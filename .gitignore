@@ -1,0 +1,16 @@
+node_modules/
+.output/
+.vinxi/
+dist/
+.tanstack/
+.nitro/
+.vercel/
+screenshots/
+attachments/
+artifacts/
+*.log
+.grok/
+__pycache__/
+.env
+.DS_Store
+public/__grok/
