@@ -2,33 +2,36 @@ import { contact, nav } from "@/lib/site-data";
 
 export function SiteNav() {
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-40">
-      <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-        <a
-          href="#topo"
-          className="flex items-center rounded-md bg-void/80 px-2.5 py-1.5 backdrop-blur-md"
-        >
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-void/92 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:h-[4.5rem] md:px-8">
+        <a href="#topo" className="flex min-w-0 shrink-0 items-center gap-3">
           <img
-            src="/media/logo-nav.png"
-            alt="MOZY Construction Inc."
-            className="h-8 w-auto md:h-9"
+            src="/media/logo-mark.png"
+            alt=""
+            className="h-9 w-auto md:h-10"
           />
+          <span className="leading-none">
+            <span className="block font-display text-[1.35rem] tracking-[0.06em] text-fg md:text-[1.55rem]">
+              MOZY
+            </span>
+            <span className="mt-1 block text-[9px] uppercase tracking-[0.22em] text-gold">
+              Construction Inc.
+            </span>
+          </span>
         </a>
-        <nav className="hidden items-center gap-6 text-xs uppercase tracking-[0.18em] text-muted md:flex">
+        <nav className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.2em] text-fg/80 lg:flex">
           {nav.map((item) => (
             <a key={item.href} href={item.href} className="transition-colors hover:text-gold">
               {item.label}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
-          <a
-            href={contact.phoneHref}
-            className="hidden rounded-full border border-gold/50 px-4 py-2 text-xs tracking-[0.14em] text-gold transition-colors hover:bg-gold hover:text-void sm:inline-flex"
-          >
-            {contact.phone}
-          </a>
-        </div>
+        <a
+          href={contact.phoneHref}
+          className="inline-flex shrink-0 whitespace-nowrap rounded-full bg-gold px-4 py-2 text-xs font-medium tracking-wide text-void transition-colors hover:bg-gold-soft"
+        >
+          {contact.phone}
+        </a>
       </div>
     </header>
   );
