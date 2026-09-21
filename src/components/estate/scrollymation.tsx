@@ -17,7 +17,7 @@ function bump(x: number, center: number, width: number) {
 }
 
 function frameSrc(dir: string, i: number) {
-  return `${dir}/frame-${String(i).padStart(4, "0")}.jpg`;
+  return `${dir}/frame-${String(i).padStart(4, "0")}.webp`;
 }
 
 export function Scrollymation({
@@ -132,31 +132,15 @@ export function Scrollymation({
 
     function prefetchAround(center: number) {
       loadOne(center);
-      for (let d = 1; d <= 6; d++) {
+      for (let d = 1; d <= 10; d++) {
         if (center - d >= 0) loadOne(center - d);
         if (center + d < count) loadOne(center + d);
       }
     }
 
-    function fillRest() {
-      const idle = (cb: () => void) =>
-        "requestIdleCallback" in window
-          ? window.requestIdleCallback(cb, { timeout: 400 })
-          : window.setTimeout(cb, 40);
-      let i = 0;
-      const step = () => {
-        if (disposed) return;
-        let n = 0;
-        while (i < count && n < 4) {
-          if (!imagesRef.current[i] && !inflight.has(i)) {
-            loadOne(i);
-            n++;
-          }
-          i++;
-        }
-        if (i < count) idle(step);
-      };
-      idle(step);
+    function loadKeyframes() {
+      for (let i = 0; i < count; i += 6) loadOne(i);
+      loadOne(count - 1);
     }
 
     function syncText(progress: number) {
@@ -199,7 +183,7 @@ export function Scrollymation({
       ([entry]) => {
         if (!entry.isIntersecting) return;
         prefetchAround(0);
-        fillRest();
+        loadKeyframes();
         io.disconnect();
       },
       { rootMargin: "200px 0px" },
