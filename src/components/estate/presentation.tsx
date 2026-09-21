@@ -536,54 +536,54 @@ export function Presentation() {
         </div>
       </section>
 
-      <section id="contato" className="relative overflow-hidden bg-navy py-24 md:py-36">
+      <section id="contato" className="relative min-h-[100svh] overflow-hidden bg-navy">
         <MediaStage
-          image="/media/hero.jpg"
-          video="/media/hero.mp4"
-          alt="Aproximação aérea da comunidade — o jato vem pela pista"
-          overlay="from-void/80 via-void/55 to-void"
+          image="/media/closer.jpg"
+          video="/media/closer.mp4"
+          alt="O jato da abertura — só para a frente, a cruzar a pista"
+          overlay="from-void/20 via-void/35 to-void/90"
         />
-        <div className="relative z-10 mx-auto max-w-4xl px-5 text-center md:px-8">
-          <Reveal>
-            <p className="text-xs uppercase tracking-[0.28em] text-gold">90 dias</p>
-            <h2 className="font-display mt-4 text-3xl md:text-5xl">
-              Reduzir quatro terrenos a dois finalistas.
-            </h2>
-          </Reveal>
-          <ol className="mx-auto mt-10 max-w-xl space-y-3 text-left text-sm text-muted">
-            {days90.map((d, i) => (
-              <li key={d} className="flex gap-3">
-                <span className="text-gold">0{i + 1}</span>
-                {d}
-              </li>
-            ))}
-          </ol>
-          <h3 className="font-display mt-16 text-3xl leading-tight md:text-5xl">
-            Construir o endereço onde a aviação privada encontra o seu próximo padrão de vida.
-          </h3>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href={contact.phoneHref}
-              className="inline-flex min-h-11 items-center rounded-full bg-gold px-8 py-3 text-sm font-medium text-void transition-transform duration-150 active:scale-[0.96]"
-            >
-              {contact.phone}
-            </a>
-            <a
-              href={contact.emailHref}
-              className="inline-flex min-h-11 items-center rounded-full border border-gold/50 px-8 py-3 text-sm text-gold"
-            >
-              {contact.email}
-            </a>
+        <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-14 pt-28 md:px-8">
+          <div className="max-w-lg md:max-w-xl">
+            <Reveal>
+              <p className="text-xs uppercase tracking-[0.28em] text-gold">90 dias</p>
+              <h2 className="font-display mt-4 text-3xl leading-[1.12] md:text-4xl">
+                Reduzir quatro terrenos a dois finalistas.
+              </h2>
+            </Reveal>
+            <ol className="mt-8 space-y-3 text-sm text-muted">
+              {days90.map((d, i) => (
+                <li key={d} className="flex gap-3">
+                  <span className="text-gold">0{i + 1}</span>
+                  {d}
+                </li>
+              ))}
+            </ol>
+            <h3 className="font-display mt-10 text-2xl leading-[1.15] md:text-3xl">
+              Construir o endereço onde a aviação privada encontra o seu próximo padrão de vida.
+            </h3>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={contact.phoneHref}
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-medium text-void transition-transform duration-150 active:scale-[0.96]"
+              >
+                {contact.phone}
+              </a>
+              <a
+                href={contact.emailHref}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-gold/50 px-8 py-3 text-sm text-gold"
+              >
+                {contact.email}
+              </a>
+            </div>
+            <p className="mt-6 text-sm text-muted">MOZY CONSTRUCTION INC. · {contact.web}</p>
+            <p className="mt-6 max-w-md text-[11px] leading-relaxed text-muted">
+              Material conceitual para discussão. Não constitui oferta de valores mobiliários,
+              garantia de aprovação, appraisal, orçamento ou recomendação jurídica, fiscal,
+              aeronáutica ou ambiental. Todos os dados devem ser validados por profissionais
+              licenciados. Status de anúncios verificado em agosto de 2026.
+            </p>
           </div>
-          <p className="mt-8 text-sm text-muted">
-            MOZY CONSTRUCTION INC. · {contact.web}
-          </p>
-          <p className="mx-auto mt-10 max-w-2xl text-xs leading-relaxed text-muted">
-            Material conceitual para discussão. Não constitui oferta de valores mobiliários,
-            garantia de aprovação, appraisal, orçamento ou recomendação jurídica, fiscal,
-            aeronáutica ou ambiental. Todos os dados devem ser validados por profissionais
-            licenciados. Status de anúncios verificado em agosto de 2026.
-          </p>
         </div>
       </section>
 
