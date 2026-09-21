@@ -24,7 +24,7 @@ export function Scrollymation({
   id,
   dir,
   count,
-  heightVh = 520,
+  heightVh = 360,
   intro,
   mid,
   arrival,
@@ -45,11 +45,9 @@ export function Scrollymation({
   const hintRef = useRef<HTMLDivElement>(null);
   const midRef = useRef<HTMLDivElement>(null);
   const arrivalRef = useRef<HTMLDivElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(Array(count).fill(null));
   const drawnRef = useRef(-1);
   const tickingRef = useRef(false);
-  const loadedRef = useRef(0);
-  const [pct, setPct] = useState(0);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -64,11 +62,12 @@ export function Scrollymation({
 
     let dest = { dx: 0, dy: 0, dw: 0, dh: 0 };
     let disposed = false;
+    const inflight = new Set<number>();
 
     function computeRect() {
       const w = canvas!.clientWidth;
       const h = canvas!.clientHeight;
-      const img = imagesRef.current[0];
+      const img = imagesRef.current.find((i) => i?.naturalWidth);
       const ir = img?.naturalWidth ? img.naturalWidth / img.naturalHeight : 16 / 9;
       const cr = w / h;
       if (cr > ir) dest = { dw: w, dh: w / ir, dx: 0, dy: (h - w / ir) / 2 };
@@ -77,19 +76,19 @@ export function Scrollymation({
 
     function nearest(index: number) {
       const imgs = imagesRef.current;
-      if (imgs[index]?.complete && imgs[index].naturalWidth) return index;
+      if (imgs[index]?.naturalWidth) return index;
       for (let d = 1; d < count; d++) {
         const a = index - d;
         const b = index + d;
-        if (a >= 0 && imgs[a]?.complete && imgs[a].naturalWidth) return a;
-        if (b < count && imgs[b]?.complete && imgs[b].naturalWidth) return b;
+        if (a >= 0 && imgs[a]?.naturalWidth) return a;
+        if (b < count && imgs[b]?.naturalWidth) return b;
       }
       return 0;
     }
 
     function draw(index: number) {
       const img = imagesRef.current[nearest(index)];
-      if (!img || !img.complete || !img.naturalWidth) return;
+      if (!img || !img.naturalWidth) return;
       drawnRef.current = index;
       ctx.clearRect(0, 0, canvas!.clientWidth, canvas!.clientHeight);
       ctx.drawImage(img, dest.dx, dest.dy, dest.dw, dest.dh);
@@ -108,6 +107,56 @@ export function Scrollymation({
       ctx.imageSmoothingQuality = "medium";
       computeRect();
       draw(Math.max(0, drawnRef.current));
+    }
+
+    function loadOne(index: number) {
+      if (disposed || imagesRef.current[index] || inflight.has(index)) return;
+      inflight.add(index);
+      const img = new Image();
+      img.decoding = "async";
+      img.onload = () => {
+        inflight.delete(index);
+        if (disposed) return;
+        imagesRef.current[index] = img;
+        if (index === 0) {
+          resize();
+          draw(0);
+          setReady(true);
+        } else if (index === drawnRef.current) {
+          draw(index);
+        }
+      };
+      img.onerror = () => inflight.delete(index);
+      img.src = frameSrc(dir, index + 1);
+    }
+
+    function prefetchAround(center: number) {
+      loadOne(center);
+      for (let d = 1; d <= 6; d++) {
+        if (center - d >= 0) loadOne(center - d);
+        if (center + d < count) loadOne(center + d);
+      }
+    }
+
+    function fillRest() {
+      const idle = (cb: () => void) =>
+        "requestIdleCallback" in window
+          ? window.requestIdleCallback(cb, { timeout: 400 })
+          : window.setTimeout(cb, 40);
+      let i = 0;
+      const step = () => {
+        if (disposed) return;
+        let n = 0;
+        while (i < count && n < 4) {
+          if (!imagesRef.current[i] && !inflight.has(i)) {
+            loadOne(i);
+            n++;
+          }
+          i++;
+        }
+        if (i < count) idle(step);
+      };
+      idle(step);
     }
 
     function syncText(progress: number) {
@@ -133,6 +182,7 @@ export function Scrollymation({
       const total = rect.height - window.innerHeight;
       const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
       const frame = Math.min(count - 1, Math.round(progress * (count - 1)));
+      prefetchAround(frame);
       if (frame !== drawnRef.current) draw(frame);
       syncText(progress);
     }
@@ -143,67 +193,27 @@ export function Scrollymation({
       requestAnimationFrame(update);
     }
 
-    const images: HTMLImageElement[] = Array.from({ length: count }, () => {
-      const img = new Image();
-      img.decoding = "async";
-      return img;
-    });
-    imagesRef.current = images;
+    loadOne(0);
 
-    const timer = window.setInterval(() => {
-      setPct(Math.round((loadedRef.current / count) * 100));
-    }, 80);
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        prefetchAround(0);
+        fillRest();
+        io.disconnect();
+      },
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(section);
 
-    images[0].src = frameSrc(dir, 1);
-    images[0]
-      .decode()
-      .catch(
-        () =>
-          new Promise<void>((res) => {
-            images[0].onload = () => res();
-            images[0].onerror = () => res();
-          }),
-      )
-      .then(() => {
-        if (disposed) return;
-        loadedRef.current = 1;
-        resize();
-        draw(0);
-        setReady(true);
-      });
-
-    const rest = images.slice(1).map((img, k) => {
-      img.src = frameSrc(dir, k + 2);
-      return img
-        .decode()
-        .catch(
-          () =>
-            new Promise<void>((res) => {
-              img.onload = () => res();
-              img.onerror = () => res();
-            }),
-        )
-        .then(() => {
-          loadedRef.current += 1;
-        });
-    });
-
-    Promise.all(rest).then(() => {
-      if (disposed) return;
-      window.clearInterval(timer);
-      setPct(100);
-    });
-
-    if (reduce) {
-      syncText(0);
-    }
+    if (reduce) syncText(0);
 
     window.addEventListener("resize", resize);
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       disposed = true;
-      window.clearInterval(timer);
+      io.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
     };
@@ -217,10 +227,9 @@ export function Scrollymation({
           style={{ opacity: ready ? 0 : 1, pointerEvents: ready ? "none" : "auto" }}
         >
           <p className="font-display text-base tracking-wide text-fg/80">Preparando a aproximação</p>
-          <div className="h-0.5 w-52 overflow-hidden rounded-full bg-border">
-            <div className="h-full bg-gold transition-[width] duration-150" style={{ width: `${pct}%` }} />
+          <div className="h-0.5 w-40 overflow-hidden rounded-full bg-border">
+            <div className="h-full w-1/3 animate-pulse bg-gold" />
           </div>
-          <span className="tabular-nums text-xs text-muted">{pct}%</span>
         </div>
 
         <canvas
