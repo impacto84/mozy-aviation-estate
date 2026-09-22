@@ -31,8 +31,8 @@ export function Presentation() {
       <Scrollymation
         id="aproximacao"
         dir="/frames/approach"
-        count={90}
-        heightVh={420}
+        count={121}
+        heightVh={520}
         intro={{
           kicker: "Florida · Private Aviation Estate · V05",
           title: "Uma comunidade residencial de aviação privada.",
@@ -49,18 +49,18 @@ export function Presentation() {
       <Scrollymation
         id="residencia"
         dir="/frames/villa"
-        count={150}
-        heightVh={480}
-        midAt={0.56}
+        count={722}
+        heightVh={720}
+        midAt={0.5}
         intro={{
-          kicker: "Founder Estate",
-          title: "Uma villa. Um scroll. A casa à beira da pista.",
-          body: "Desce das nuvens, atravessa a sala, chega à água — o quotidiano de quem vive onde o jato pousa.",
+          kicker: "Orlando · Founder Estate",
+          title: "Entrar na casa. A vista é a pista.",
+          body: "Central Florida — carvalhos, relva, taxiway. Sem praia. A câmara atravessa as portas de vidro e o jato espera do outro lado do living.",
         }}
-        mid="Entre"
+        mid="A casa"
         arrival={{
           kicker: "Você chegou",
-          title: "A vista espera.",
+          title: "A janela dá para o hangar.",
         }}
       />
 
@@ -87,8 +87,8 @@ export function Presentation() {
       <Scrollymation
         id="gesto"
         dir="/frames/hangar"
-        count={80}
-        heightVh={400}
+        count={121}
+        heightVh={480}
         midAt={0.45}
         intro={{
           kicker: "Casa + hangar",
