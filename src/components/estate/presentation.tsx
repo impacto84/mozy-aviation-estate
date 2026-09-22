@@ -87,15 +87,15 @@ export function Presentation() {
       <Scrollymation
         id="gesto"
         dir="/frames/hangar"
-        count={121}
-        heightVh={480}
-        midAt={0.45}
+        count={361}
+        heightVh={560}
+        midAt={0.5}
         intro={{
           kicker: "Casa + hangar",
-          title: "O jato pousa. Cruza a taxiway. Entra no hangar da casa.",
-          body: "Cada residência é projetada com hangar, circulação e operação desde o primeiro traço. Da pista à sala — sem aeroporto público, sem espera.",
+          title: "Entra. O jato já espera.",
+          body: "A câmara avança no piso vazio — só para a frente. Sem móveis no caminho. Da taxiway ao nariz da aeronave.",
         }}
-        mid="Taxiway"
+        mid="Avança"
         arrival={{
           kicker: "O quotidiano",
           title: "Da pista à sala.",
