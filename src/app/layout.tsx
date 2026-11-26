@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { MartechProvider } from "@/components/consent/MartechProvider";
+import { ImageWarmup } from "@/components/media/ImageWarmup";
 import { ScrollProvider } from "@/components/motion/ScrollProvider";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <SiteFooter />
           </ScrollProvider>
         </MartechProvider>
+        <ImageWarmup />
         <JsonLd data={siteJsonLd()} />
       </body>
     </html>
