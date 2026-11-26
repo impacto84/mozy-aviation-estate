@@ -64,7 +64,9 @@ export function createMartechRuntime(config: MartechClientConfig, env: MartechEn
   const unsubscribe = env.consent.onChange(applyConsent);
   const tracker = createTracker({
     consent: env.consent,
-    destinations: [createDataLayerDestination(layer), ...(env.extraDestinations ?? [])],
+    // Sem GTM nenhuma tag lê a dataLayer: ela é local e recebe sem esperar consentimento.
+    // Com GTM, volta a fila do consentimento (Piso P9).
+    destinations: [createDataLayerDestination(layer, config.gtmId === null ? "first-party" : "any"), ...(env.extraDestinations ?? [])],
     getAttribution: env.attribution.get,
     onError: env.onError,
   });

@@ -112,6 +112,24 @@ describe("createTracker", () => {
     expect(tracker.pending()).toBe(0);
   });
 
+  it("destino first-party recebe na hora, sem fila, e não duplica quando o consentimento chega", () => {
+    const consent = freshConsent();
+    const local = createMemoryDestination("first-party", "local");
+    const analytics = createMemoryDestination("analytics", "medicao");
+    const tracker = createTracker({ consent, destinations: [local, analytics] });
+
+    tracker.track(LEAD);
+
+    expect(local.events()).toHaveLength(1);
+    expect(analytics.events()).toEqual([]);
+    expect(tracker.pending()).toBe(1);
+
+    consent.acceptAll();
+
+    expect(local.events()).toHaveLength(1);
+    expect(analytics.events()).toHaveLength(1);
+  });
+
   it("não reenvia evento antigo quando uma categoria é aceita depois", () => {
     const consent = freshConsent();
     const marketing = createMemoryDestination("marketing");

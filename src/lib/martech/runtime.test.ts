@@ -125,6 +125,30 @@ describe("createMartechRuntime", () => {
     expect(document.querySelectorAll("script[src]")).toHaveLength(0);
   });
 
+  it("sem GTM, a conversão vai na hora para a dataLayer local e nada sai do navegador", () => {
+    const store = createConsentStore({ storage: createMemoryStorage() });
+    const runtime = createMartechRuntime({ gtmId: null }, environment(store));
+
+    const eventId = runtime.track({ name: "generate_lead", params: { form_id: "data-room" } });
+
+    expect(window.dataLayer?.at(-1)).toMatchObject({ event: "generate_lead", event_id: eventId });
+    expect(runtime.pending()).toBe(0);
+    expect(document.querySelectorAll("script[src]")).toHaveLength(0);
+
+    store.acceptAll();
+    expect(eventNames().filter((name) => name === "generate_lead")).toHaveLength(1);
+  });
+
+  it("com GTM, o evento espera o consentimento (Piso P9)", () => {
+    const store = createConsentStore({ storage: createMemoryStorage() });
+    const runtime = createMartechRuntime({ gtmId: TEST_GTM_ID }, environment(store));
+
+    runtime.track({ name: "generate_lead", params: { form_id: "data-room" } });
+
+    expect(eventNames()).not.toContain("generate_lead");
+    expect(runtime.pending()).toBe(1);
+  });
+
   it("captura a campanha da URL de entrada e a carimba em cada evento", () => {
     const store = createConsentStore({ storage: createMemoryStorage() });
     const memory = createMemoryDestination();

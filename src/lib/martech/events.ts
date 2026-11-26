@@ -44,7 +44,12 @@ export interface TrackedEvent {
 }
 
 /** `any`: o destino recebe eventos com qualquer categoria aceita (caso do GTM, que decide por tag). */
-export type DestinationRequirement = ConsentCategory | "any";
+/**
+ * `first-party`: destino que não sai do navegador nem carrega tag de terceiro (a
+ * `dataLayer` local quando o site não tem GTM configurado). Recebe na hora, sem fila:
+ * não há o que consentir (Piso P9 trata de tags, pixels e cookies de terceiros).
+ */
+export type DestinationRequirement = ConsentCategory | "any" | "first-party";
 
 export interface Destination {
   readonly name: string;
@@ -81,6 +86,9 @@ export interface Tracker {
 export const DEFAULT_MAX_QUEUE = 50;
 
 export function isDestinationAllowed(requirement: DestinationRequirement, state: ConsentState): boolean {
+  if (requirement === "first-party") {
+    return true;
+  }
   if (state.status !== "decided") {
     return false;
   }
@@ -101,11 +109,14 @@ function toTrackedEvent(input: TrackInput, options: TrackerOptions): TrackedEven
 
 export function createTracker(options: TrackerOptions): Tracker {
   const maxQueue = options.maxQueue ?? DEFAULT_MAX_QUEUE;
+  const needsConsent = options.destinations.some((destination) => destination.requires !== "first-party");
   let queue: readonly TrackedEvent[] = [];
 
-  const deliver = (event: TrackedEvent, state: ConsentState): void => {
+  const deliver = (event: TrackedEvent, state: ConsentState, scope: "all" | "consented" | "first-party" = "all"): void => {
     for (const destination of options.destinations) {
-      if (!isDestinationAllowed(destination.requires, state)) {
+      const isFirstParty = destination.requires === "first-party";
+      const isInScope = scope === "all" || (scope === "first-party") === isFirstParty;
+      if (!isInScope || !isDestinationAllowed(destination.requires, state)) {
         continue;
       }
       try {
@@ -123,7 +134,8 @@ export function createTracker(options: TrackerOptions): Tracker {
     const waiting = queue;
     queue = [];
     for (const event of waiting) {
-      deliver(event, state);
+      // Os destinos first-party já receberam no `track`: a fila é só dos que dependem do consentimento.
+      deliver(event, state, "consented");
     }
   };
 
@@ -136,8 +148,9 @@ export function createTracker(options: TrackerOptions): Tracker {
       if (state.status === "decided") {
         deliver(event, state);
       } else {
-        // Fila limitada: sem decisão por muito tempo, os eventos mais antigos saem.
-        queue = [...queue, event].slice(-maxQueue);
+        deliver(event, state, "first-party");
+        // Fila limitada (só se algum destino depende do consentimento): os mais antigos saem.
+        queue = needsConsent ? [...queue, event].slice(-maxQueue) : queue;
       }
       return event.eventId;
     },

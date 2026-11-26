@@ -7,7 +7,7 @@
  * um nível só, para virar variável de camada de dados no GTM sem transformação.
  */
 
-import type { Destination, TrackedEvent } from "../events";
+import type { Destination, DestinationRequirement, TrackedEvent } from "../events";
 
 declare global {
   interface Window {
@@ -39,10 +39,14 @@ export function toDataLayerEntry(event: TrackedEvent): DataLayerEntry {
   });
 }
 
-export function createDataLayerDestination(getLayer: () => unknown[]): Destination {
+/**
+ * `requires` padrão `any` (o GTM decide pelo Consent Mode). Sem GTM configurado o
+ * runtime passa `first-party`: a `dataLayer` é só um array da página, sem tag que a leia.
+ */
+export function createDataLayerDestination(getLayer: () => unknown[], requires: DestinationRequirement = "any"): Destination {
   return {
     name: "gtm",
-    requires: "any",
+    requires,
     send: (event) => {
       getLayer().push(toDataLayerEntry(event));
     },
