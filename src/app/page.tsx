@@ -1,17 +1,8 @@
 import type { Metadata } from "next";
-import { ChapterPlayer } from "@/components/chapter/ChapterPlayer";
-import { AviationTeaser } from "@/components/home/AviationTeaser";
-import { CapitalTeaser } from "@/components/home/CapitalTeaser";
-import { Closing } from "@/components/home/Closing";
-import { ClubBand } from "@/components/home/ClubBand";
-import { Collections } from "@/components/home/Collections";
-import { Discipline } from "@/components/home/Discipline";
-import { HangarGlass } from "@/components/home/HangarGlass";
-import { HomeHero } from "@/components/home/HomeHero";
-import { LandsTeaser } from "@/components/home/LandsTeaser";
-import { Sponsor } from "@/components/home/Sponsor";
-import { TechList } from "@/components/home/TechList";
-import { Vision } from "@/components/home/Vision";
+import { ActApproach, ActHangar, ActVilla } from "@/components/home/HomeActs";
+import { ClubBand, Collections, HangarPrelude, ResidencePrelude, Sponsor, TechList, Thesis } from "@/components/home/HomeEditorial";
+import { Closing, NightFilm } from "@/components/home/HomeFilms";
+import { AtlasSection, AviationSection, CapitalTeaser, Discipline } from "@/components/home/HomeInteractive";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { placeJsonLd } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
@@ -24,7 +15,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     path: "/",
     siteName: SITE_NAME,
-    ogImageAlt: "MOZY Private Aviation Estate ao entardecer, com jato na taxiway",
+    ogImageAlt: "MOZY Private Aviation Estate ao entardecer, com jato na pista privada",
   }),
   title: { absolute: `${SITE_NAME} — comunidade residencial de aviação privada na Central Florida` },
 };
@@ -42,20 +33,27 @@ function homeJsonLd() {
   });
 }
 
+/**
+ * Home em três atos filmados (aproximação, residência, hangar) separados por
+ * capítulos editoriais e duas bandas de filme. Cada ato é independente na rolagem.
+ */
 export default function HomePage() {
   return (
     <>
       <JsonLd data={homeJsonLd()} />
-      <HomeHero />
-      <Vision />
-      <ChapterPlayer />
+      <ActApproach />
+      <Thesis />
       <Collections />
-      <HangarGlass />
-      <AviationTeaser />
+      <ResidencePrelude />
+      <ActVilla />
+      <NightFilm />
+      <HangarPrelude />
+      <ActHangar />
+      <AviationSection />
       <ClubBand />
       <TechList />
       <Discipline />
-      <LandsTeaser />
+      <AtlasSection />
       <CapitalTeaser />
       <Sponsor />
       <Closing />
