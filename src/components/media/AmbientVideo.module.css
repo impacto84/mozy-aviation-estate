@@ -11,8 +11,9 @@
 
 .toggle {
   position: absolute;
-  inset-block-end: var(--space-4);
-  inset-inline-end: var(--space-4);
+  /* Alinhado à grade de conteúdo (mesma margem direita das colunas), não à borda da tela. */
+  inset-block-end: var(--space-6);
+  inset-inline-end: max(var(--container-gutter), calc((100% - var(--container-wide)) / 2 + var(--container-gutter)));
   z-index: var(--z-raised);
   min-block-size: var(--target-min);
   padding-inline: var(--space-4);

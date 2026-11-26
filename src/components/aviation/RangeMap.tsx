@@ -73,16 +73,17 @@ export function RangeMap({ spec }: RangeMapProps) {
           <path key={d} className={styles.land} d={d} />
         ))}
         {DISTANCE_RINGS.map((nm) => (
-          <g key={nm}>
-            <circle className={styles.distanceRing} cx="0" cy="0" r={radiusForNm(nm)} />
-            <text className={styles.ringLabel} x={-radiusForNm(nm) * RING_LABEL_COS - 6} y={radiusForNm(nm) * RING_LABEL_COS + 22} textAnchor="end">
-              {formatNm(nm).toUpperCase()}
-            </text>
-          </g>
+          <circle key={nm} className={styles.distanceRing} cx="0" cy="0" r={radiusForNm(nm)} />
         ))}
         <circle className={styles.rangeFill} cx="0" cy="0" r="1" style={{ transform: `scale(${rangeRadius})` } as CSSProperties} />
       </g>
       <circle className={styles.rangeRing} cx="0" cy="0" r={rangeRadius} vectorEffect="non-scaling-stroke" />
+      {/* Rótulos dos anéis fora do recorte do disco, a sudoeste (Pacífico), sempre inteiros. */}
+      {DISTANCE_RINGS.map((nm) => (
+        <text key={nm} className={styles.ringLabel} x={-radiusForNm(nm) * RING_LABEL_COS + 8} y={radiusForNm(nm) * RING_LABEL_COS + 8} textAnchor="start">
+          {formatNm(nm).toUpperCase()}
+        </text>
+      ))}
       <circle className={styles.discEdge} cx="0" cy="0" r={DISC_RADIUS} />
 
       {reach.map((entry) => {

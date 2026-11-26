@@ -59,11 +59,20 @@
   opacity: clamp(0, calc((var(--act-progress, 0) - 0.01) * 14), 1);
 }
 
+/* phone: a abertura ocupa a metade de baixo; o degradê cobre todo o bloco de texto. */
 .shade {
   background-image:
-    linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 78%, transparent) 26%, transparent 62%),
+    linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 88%, transparent) 40%, color-mix(in oklch, var(--color-bg) 40%, transparent) 62%, transparent 76%),
     linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
   pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 78%, transparent) 26%, transparent 62%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
+  }
 }
 
 /* Marcas de enquadramento: dois cantos em fio de latão, como num visor de câmera. */

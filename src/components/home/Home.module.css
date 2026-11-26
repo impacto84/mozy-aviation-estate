@@ -155,12 +155,27 @@
   gap: var(--space-3);
 }
 
+/* Telemetria: painel de obsidiana translúcida, legível sobre telhados e piscinas claros. */
 .telemetry {
   display: grid;
   gap: 0;
-  inline-size: 15rem;
+  inline-size: 16rem;
   margin: 0;
-  border-block-start: var(--border-width) solid var(--color-hairline);
+  padding: var(--space-2) var(--space-5);
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: color-mix(in oklch, var(--color-bg) 86%, transparent);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .telemetry {
+    background-color: color-mix(in oklch, var(--color-bg) 70%, transparent);
+    -webkit-backdrop-filter: blur(var(--space-3));
+    backdrop-filter: blur(var(--space-3));
+  }
+}
+
+.telemetryItem:last-child {
+  border-block-end: 0;
 }
 
 .telemetryItem {
