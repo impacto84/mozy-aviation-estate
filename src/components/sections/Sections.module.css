@@ -111,6 +111,13 @@
   font-size: var(--text-xs);
 }
 
+/* Cabeçalho de bloco: título, linha de apoio e endereço com respiro entre si. */
+.stackHeader {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
 /* Título e descrição empilhados, com respiro próprio (nunca colados na mesma linha). */
 .ruledContent {
   display: grid;

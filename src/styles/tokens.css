@@ -222,16 +222,11 @@
  * Respiro inferior dos heróis do tamanho do aviso de cookies (fixo no rodapé): o CTA
  * primário nunca fica coberto na primeira dobra. A reserva é fixa de propósito: ligar
  * e desligar conforme o aviso aparece (só depois da hidratação) deslocava o conteúdo
- * e estourava o CLS. Valores medidos do aviso em cada faixa (phone empilha texto e botões).
+ * e estourava o CLS. Valores medidos do aviso: phone empilha texto e botões (7,5rem);
+ * a partir de 768px o aviso é uma linha só (4,5rem).
  */
 @media (min-width: 768px) {
   :root {
     --consent-offset: 4.5rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  :root {
-    --consent-offset: 0rem;
   }
 }

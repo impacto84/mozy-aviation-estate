@@ -48,7 +48,7 @@ o pior fundo nas superfícies void e ivory).
 - `--column-kpi: calc(var(--text-2xl) * 2.5)`: coluna de número grande que acompanha a
   fonte (pesos do scorecard em `/terrenos`), para o número nunca invadir o texto.
 - `--consent-offset`: respiro inferior fixo dos heróis do tamanho do aviso de cookies
-  (7,5rem no phone, 4,5rem no tablet, 0 no desktop). Fixo de propósito: ligar/desligar com o
+  (7,5rem no phone, 4,5rem a partir de 768 px). Fixo de propósito: ligar/desligar com o
   aviso (que só aparece após a hidratação) deslocava o conteúdo e estourava o CLS.
 - Raios discretos (`--radius-sm` a `--radius-xl`), alvos de toque ≥ `--target-min` (44 px).
 

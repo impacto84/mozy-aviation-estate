@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef } from "react";
+import { CTA } from "@/lib/editorial";
 import { HONEYPOT_FIELD, LEAD_PROFILES } from "@/lib/martech/lead";
 import type { LeadErrors } from "@/lib/martech/lead";
 import type { LeadFailureReason } from "@/lib/martech/lead-client";
@@ -93,7 +94,7 @@ export function LeadForm({ labelledBy, fallbackErrorId, fallbackSuccessId, ...op
         </div>
         <AttributionFields />
         <button type="submit" className={styles.submit} aria-disabled={isBusy}>
-          {form.status === "pending" ? "Enviando…" : form.status === "success" ? "Solicitação enviada" : "Solicitar acesso ao Data Room"}
+          {form.status === "pending" ? "Enviando…" : form.status === "success" ? "Solicitação enviada" : CTA.primary}
         </button>
       </form>
       <p className={styles.status} role="status" data-lead-message={form.status}>

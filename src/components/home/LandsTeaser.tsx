@@ -37,7 +37,7 @@ export function LandsTeaser() {
               </li>
             ))}
           </ol>
-          <LinkButton href="/terrenos" variant="primary">
+          <LinkButton href="/terrenos" variant="ghost">
             Abrir o Atlas Satelital
           </LinkButton>
         </div>

@@ -72,6 +72,13 @@
   gap: var(--space-3);
 }
 
+.caption {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+}
+
 .facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -80,9 +87,11 @@
   margin: var(--space-4) 0 0;
 }
 
+/* column-reverse empacota no fim por padrão: flex-end alinha os valores pelo topo. */
 .fact {
   display: flex;
   flex-direction: column-reverse;
+  justify-content: flex-end;
   gap: var(--space-1);
   padding-block-start: var(--space-3);
   border-block-start: var(--border-width) solid color-mix(in oklch, var(--color-text) 25%, transparent);
@@ -97,9 +106,10 @@
   margin: 0;
   font-size: var(--text-xl);
   font-weight: var(--weight-light);
+  white-space: nowrap;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .facts {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

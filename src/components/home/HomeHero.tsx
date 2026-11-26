@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RunwayHero } from "@/components/hero/RunwayHero";
-import { CTA, HERO } from "@/lib/editorial";
+import { CONCEPT_CAPTION, CTA, HERO } from "@/lib/editorial";
 import { ACCESS_PATH } from "@/lib/martech/seo/site";
 import { stats } from "@/lib/site-data";
 import styles from "./HomeHero.module.css";
@@ -21,7 +21,7 @@ export function HomeHero() {
           alt=""
           width={1672}
           height={942}
-          sizes="100vw"
+          sizes="(max-width: 767px) 230vw, 100vw"
           quality={72}
           priority
         />
@@ -42,6 +42,7 @@ export function HomeHero() {
             {CTA.aviation}
           </Link>
         </div>
+        <p className={styles.caption}>{CONCEPT_CAPTION}</p>
       </div>
       <dl className={styles.hud} aria-label="Números-chave do empreendimento">
         {stats.map((stat) => (

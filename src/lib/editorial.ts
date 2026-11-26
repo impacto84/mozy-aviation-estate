@@ -15,10 +15,13 @@ export const BRAND = {
 export const HERO = {
   kicker: "Florida · Private Aviation Estate",
   title: "Uma comunidade residencial de aviação privada.",
-  body: "Não um loteamento com pista. Sessenta residências, hangar em cada casa e uma pista para grandes jatos — o endereço mais cobiçado da região de Orlando.",
+  body: "Não um loteamento com pista. Sessenta residências, hangar em cada casa e uma pista para grandes jatos, na região de Orlando.",
   positioning:
     "Um endereço privado e seguro desenhado para proprietários de aeronaves executivas, famílias UHNWI e investidores institucionais viverem, receberem, trabalharem e decolarem com autonomia completa.",
 } as const;
+
+/** Legenda obrigatória de toda imagem gerada do projeto (renders, não fotografia do local). */
+export const CONCEPT_CAPTION = "Imagem: ilustração conceitual do projeto.";
 
 export const CTA = {
   primary: "Solicitar acesso ao Data Room confidencial",
@@ -67,7 +70,7 @@ export const CHAPTER_COPY = {
 } as const;
 
 export const SPONSOR = {
-  title: "Mozy combina execução de campo e visão de desenvolvimento.",
+  title: "MOZY combina execução de campo e visão de desenvolvimento.",
   roles: [
     "Originar e controlar o terreno",
     "Integrar os estudos de viabilidade",
@@ -115,6 +118,9 @@ export const BENCHMARKS = {
   title: "O melhor dos airparks — corrigindo os limites de cada um.",
   complementary: "Heaven’s Landing inspira o Aviation Club · Pecan Plantation amplia amenidades · SilverWing inspira lotes build-ready.",
 } as const;
+
+export const LANDS_HERO =
+  "Honey Bee Ranch, Peace River Legacy East e Osceola Ranch: três candidatos na Central Florida, avaliados por espaço aéreo, ambiental, zoning e economia antes do preço.";
 
 export const LANDS = {
   title: "De Orlando, no alto, até cada terreno.",

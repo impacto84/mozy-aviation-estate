@@ -18,12 +18,14 @@ interface PageHeroProps {
   readonly image: PageHeroImage;
   readonly primaryCta: { readonly href: string; readonly label: string };
   readonly secondaryCta?: { readonly href: string; readonly label: string };
+  /** Legenda da imagem (ex.: ilustração conceitual), sob os CTAs. */
+  readonly caption?: string;
   /** Linha de dados (HUD) sob o texto. */
   readonly facts?: readonly { readonly label: string; readonly value: string }[];
 }
 
 /** Hero das páginas internas: fotografia LCP do servidor, `<h1>` único e CTA na dobra. */
-export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta, facts }: PageHeroProps) {
+export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta, caption, facts }: PageHeroProps) {
   return (
     <section className={styles.hero} aria-labelledby="page-title" data-surface="void">
       <Image
@@ -33,7 +35,7 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
         alt=""
         width={image.width}
         height={image.height}
-        sizes="100vw"
+        sizes="(max-width: 767px) 200vw, 100vw"
         quality={72}
         priority
       />
@@ -54,6 +56,7 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
             </LinkButton>
           )}
         </div>
+        {caption === undefined ? null : <p className={styles.caption}>{caption}</p>}
         {facts === undefined ? null : (
           <dl className={styles.facts}>
             {facts.map((fact) => (

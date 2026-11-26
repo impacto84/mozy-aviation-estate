@@ -4,7 +4,7 @@ import { LeadForm } from "@/components/lead/LeadForm";
 import { BRAND, CTA, LEGAL } from "@/lib/editorial";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
-import { contact, tiers } from "@/lib/site-data";
+import { tiers } from "@/lib/site-data";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -36,7 +36,7 @@ export default function AccessPage() {
           </p>
         </section>
 
-        <aside className={styles.aside} aria-label="Coleções e contato direto">
+        <aside className={styles.aside} aria-label="Coleções residenciais">
           <ul className={styles.tiers} role="list">
             {tiers.map((tier) => (
               <li key={tier.name} className={styles.tier}>
@@ -45,16 +45,6 @@ export default function AccessPage() {
               </li>
             ))}
           </ul>
-          <div className={styles.direct}>
-            <p className={styles.directTitle}>Contato direto</p>
-            <a className={`${styles.directLink} tnum`} href={contact.phoneHref}>
-              {contact.phone}
-            </a>
-            <a className={styles.directLink} href={contact.emailHref}>
-              {contact.email}
-            </a>
-            <p className={styles.address}>{contact.address}</p>
-          </div>
         </aside>
 
         <section className={styles.formPanel} aria-labelledby={FORM_TITLE_ID}>

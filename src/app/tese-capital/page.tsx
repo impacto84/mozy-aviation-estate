@@ -7,7 +7,7 @@ import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { BRAND, CTA, DISCIPLINE, SPONSOR, TECH } from "@/lib/editorial";
+import { BRAND, CONCEPT_CAPTION, CTA, DISCIPLINE, SPONSOR, TECH } from "@/lib/editorial";
 import { faqPageJsonLd } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
@@ -34,6 +34,7 @@ export default function CapitalPage() {
         image={{ src: "/media/hero.jpg", width: 1920, height: 1088, position: "right" }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
         secondaryCta={{ href: "#fases", label: "Ver as fases" }}
+        caption={CONCEPT_CAPTION}
         facts={[
           { label: "faixa de investimento construída", value: "$550M–$1,0B+" },
           { label: "cronograma do plano", value: "0–84 meses" },
@@ -117,7 +118,7 @@ export default function CapitalPage() {
 
       <section className={section.section} aria-labelledby="sponsor-capital-titulo" data-surface="navy">
         <div className={`${section.inner} ${sections.split}`}>
-          <div>
+          <div className={sections.stackHeader}>
             <h2 id="sponsor-capital-titulo" className={section.title}>
               {SPONSOR.title}
             </h2>

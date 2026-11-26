@@ -7,7 +7,7 @@ import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { CTA, DISCIPLINE, LANDS, LEGAL } from "@/lib/editorial";
+import { CTA, DISCIPLINE, LANDS, LANDS_HERO, LEGAL } from "@/lib/editorial";
 import { placeJsonLd } from "@/lib/martech/seo/json-ld";
 import type { JsonLdNode } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
@@ -43,10 +43,10 @@ export default function LandsPage() {
       <PageHero
         kicker="Terrenos · originação na Central Florida"
         title="Três terrenos. Um só critério: risco ajustado."
-        lead={LANDS.body}
+        lead={LANDS_HERO}
         image={{ src: "/media/estate-aerial.jpg", width: 1800, height: 1350 }}
-        primaryCta={{ href: "#atlas", label: "Abrir o Atlas Satelital" }}
-        secondaryCta={{ href: ACCESS_PATH, label: CTA.primaryShort }}
+        primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
+        secondaryCta={{ href: "#atlas", label: "Abrir o Atlas Satelital" }}
         facts={[
           { label: "faixa-alvo de área", value: "1.200–1.800 acres" },
           { label: "terrenos candidatos", value: String(lands.length) },

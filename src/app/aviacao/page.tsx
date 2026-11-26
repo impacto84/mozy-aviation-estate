@@ -8,7 +8,7 @@ import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { AVIATION, BENCHMARKS, CLUB, CTA } from "@/lib/editorial";
+import { AVIATION, BENCHMARKS, CLUB, CONCEPT_CAPTION, CTA } from "@/lib/editorial";
 import { placeJsonLd } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
@@ -42,8 +42,9 @@ export default function AviationPage() {
         title="A pista como extensão da casa."
         lead={AVIATION.title}
         image={{ src: "/media/taxiway.jpg", width: 1792, height: 1008, position: "right" }}
-        primaryCta={{ href: "#simulador", label: "Abrir o simulador" }}
-        secondaryCta={{ href: ACCESS_PATH, label: CTA.primaryShort }}
+        primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
+        secondaryCta={{ href: "#simulador", label: "Abrir o simulador" }}
+        caption={CONCEPT_CAPTION}
         facts={[
           { label: "pista como premissa inicial", value: "3.000 × 45 m" },
           { label: "aeronaves críticas suportadas", value: String(aircraft.length) },
