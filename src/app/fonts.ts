@@ -12,7 +12,9 @@ import localFont from "next/font/local";
  * Texto e UI (Manrope, JetBrains Mono) usam `display: "optional"`: com o preload a face
  * real chega antes da primeira pintura; se não chegar, o fallback fica até a próxima
  * navegação em vez de trocar no meio da leitura (a troca quebrava linhas diferente e
- * gerava CLS de 0,06–0,07 no gate). O display (Cormorant) segue em `swap`.
+ * gerava CLS de 0,06–0,07 no gate). Na V3 o display (Cormorant) também é `optional`: o `<h1>`
+ * de abertura tem ~100 px e, com `swap` sob 4G lenta, a troca de fonte refluía o Ato I inteiro
+ * (CLS 0,087 no desktop).
  * O carregador exige literais escritos por extenso (nada de template string ou constante).
  */
 
@@ -24,7 +26,7 @@ export const displayFont = localFont({
     { path: "../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2", weight: "500", style: "normal" },
   ],
   variable: "--nf-display",
-  display: "swap",
+  display: "optional",
   adjustFontFallback: "Times New Roman",
   fallback: ["Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", "serif"],
 });
