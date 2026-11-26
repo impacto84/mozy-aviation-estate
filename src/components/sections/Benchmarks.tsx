@@ -23,8 +23,10 @@ export function BenchmarksTable() {
               <th scope="row" className={styles.rowHead}>
                 {benchmark.name}
               </th>
-              <td>{benchmark.take}</td>
-              <td className={styles.emphasis}>{benchmark.bring}</td>
+              <td data-label="O que tem">{benchmark.take}</td>
+              <td className={styles.emphasis} data-label="O que trazemos">
+                {benchmark.bring}
+              </td>
             </tr>
           ))}
         </tbody>

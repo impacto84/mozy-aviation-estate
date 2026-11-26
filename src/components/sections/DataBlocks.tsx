@@ -60,9 +60,11 @@ export function CorridorsTable() {
               <th scope="row" className={styles.rowHead}>
                 {corridor.name}
               </th>
-              <td>{corridor.connect}</td>
-              <td>{corridor.thesis}</td>
-              <td className={styles.muted}>{corridor.risk}</td>
+              <td data-label="Conectividade">{corridor.connect}</td>
+              <td data-label="Tese">{corridor.thesis}</td>
+              <td className={styles.muted} data-label="Risco">
+                {corridor.risk}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -3,7 +3,7 @@
 .tableWrap {
   inline-size: 100%;
   overflow-x: auto;
-  border-block-start: var(--border-width-strong) solid var(--color-text);
+  border-block-start: var(--border-width) solid var(--color-hairline-strong);
 }
 
 .tableWrap:focus-visible {
@@ -49,6 +49,62 @@
 
 .emphasis {
   font-weight: var(--weight-semibold);
+}
+
+/* phone: cada linha vira um bloco empilhado, com o rótulo da coluna (data-label). */
+@media (max-width: 767px) {
+  .tableWrap {
+    overflow-x: visible;
+  }
+
+  .table,
+  .table caption {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody,
+  .table tr {
+    display: block;
+  }
+
+  .table tr {
+    display: grid;
+    grid-template-columns: var(--space-10) minmax(0, 1fr);
+    column-gap: var(--space-2);
+    row-gap: var(--space-2);
+    padding-block: var(--space-4);
+    border-block-end: var(--border-width) solid var(--color-hairline);
+  }
+
+  .table th,
+  .table td {
+    display: block;
+    grid-column: 2;
+    padding: 0;
+    border: 0;
+  }
+
+  .table td.rank {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .table td[data-label]::before {
+    display: block;
+    margin-block-end: var(--space-1);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-hud);
+    text-transform: uppercase;
+    content: attr(data-label);
+  }
 }
 
 .tableNote {
