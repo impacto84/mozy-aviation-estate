@@ -126,7 +126,12 @@ export function Scrollymation({
           draw(index);
         }
       };
-      img.onerror = () => inflight.delete(index);
+      img.onerror = () => {
+        inflight.delete(index);
+        // If the opening frame is unavailable, keep the page readable instead of
+        // leaving the full-screen loading curtain up forever.
+        if (!disposed && index === 0) setReady(true);
+      };
       img.src = frameSrc(dir, index + 1);
     }
 
