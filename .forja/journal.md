@@ -55,6 +55,22 @@ Registro de decisões do build flagship (RFC-0001 · ADR-0001). Mais recente emb
 - **A11Y**: a marca do cabeçalho não tem mais `aria-label` divergente do texto visível
   (`label-content-name-mismatch`); o nome acessível é o próprio texto + "página inicial" oculto.
 
+## 2026-11-26 — Júri cego, rodada 1: FIX (6,9)
+Correções aplicadas (P1 e P2 do júri):
+- **CTA**: o dourado cheio passou a ser sempre "Solicitar acesso ao Data Room confidencial"; simulador
+  (/aviacao) e atlas (/terrenos e home) viraram contorno. Botão do formulário usa o mesmo rótulo.
+- **Hero phone**: a foto paisagem cobria a tela inteira e ampliava só o céu (desfocado). No phone a
+  foto ocupa a metade de cima, recortada no jato e na pista, e se dissolve no fundo; heróis internos
+  com `sizes` coerente com o recorte.
+- **Prova**: removido o superlativo sem fonte "o endereço mais cobiçado da região de Orlando" (vinha
+  da V05). Heróis com render ganham a legenda "Imagem: ilustração conceitual do projeto."
+- **/terrenos**: o subtítulo descrevia um mapa de satélite que não estava no hero; agora descreve os três
+  candidatos e os critérios (fatos do brief). O satélite com marcadores segue no Atlas.
+- **Números**: valores sem quebra (`nowrap`), alinhados pelo topo (`column-reverse` + `flex-end`),
+  fatos 2×2 até 1200 px; HUD da home em `--text-xl` com rótulos visíveis acima do aviso de cookies.
+- **Acabamento**: "Mozy" → "MOZY"; título e linha do sponsor com respiro; bloco "Contato direto"
+  duplicado removido de /solicitar-acesso (fica no rodapé).
+
 ## Exceções e limites conhecidos
 - Capturas full-page do Chromium acima de ~8.192 px de altura repetem o topo da página (limite de
   textura da captura, não do layout). A home tem ~15k px; a repetição nas capturas não existe no navegador.
