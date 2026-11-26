@@ -1,3 +1,9 @@
+/**
+ * Fonte única de fatos do MOZY Private Aviation Estate (preservada da V05).
+ * Nenhum número, nome ou status pode ser criado fora deste arquivo e de `.forja/brief.md`
+ * (Piso P11 — CONTENT-NO-FABRICATION). Valores literais em português, como no original.
+ */
+
 export const contact = {
   phone: "(754) 271-6203",
   phoneHref: "tel:+17542716203",
@@ -6,7 +12,7 @@ export const contact = {
   web: "mozyconstructions.com",
   address: "220 Northeast 38th Street · Oakland Park · Florida",
   entity: "P18000088130",
-};
+} as const;
 
 export const nav = [
   { href: "#visao", label: "Visão" },
@@ -15,14 +21,14 @@ export const nav = [
   { href: "#terrenos", label: "Terrenos" },
   { href: "#capital", label: "Capital" },
   { href: "#contato", label: "Contato" },
-];
+] as const;
 
 export const stats = [
   { value: "60", label: "residências de altíssimo padrão" },
   { value: "3.000 m", label: "pista para grandes jatos" },
   { value: "1.200–1.800", label: "acres como faixa-alvo" },
   { value: "24/7", label: "operação, concierge e segurança" },
-];
+] as const;
 
 export const tiers = [
   {
@@ -52,7 +58,7 @@ export const tiers = [
     price: "$7–15M",
     note: "Lake / green views",
   },
-];
+] as const;
 
 export const aircraft = [
   "G450 / G550",
@@ -61,7 +67,7 @@ export const aircraft = [
   "Falcon 2000",
   "Falcon 8X",
   "Falcon 900XP",
-];
+] as const;
 
 export const benchmarks = [
   {
@@ -88,7 +94,7 @@ export const benchmarks = [
     take: "Exclusividade e governança de 59 residências",
     bring: "Modelo próximo das nossas 60 casas",
   },
-];
+] as const;
 
 export const corridors = [
   {
@@ -119,7 +125,7 @@ export const corridors = [
     thesis: "Ranchos e benchmark Jumbolair",
     risk: "Mais distante de Orlando / MCO",
   },
-];
+] as const;
 
 export const lands = [
   {
@@ -182,7 +188,7 @@ export const lands = [
     oy: "49.4%",
     note: "Maior risco ambiental. Avançar só após desktop e confirmação de uplands. Status de anúncio: agosto 2026.",
   },
-];
+] as const;
 
 export const gates = [
   { n: "0", title: "Controle", body: "Opção + contingências" },
@@ -192,14 +198,14 @@ export const gates = [
   { n: "4", title: "Ambiental", body: "ERP + 404 + espécies" },
   { n: "5", title: "Infra", body: "Acesso + utilities" },
   { n: "6", title: "Economia", body: "Go / redesign / reject" },
-];
+] as const;
 
 export const capital = [
   { range: "$10–50M+", label: "Controle, terreno e entitlements" },
   { range: "$150–250M", label: "Aeroporto, horizontal e comuns" },
   { range: "$300–600M", label: "60 casas e hangares privados" },
   { range: "$550M–$1,0B+", label: "Faixa de investimento construída" },
-];
+] as const;
 
 export const days90 = [
   "Obter Parcel IDs, KML/KMZ e data rooms",
@@ -207,7 +213,7 @@ export const days90 = [
   "Screening de zoning, wetlands e espaço aéreo",
   "Estimar custo e residual land value",
   "Negociar opção de compra com contingências",
-];
+] as const;
 
 export const tech = [
   {
@@ -230,7 +236,7 @@ export const tech = [
     title: "Resiliência",
     body: "Microgrid, geradores redundantes, 72–120 h de autonomia crítica.",
   },
-];
+] as const;
 
 export const timeline = [
   { when: "0–12 meses", title: "Controlar", body: "Terreno · diligência · pre-app · layouts" },
@@ -238,7 +244,7 @@ export const timeline = [
   { when: "24–42", title: "Implantar", body: "Pista · utilities · acessos · segurança" },
   { when: "36–60", title: "Entregar", body: "Primeiros lotes · club · casas-modelo" },
   { when: "48–84", title: "Escalar", body: "Buildout · vendas · HOA estável" },
-];
+] as const;
 
 export const scorecard = [
   { weight: "25%", title: "Espaço aéreo + runway fit", test: "Corredor, vento, obstáculos, airports" },
@@ -247,14 +253,14 @@ export const scorecard = [
   { weight: "15%", title: "Mercado + acesso", test: "Orlando/MCO, rodovias, branding" },
   { weight: "10%", title: "Utilities + infraestrutura", test: "Energia, água, esgoto, fibra" },
   { weight: "10%", title: "Economia da aquisição", test: "Preço, termos, residual land value" },
-];
+] as const;
 
 export const stack = [
   { share: "5–10%", title: "Sponsor / seed", body: "Opção, diligência, design e approvals" },
   { share: "20–35%", title: "Development equity", body: "Aquisição e infraestrutura inicial" },
   { share: "35–50%", title: "Senior / construction debt", body: "Pista, horizontal e vertical" },
   { share: "10–25%", title: "Pre-sales / deposits", body: "Redução de exposição no buildout" },
-];
+] as const;
 
 export const risks = [
   { level: "Alto", title: "FAA / espaço aéreo", body: "Favorável antes do fechamento" },
@@ -263,7 +269,7 @@ export const risks = [
   { level: "Médio", title: "Custos / inflação", body: "Design-to-budget + contingência" },
   { level: "Médio", title: "Absorção de luxo", body: "Pre-sales + fases + produto raro" },
   { level: "Médio", title: "Operação / seguros", body: "OpCo especializado + reservas" },
-];
+] as const;
 
 export const regulators = [
   { title: "County / City", body: "Zoning · FLU · PD · public hearings" },
@@ -272,7 +278,7 @@ export const regulators = [
   { title: "FDEP / WMD", body: "ERP · stormwater · wetlands" },
   { title: "USACE / USFWS", body: "Section 404 · IPaC · espécies" },
   { title: "FDOT Roads / Fire", body: "Connection permit · traffic · fuel" },
-];
+] as const;
 
 export const entities = [
   { title: "Mozy / Sponsor", body: "Estratégia · capital · execução" },
@@ -280,7 +286,7 @@ export const entities = [
   { title: "Land / DevCo", body: "Aquisição · entitlements · construção" },
   { title: "Airport OpCo", body: "Pista · fuel · terminal · operação" },
   { title: "Club / Amenities", body: "Hospitalidade · memberships · eventos" },
-];
+] as const;
 
 export const revenues = [
   { n: "01", title: "Residências e lotes", body: "Principal fonte de receita e valorização" },
@@ -289,4 +295,4 @@ export const revenues = [
   { n: "04", title: "Airport operations", body: "Fuel margin, fees e guest handling" },
   { n: "05", title: "Club memberships", body: "Hospitalidade, wellness e eventos" },
   { n: "06", title: "Property services", body: "Concierge, maintenance e management" },
-];
+] as const;

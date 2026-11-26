@@ -1,0 +1,241 @@
+/*
+ * Capítulo cinematográfico. Padrão (servidor, sem JS, movimento reduzido):
+ * quadro estático nítido e todas as legendas visíveis. Com movimento permitido
+ * (`data-chapter-mode="scrub"`), o trilho ganha altura e o palco fica sticky.
+ */
+
+.section {
+  position: relative;
+  padding-block-start: var(--space-section-tight);
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block-end: var(--space-10);
+}
+
+.heading {
+  max-inline-size: 20ch;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+}
+
+.note {
+  max-inline-size: var(--measure);
+  color: var(--color-text-muted);
+}
+
+.track {
+  position: relative;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  min-block-size: 100svh;
+  overflow: clip;
+  background-color: var(--color-bg);
+}
+
+.still,
+.canvas,
+.shade {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.still {
+  object-fit: cover;
+}
+
+.canvas {
+  opacity: 0;
+}
+
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+.shade {
+  background-image:
+    linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 70%, transparent) 34%, transparent 70%),
+    linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 70%, transparent) 0%, transparent 26%);
+  pointer-events: none;
+}
+
+.hud {
+  position: relative;
+  z-index: var(--z-raised);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-6);
+  inline-size: 100%;
+  max-inline-size: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: calc(var(--header-height) + var(--space-6)) var(--space-8);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: var(--border-width) solid color-mix(in oklch, var(--color-text) 30%, transparent);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.tab[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.tabIndex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.captions {
+  display: grid;
+  align-content: end;
+  gap: var(--space-8);
+}
+
+.caption {
+  display: grid;
+  gap: var(--space-2);
+  max-inline-size: var(--measure-narrow);
+}
+
+.captionKicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.captionTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-snug);
+}
+
+.captionBody {
+  color: var(--color-text);
+}
+
+.captionMid {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.meter {
+  position: relative;
+  flex: 1 1 8rem;
+  block-size: var(--border-width-strong);
+  background-color: color-mix(in oklch, var(--color-text) 20%, transparent);
+  overflow: clip;
+}
+
+.meterFill {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent);
+  transform-origin: left center;
+  transform: scaleX(var(--scrub-progress, 1));
+}
+
+/* Modo scrub: trilho alto, palco preso, uma legenda por vez. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Trilho enxuto: 0,8 tela de rolagem de scrub além do palco (era 2,2), sem faixa vazia longa. */
+  .section[data-chapter-mode="scrub"] .track {
+    block-size: 180svh;
+  }
+
+  .section[data-chapter-mode="scrub"] .stage {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100svh;
+  }
+
+  .section[data-chapter-mode="scrub"] .captions {
+    grid-template-areas: "caption";
+  }
+
+  .section[data-chapter-mode="scrub"] .caption {
+    grid-area: caption;
+    align-self: end;
+    /* Legenda inativa sai também da árvore visível (não fica empilhada sob a ativa). */
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 var(--space-4);
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      translate var(--duration-slow) var(--ease-out),
+      visibility var(--duration-slow) var(--ease-out);
+  }
+
+  .section[data-chapter-mode="scrub"] .hud[data-phase="intro"] [data-caption="intro"],
+  .section[data-chapter-mode="scrub"] .hud[data-phase="mid"] [data-caption="mid"],
+  .section[data-chapter-mode="scrub"] .hud[data-phase="arrival"] [data-caption="arrival"] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .section[data-chapter-mode="scrub"] .hud:not([data-phase]) [data-caption="intro"] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .canvas {
+    transition: opacity var(--duration-base) var(--ease-out);
+  }
+
+  .tab {
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+}
+
+@media (min-width: 1200px) {
+  .intro {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: end;
+    max-inline-size: var(--container-wide);
+  }
+}

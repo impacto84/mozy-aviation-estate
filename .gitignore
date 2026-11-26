@@ -1,16 +1,33 @@
+# Dependências e builds
 node_modules/
-.output/
-.vinxi/
-dist/
-.tanstack/
-.nitro/
-.vercel/
-screenshots/
-attachments/
-artifacts/
-*.log
-.grok/
-__pycache__/
+.next/
+out/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo
+next-env.d.ts
+
+# FORJA: saída do gate (não versionada)
+.forja/gate/
+
+# Dados de leads gravados em disco (PII) — nunca versionar
+.data/
+
+# Segredos e ambiente local
 .env
+.env.*
+!.env.example
+
+# Sistema e logs
+*.log
 .DS_Store
-public/__grok/
+screenshots/
+
+# FORJA: servidor local e relatórios temporários
+.forja/server.log
+.forja/server.pid
+.forja/*.tmp
+*.report.json
+.lighthouseci/
+.vitest/

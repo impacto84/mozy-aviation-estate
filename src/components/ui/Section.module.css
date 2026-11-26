@@ -1,0 +1,63 @@
+/* Primitivos de seção: ritmo vertical, cabeçalho de seção e grade de 12 colunas. */
+
+.section {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+.tight {
+  padding-block: var(--space-section-tight);
+}
+
+.inner {
+  inline-size: 100%;
+  max-inline-size: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+}
+
+.wide {
+  max-inline-size: var(--container-wide);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-5);
+  margin-block-end: var(--space-12);
+}
+
+.index {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.title {
+  max-inline-size: 22ch;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.lede {
+  max-inline-size: var(--measure);
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+}
+
+.note {
+  max-inline-size: var(--measure);
+  margin-block-start: var(--space-8);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 1200px) {
+  .headerSplit {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: end;
+    column-gap: var(--space-16);
+  }
+}

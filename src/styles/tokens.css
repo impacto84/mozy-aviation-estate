@@ -1,0 +1,237 @@
+/*
+ * Design tokens — MOZY Private Aviation Estate
+ * Direção: "High-Altitude Architectural Luxury / Sovereign Aviation Club" (ver DESIGN.md).
+ *
+ * Fonte única de cor, tipo, espaço, raio, sombra, movimento e camadas.
+ * CSS Modules só consomem os tokens SEMÂNTICOS (--color-*, --font-*, --space-*…).
+ *
+ * Camadas:
+ *   1. literais   (--void-*, --navy-*, --ivory-*, --brass-*, --signal-*) — nunca usados direto em componente
+ *   2. semânticos (--color-*, …) — o que os componentes leem
+ *
+ * Superfícies: o site é escuro por cena (crepúsculo, pista iluminada, noite). Seções
+ * alternam a superfície com `data-surface="void" | "navy" | "ivory"`: o atributo
+ * reescreve os tokens semânticos e o `color-scheme`, e todo o conteúdo abaixo acompanha.
+ *
+ * Breakpoints (media query não aceita var(); use os números):
+ *   phone <= 767px | tablet 768px a 1199px | desktop >= 1200px
+ */
+
+:root {
+  /* 1. Literais ---------------------------------------------------------- */
+  --void-950: oklch(13.5% 0.018 255);
+  --void-900: oklch(16% 0.022 255);
+  --navy-900: oklch(19.5% 0.034 252);
+  --navy-800: oklch(23.5% 0.04 252);
+  --navy-700: oklch(29% 0.042 252);
+  --navy-600: oklch(36% 0.04 252);
+  --mist-400: oklch(72% 0.022 245);
+  --mist-300: oklch(80% 0.018 245);
+  --mist-100: oklch(94% 0.008 245);
+
+  --ivory-50: oklch(97.5% 0.008 85);
+  --ivory-100: oklch(95% 0.012 85);
+  --ivory-200: oklch(90.5% 0.016 82);
+  --ivory-300: oklch(84% 0.02 80);
+  --stone-600: oklch(43% 0.022 250);
+  --ink-900: oklch(19% 0.03 252);
+
+  --brass-200: oklch(90% 0.06 85);
+  --brass-300: oklch(83% 0.1 80);
+  --brass-400: oklch(77% 0.115 76);
+  --brass-700: oklch(47% 0.09 68);
+  --brass-800: oklch(38% 0.07 66);
+
+  --signal-400: oklch(68% 0.19 32);
+  --signal-600: oklch(55% 0.19 30);
+  --runway-green: oklch(74% 0.14 150);
+
+  /* 2. Semânticos: cor (superfície padrão = void, escura) ----------------- */
+  --color-bg: var(--void-950);
+  --color-surface: var(--navy-900);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-accent-soft: var(--brass-800);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-runway: var(--runway-green);
+  --color-scrim: var(--void-950);
+
+  --color-success: var(--runway-green);
+  --color-success-soft: var(--navy-800);
+  --color-warning: var(--brass-300);
+  --color-warning-soft: var(--brass-800);
+  --color-danger: var(--signal-400);
+  --color-danger-soft: var(--navy-800);
+
+  /* Tipografia ------------------------------------------------------------ */
+  /* --nf-*: famílias de next/font (src/app/fonts.ts) com fallback de métricas ajustadas. */
+  --font-display: var(--nf-display, "Cormorant Garamond"), "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-sans: var(--nf-sans, "Manrope Variable"), "Avenir Next", "Segoe UI", Helvetica, sans-serif;
+  --font-mono: var(--nf-mono, "JetBrains Mono Variable"), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-display);
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: clamp(1.125rem, 1.0554rem + 0.2857vw, 1.3125rem);
+  --text-xl: clamp(1.375rem, 1.1893rem + 0.7619vw, 1.875rem);
+  --text-2xl: clamp(1.875rem, 1.3643rem + 2.0952vw, 3.25rem);
+  --text-3xl: clamp(2.375rem, 1.4929rem + 3.619vw, 4.75rem);
+  --text-display: clamp(2.875rem, 1.5286rem + 5.5238vw, 6.5rem);
+  --text-kpi: clamp(2.5rem, 1.3857rem + 4.5714vw, 5.5rem);
+
+  --leading-tight: 1.02;
+  --leading-snug: 1.22;
+  --leading-body: 1.62;
+  --tracking-display: -0.018em;
+  --tracking-tight: -0.012em;
+  --tracking-wide: 0.14em;
+  --tracking-hud: 0.08em;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 650;
+
+  /* Espaço (base 4px) ------------------------------------------------------ */
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-section: clamp(5rem, 3rem + 8vw, 10rem);
+  --space-section-tight: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+
+  /* Layout ----------------------------------------------------------------- */
+  --container-max: 82rem;
+  --container-wide: 96rem;
+  --container-gutter: clamp(1.25rem, 0.4rem + 3.6vw, 3.5rem);
+  --measure: 60ch;
+  --measure-narrow: 42ch;
+  --measure-title: 17ch;
+  --target-min: 2.75rem;
+  --header-height: 4.5rem;
+  --sidebar-width: 15.5rem;
+  /* Coluna de número grande (pesos do scorecard, KPIs em régua): acompanha --text-2xl. */
+  --column-kpi: calc(var(--text-2xl) * 2.5);
+  /* Respiro inferior dos heróis = altura do aviso de cookies fixo no rodapé (phone). */
+  --consent-offset: 7.5rem;
+
+  /* Forma ------------------------------------------------------------------ */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 999px;
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.24);
+  --shadow-md: 0 14px 34px oklch(0% 0 0 / 0.32), 0 2px 8px oklch(0% 0 0 / 0.2);
+  --shadow-lg: 0 30px 70px oklch(0% 0 0 / 0.45), 0 8px 20px oklch(0% 0 0 / 0.25);
+
+  /* Movimento (use só dentro de prefers-reduced-motion: no-preference) ------ */
+  --duration-fast: 160ms;
+  --duration-base: 320ms;
+  --duration-slow: 720ms;
+  --duration-cinematic: 1200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Camadas ---------------------------------------------------------------- */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 50;
+  --z-header: 100;
+  --z-overlay: 1000;
+
+  color-scheme: dark;
+}
+
+/* Superfície navy: um degrau mais clara, para alternar ritmo com o void. */
+[data-surface="navy"] {
+  --color-bg: var(--navy-900);
+  --color-surface: var(--navy-800);
+  --color-surface-raised: var(--navy-700);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-scrim: var(--navy-900);
+}
+
+/* Superfície void explícita (para reabrir o escuro dentro de uma seção ivory). */
+[data-surface="void"] {
+  --color-bg: var(--void-950);
+  --color-surface: var(--navy-900);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-scrim: var(--void-950);
+
+  color-scheme: dark;
+}
+
+/* Superfície ivory (pedra clara): papel de dossiê, tabelas, dados. */
+[data-surface="ivory"] {
+  --color-bg: var(--ivory-100);
+  --color-surface: var(--ivory-50);
+  --color-surface-raised: var(--ivory-200);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--stone-600);
+  --color-border: var(--ivory-300);
+  --color-border-strong: var(--stone-600);
+  --color-accent: var(--brass-700);
+  --color-accent-strong: var(--brass-800);
+  --color-accent-soft: var(--brass-200);
+  --color-on-accent: var(--ivory-50);
+  --color-focus: var(--brass-800);
+  --color-signal: var(--signal-600);
+  --color-scrim: var(--ivory-100);
+
+  color-scheme: light;
+}
+
+/*
+ * Respiro inferior dos heróis do tamanho do aviso de cookies (fixo no rodapé): o CTA
+ * primário nunca fica coberto na primeira dobra. A reserva é fixa de propósito: ligar
+ * e desligar conforme o aviso aparece (só depois da hidratação) deslocava o conteúdo
+ * e estourava o CLS. Valores medidos do aviso em cada faixa (phone empilha texto e botões).
+ */
+@media (min-width: 768px) {
+  :root {
+    --consent-offset: 4.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --consent-offset: 0rem;
+  }
+}

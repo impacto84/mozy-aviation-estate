@@ -1,0 +1,124 @@
+/*
+ * Formulário de lead: uma coluna em toda largura, rótulo acima do campo,
+ * alvos de toque com a altura mínima do token. Só tokens.
+ */
+
+.shell {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.field {
+  display: grid;
+  /* Rótulo mais perto do próprio campo do que do campo vizinho. */
+  gap: var(--space-2);
+}
+
+.label {
+  font-weight: var(--weight-medium);
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+}
+
+.control {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  /* Nunca abaixo de 1rem: evita o zoom automático do iOS ao focar. */
+  font-size: max(var(--text-base), 1em);
+}
+
+textarea.control {
+  resize: vertical;
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--color-text);
+  border-inline-start-width: var(--space-1);
+}
+
+.error {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.error[hidden] {
+  display: none;
+}
+
+.submit {
+  min-block-size: var(--target-min);
+  padding: var(--space-3) var(--space-6);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.submit[aria-disabled="true"] {
+  cursor: progress;
+}
+
+.status {
+  min-block-size: var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* Aviso do envio sem JavaScript: só aparece quando a URL aponta para ele (#id). */
+.fallbackError {
+  display: none;
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-text);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.fallbackError:target {
+  display: block;
+}
+
+/* Campo-isca: fora da vista e do fluxo, mas presente no DOM para quem preenche tudo. */
+.trap {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .submit {
+    justify-self: start;
+  }
+}
+
+.fieldHint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+select.control {
+  appearance: auto;
+}
+
+.submit:hover {
+  background-color: var(--color-accent-strong);
+}
