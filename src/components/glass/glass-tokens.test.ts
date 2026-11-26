@@ -40,12 +40,12 @@ function ruleBody(selector: string): string {
 
 /**
  * O site alterna superfícies por `data-surface`: o esquema escuro é o `:root` (void),
- * o claro é a superfície ivory. Um token do esquema claro que a superfície não
+ * o "claro" virou a superfície dossier (grafite, também escura). Um token do esquema claro que a superfície não
  * redefine herda o valor do `:root`.
  */
 const SCHEME_BLOCKS: Readonly<Record<Scheme, readonly string[]>> = {
   dark: [ruleBody(":root")],
-  light: [ruleBody('[data-surface="ivory"]'), ruleBody(":root")],
+  light: [ruleBody('[data-surface="dossier"]'), ruleBody(":root")],
 };
 const ROOT_BLOCK = ruleBody(":root");
 

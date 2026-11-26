@@ -36,7 +36,7 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
         width={image.width}
         height={image.height}
         sizes="(max-width: 767px) 200vw, 100vw"
-        quality={72}
+        quality={88}
         priority
       />
       <div className={styles.scrim} aria-hidden="true" />

@@ -25,7 +25,7 @@ export const CONCEPT_CAPTION = "Imagem: ilustração conceitual do projeto.";
 
 export const CTA = {
   primary: "Solicitar acesso ao Data Room confidencial",
-  primaryShort: "Solicitar acesso",
+  primaryShort: "Acesso ao Data Room",
   aviation: "Explorar pista & frota",
   lands: "Atlas de terrenos (FL)",
   capital: "Tese de capital",
@@ -52,7 +52,7 @@ export const CHAPTER_COPY = {
     intro: {
       kicker: "Orlando · Founder Estate",
       title: "Entrar na casa. A vista é a pista.",
-      body: "Central Florida — carvalhos, relva, taxiway. A câmara atravessa as portas de vidro e o jato espera do outro lado do living.",
+      body: "Central Florida — carvalhos, relva, taxiway. A câmera atravessa as portas de vidro e o jato espera do outro lado do living.",
     },
     mid: "A casa",
     arrival: { kicker: "Você chegou", title: "A janela dá para o hangar.", body: "" },
@@ -62,10 +62,10 @@ export const CHAPTER_COPY = {
     intro: {
       kicker: "Casa + hangar",
       title: "Entra. O jato já espera.",
-      body: "A câmara avança no piso vazio — só para a frente. Da taxiway ao nariz da aeronave.",
+      body: "A câmera avança no piso vazio — só para a frente. Da taxiway ao nariz da aeronave.",
     },
     mid: "Avança",
-    arrival: { kicker: "O quotidiano", title: "Da pista à sala.", body: "" },
+    arrival: { kicker: "O cotidiano", title: "Da pista à sala.", body: "" },
   },
 } as const;
 
@@ -86,7 +86,7 @@ export const COLLECTIONS = {
 
 export const HANGAR_HOME = {
   title: "Residência, hangar e operação projetados juntos.",
-  body: "Casas de 3 a 4 pavimentos, hangar para uma ou várias aeronaves, taxiway privada e a pista como extensão do quotidiano — não como um apêndice.",
+  body: "Casas de 3 a 4 pavimentos, hangar para uma ou várias aeronaves, taxiway privada e a pista como extensão do cotidiano — não como um apêndice.",
 } as const;
 
 export const AVIATION = {

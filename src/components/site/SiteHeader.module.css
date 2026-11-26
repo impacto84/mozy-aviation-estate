@@ -1,6 +1,7 @@
 /*
- * Barra flutuante em vidro. Piso P7: o fundo opaco é a regra base; o vidro
- * (backdrop-filter) só liga dentro de @supports. Texto sempre sobre tinta densa.
+ * Cabeçalho fixo arquitetônico. Piso P7: o fundo opaco é a regra base; o vidro
+ * (backdrop-filter) só liga dentro de @supports. Sem pílulas: faixa reta com fio de
+ * latão de 1px embaixo, CTA retangular de chanfro fino.
  */
 
 .header {
@@ -8,40 +9,33 @@
   inset-block-start: 0;
   inset-inline: 0;
   z-index: var(--z-header);
-  padding-block-start: var(--space-3);
-  padding-inline: var(--container-gutter);
-  pointer-events: none;
+  border-block-end: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .header {
+    background-color: color-mix(in oklch, var(--color-bg) 80%, transparent);
+    -webkit-backdrop-filter: blur(var(--space-4)) saturate(1.2);
+    backdrop-filter: blur(var(--space-4)) saturate(1.2);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .header {
+    background-color: var(--color-bg);
+  }
 }
 
 .bar {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-2);
   max-inline-size: var(--container-wide);
-  min-block-size: calc(var(--header-height) - var(--space-3));
+  min-block-size: var(--header-height);
   margin-inline: auto;
-  padding-block: var(--space-2);
-  padding-inline: var(--space-3) var(--space-2);
-  border: var(--border-width) solid color-mix(in oklch, var(--color-text) 14%, transparent);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-surface);
-  box-shadow: var(--shadow-md);
-  color: var(--color-text);
-  pointer-events: auto;
-}
-
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .bar {
-    background-color: color-mix(in oklch, var(--color-bg) 72%, transparent);
-    -webkit-backdrop-filter: blur(var(--space-5)) saturate(1.4);
-    backdrop-filter: blur(var(--space-5)) saturate(1.4);
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .bar {
-    background-color: var(--color-surface);
-  }
+  padding-inline: var(--container-gutter);
 }
 
 .brand {
@@ -49,7 +43,7 @@
   align-items: center;
   gap: var(--space-3);
   min-block-size: var(--target-min);
-  padding-inline-end: var(--space-2);
+  margin-inline-end: auto;
   color: inherit;
   text-decoration: none;
 }
@@ -57,7 +51,7 @@
 .mark {
   inline-size: var(--space-8);
   block-size: var(--space-8);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
 }
 
 .wordmark {
@@ -73,6 +67,7 @@
 }
 
 .wordmarkSub {
+  display: none;
   font-family: var(--font-display);
   font-size: var(--text-sm);
   font-style: italic;
@@ -81,50 +76,73 @@
 
 .nav {
   display: none;
-  margin-inline-start: auto;
 }
 
 .links {
   display: flex;
-  gap: var(--space-1);
+  gap: var(--space-6);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-block-size: var(--target-min);
-  padding-inline: var(--space-4);
-  border-radius: var(--radius-pill);
   color: var(--color-text-muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
   text-decoration: none;
+  text-transform: uppercase;
+}
+
+.link::after {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: var(--space-2);
+  block-size: var(--border-width);
+  background-color: var(--color-accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
 .link:hover,
 .link[aria-current="page"] {
   color: var(--color-text);
-  background-color: color-mix(in oklch, var(--color-text) 8%, transparent);
 }
 
+.link:hover::after,
+.link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* CTA do cabeçalho: visível nas três larguras (phone incluso). */
 .cta {
-  display: none;
+  display: inline-flex;
   align-items: center;
   min-block-size: var(--target-min);
-  padding-inline: var(--space-5);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-accent);
-  color: var(--color-on-accent);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
+  padding-inline: var(--space-3);
+  border: var(--border-width) solid var(--color-hairline-strong);
+  border-radius: var(--radius-cta);
+  background-color: color-mix(in oklch, var(--color-accent) 10%, var(--color-bg));
+  color: var(--color-champagne);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-hud);
   text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.cta:hover {
-  background-color: var(--color-accent-strong);
+.cta:hover,
+.cta:focus-visible {
+  border-color: var(--color-champagne);
+  color: var(--color-text);
 }
 
 .menuButton {
@@ -132,10 +150,9 @@
   place-items: center;
   inline-size: var(--target-min);
   block-size: var(--target-min);
-  margin-inline-start: auto;
   padding: 0;
-  border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-cta);
   background-color: transparent;
   color: var(--color-text);
 }
@@ -145,8 +162,7 @@
 .menuIcon::after {
   display: block;
   inline-size: var(--space-4);
-  block-size: var(--border-width-strong);
-  border-radius: var(--radius-pill);
+  block-size: var(--border-width);
   background-color: currentcolor;
 }
 
@@ -170,25 +186,24 @@
 }
 
 .menu {
-  inset: var(--space-3) var(--space-3) auto auto;
-  inline-size: min(calc(100vw - var(--space-6)), 22rem);
+  inset: 0 0 auto auto;
+  inline-size: min(100vw, 24rem);
+  block-size: 100dvh;
+  max-block-size: 100dvh;
   margin: 0;
-  padding: var(--space-6);
-  border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-xl);
-  background-color: var(--color-surface);
+  padding: var(--space-8) var(--space-6);
+  border: 0;
+  border-inline-start: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-bg);
   color: var(--color-text);
-  box-shadow: var(--shadow-lg);
-  pointer-events: auto;
 }
 
 .menu::backdrop {
-  background-color: color-mix(in oklch, var(--color-scrim) 70%, transparent);
+  background-color: color-mix(in oklch, var(--color-scrim) 76%, transparent);
 }
 
 .menuLinks {
   display: grid;
-  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -197,11 +212,11 @@
 .menuLink {
   display: flex;
   align-items: center;
-  min-block-size: var(--target-min);
-  padding-inline: var(--space-3);
-  border-radius: var(--radius-md);
+  min-block-size: calc(var(--target-min) + var(--space-3));
+  border-block-end: var(--border-width) solid var(--color-hairline);
   font-family: var(--font-display);
   font-size: var(--text-xl);
+  font-weight: var(--weight-light);
   text-decoration: none;
 }
 
@@ -210,34 +225,44 @@
 }
 
 .menuClose {
-  margin-block-start: var(--space-4);
+  margin-block-start: var(--space-6);
   min-block-size: var(--target-min);
   padding-inline: var(--space-4);
-  border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-cta);
   background-color: transparent;
   color: var(--color-text);
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .link,
   .cta {
     transition:
-      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
       color var(--duration-fast) var(--ease-out);
+  }
+
+  .link::after {
+    transition: transform var(--duration-base) var(--ease-out);
   }
 }
 
-/* tablet: o CTA aparece ao lado do menu */
+/* tablet: subtítulo da marca e rótulo longo do CTA */
 @media (min-width: 768px) {
-  .cta {
-    display: inline-flex;
-    margin-inline-start: auto;
+  .wordmarkSub {
+    display: block;
   }
 
-  .menuButton {
-    margin-inline-start: 0;
+  .bar {
+    gap: var(--space-3);
+  }
+
+  .cta {
+    padding-inline: var(--space-4);
   }
 }
 
@@ -245,10 +270,7 @@
 @media (min-width: 1200px) {
   .nav {
     display: block;
-  }
-
-  .cta {
-    margin-inline-start: 0;
+    margin-inline-end: var(--space-4);
   }
 
   .menuButton {

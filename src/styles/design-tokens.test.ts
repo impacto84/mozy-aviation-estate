@@ -50,8 +50,7 @@ const DESIGN_SYSTEM_PREFIXES = [
 const EXTERNAL_PROVIDERS: Readonly<Record<string, string>> = {
   "--x": "src/components/atlas/SatelliteAtlas.tsx",
   "--y": "src/components/atlas/SatelliteAtlas.tsx",
-  "--share": "src/components/aviation/FleetSimulator.tsx",
-  "--scrub-progress": "src/components/chapter/useFrameScrub.ts",
+  "--act-progress": "src/components/chapter/useFrameScrub.ts",
   "--reveal-index": "src/components/motion/Reveal.tsx",
   "--marquee-duration": "src/components/motion/marquee-runtime.ts",
   "--glass-refraction-filter": "src/components/glass/GlassBackdrop.tsx",
@@ -59,10 +58,10 @@ const EXTERNAL_PROVIDERS: Readonly<Record<string, string>> = {
   "--nf-sans": "src/app/fonts.ts",
   "--nf-mono": "src/app/fonts.ts",
   "--glass-text-muted": "src/components/glass/Glass.module.css",
-  "--hero-color-base": "src/components/home/HomeHero.module.css",
-  "--hero-color-soft": "src/components/home/HomeHero.module.css",
-  "--hero-color-accent": "src/components/home/HomeHero.module.css",
-  "--hero-color-ink": "src/components/home/HomeHero.module.css",
+  "--hero-color-base": "src/components/hero/HeroShell.module.css",
+  "--hero-color-soft": "src/components/hero/HeroShell.module.css",
+  "--hero-color-accent": "src/components/hero/HeroShell.module.css",
+  "--hero-color-ink": "src/components/hero/HeroShell.module.css",
 };
 
 function listCss(dir: string): string[] {

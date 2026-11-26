@@ -69,14 +69,14 @@ export default function LandsPage() {
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="corredores-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="corredores-titulo" data-surface="dossier">
         <div className={section.inner}>
           <SectionHeader id="corredores-titulo" title="Quatro corredores, ordenados por tese e por risco." isSplit lede="Conectividade com MCO, SFB, Lake Nona, Tampa e a cultura aeronáutica de Ocala." />
           <CorridorsTable />
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="scorecard-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="scorecard-titulo" data-surface="dossier">
         <div className={section.inner}>
           <SectionHeader id="scorecard-titulo" index="Scorecard de seleção" title={DISCIPLINE.scorecardTitle} isSplit lede="Seis critérios com peso fixo. O espaço aéreo e o encaixe da pista pesam mais do que o preço por acre." />
           <ScorecardBars />

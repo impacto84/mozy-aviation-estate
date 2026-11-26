@@ -69,7 +69,7 @@
 .figureImage {
   inline-size: 100%;
   block-size: auto;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xs);
 }
 
 .legend {
@@ -85,7 +85,7 @@
   padding-block: var(--space-2);
   padding-inline: var(--space-4);
   border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-cta);
   font-size: var(--text-sm);
 }
 
@@ -147,7 +147,7 @@
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: clip;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xs);
 }
 
 .photoWide {

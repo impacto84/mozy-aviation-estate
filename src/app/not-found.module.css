@@ -41,7 +41,7 @@
   align-items: center;
   min-block-size: var(--target-min);
   padding-inline: var(--space-6);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-cta);
   font-weight: var(--weight-semibold);
   text-decoration: none;
 }

@@ -9,9 +9,10 @@ import styles from "./SiteHeader.module.css";
 const MENU_ID = "menu-principal";
 
 /**
- * Barra de navegação flutuante (vidro sobre fotografia). Server Component; só os
- * links com estado de rota são cliente. No phone o menu abre em um `popover` nativo,
- * sem JavaScript próprio (fecha com Esc e clique fora).
+ * Cabeçalho fixo: faixa de obsidiana translúcida com fio de latão inferior, sem
+ * pílula. O CTA primário (Data Room) fica visível nas três larguras, inclusive no
+ * phone (390), ao lado do menu. Server Component; só os links com estado de rota são
+ * cliente. No phone o menu abre em um `popover` nativo (fecha com Esc e clique fora).
  */
 export function SiteHeader() {
   return (
@@ -28,7 +29,7 @@ export function SiteHeader() {
         <nav className={styles.nav} aria-label="Principal">
           <NavLinks items={NAV_ITEMS} className={styles.links} linkClassName={styles.link} />
         </nav>
-        <Link className={styles.cta} href={ACCESS_PATH} data-forja-cta="header">
+        <Link className={styles.cta} href={ACCESS_PATH} data-forja-cta="primary">
           {CTA.primaryShort}
         </Link>
         <button className={styles.menuButton} type="button" popoverTarget={MENU_ID} aria-label="Abrir menu">

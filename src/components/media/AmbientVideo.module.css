@@ -16,12 +16,15 @@
   z-index: var(--z-raised);
   min-block-size: var(--target-min);
   padding-inline: var(--space-4);
-  border: var(--border-width) solid color-mix(in oklch, var(--color-text) 35%, transparent);
-  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--color-hairline-strong);
+  border-radius: var(--radius-cta);
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
 .toggle:hover {

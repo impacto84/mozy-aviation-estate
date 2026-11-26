@@ -1,17 +1,17 @@
 /*
- * Design tokens — MOZY Private Aviation Estate
- * Direção: "High-Altitude Architectural Luxury / Sovereign Aviation Club" (ver DESIGN.md).
+ * Design tokens — MOZY Private Aviation Estate (V3 · FORJA 1.1 · --profile flagship)
+ * Direção: "Cinematográfico & Ultra-Luxury Soberano" (ver DESIGN.md).
  *
  * Fonte única de cor, tipo, espaço, raio, sombra, movimento e camadas.
  * CSS Modules só consomem os tokens SEMÂNTICOS (--color-*, --font-*, --space-*…).
  *
  * Camadas:
- *   1. literais   (--void-*, --navy-*, --ivory-*, --brass-*, --signal-*) — nunca usados direto em componente
+ *   1. literais   (--void-*, --navy-*, --mist-*, --brass-*, --signal-*) — nunca usados direto em componente
  *   2. semânticos (--color-*, …) — o que os componentes leem
  *
- * Superfícies: o site é escuro por cena (crepúsculo, pista iluminada, noite). Seções
- * alternam a superfície com `data-surface="void" | "navy" | "ivory"`: o atributo
- * reescreve os tokens semânticos e o `color-scheme`, e todo o conteúdo abaixo acompanha.
+ * Superfícies: o site inteiro é noturno (obsidiana / carvão / grafite de dossiê, todas
+ * entre oklch 11% e 17%). Seções alternam o degrau com `data-surface="void" | "navy" |
+ * "dossier"`; não existe mais superfície clara (bege) em nenhuma rota.
  *
  * Breakpoints (media query não aceita var(); use os números):
  *   phone <= 767px | tablet 768px a 1199px | desktop >= 1200px
@@ -19,32 +19,30 @@
 
 :root {
   /* 1. Literais ---------------------------------------------------------- */
-  --void-950: oklch(13.5% 0.018 255);
-  --void-900: oklch(16% 0.022 255);
-  --navy-900: oklch(19.5% 0.034 252);
-  --navy-800: oklch(23.5% 0.04 252);
-  --navy-700: oklch(29% 0.042 252);
-  --navy-600: oklch(36% 0.04 252);
-  --mist-400: oklch(72% 0.022 245);
-  --mist-300: oklch(80% 0.018 245);
-  --mist-100: oklch(94% 0.008 245);
+  /* Obsidiana → carvão → grafite: o degrau é pequeno de propósito (imersão >= 85% noturna). */
+  --void-950: oklch(11.5% 0.012 262);
+  --void-900: oklch(13% 0.013 262);
+  --navy-900: oklch(14.5% 0.014 260);
+  --navy-800: oklch(18% 0.016 258);
+  --navy-700: oklch(24% 0.018 256);
+  --navy-600: oklch(33% 0.02 255);
+  --graphite-900: oklch(16% 0.01 75);
+  --graphite-800: oklch(19.5% 0.012 75);
+  --mist-400: oklch(73% 0.014 80);
+  --mist-300: oklch(82% 0.014 80);
+  --mist-100: oklch(94.5% 0.012 85);
 
-  --ivory-50: oklch(97.5% 0.008 85);
-  --ivory-100: oklch(95% 0.012 85);
-  --ivory-200: oklch(90.5% 0.016 82);
-  --ivory-300: oklch(84% 0.02 80);
-  --stone-600: oklch(43% 0.022 250);
-  --ink-900: oklch(19% 0.03 252);
+  /* Latão escovado / champanhe: único acento, usado em fio (1px), rótulo e CTA. */
+  --brass-200: oklch(90% 0.045 86);
+  --brass-300: oklch(83% 0.072 83);
+  --brass-400: oklch(76% 0.085 79);
+  --brass-500: oklch(66% 0.08 75);
+  --brass-700: oklch(47% 0.06 70);
+  --brass-800: oklch(30% 0.04 70);
 
-  --brass-200: oklch(90% 0.06 85);
-  --brass-300: oklch(83% 0.1 80);
-  --brass-400: oklch(77% 0.115 76);
-  --brass-700: oklch(47% 0.09 68);
-  --brass-800: oklch(38% 0.07 66);
-
-  --signal-400: oklch(68% 0.19 32);
-  --signal-600: oklch(55% 0.19 30);
-  --runway-green: oklch(74% 0.14 150);
+  --signal-400: oklch(70% 0.16 34);
+  --signal-600: oklch(58% 0.16 32);
+  --runway-green: oklch(76% 0.12 150);
 
   /* 2. Semânticos: cor (superfície padrão = void, escura) ----------------- */
   --color-bg: var(--void-950);
@@ -62,6 +60,10 @@
   --color-signal: var(--signal-400);
   --color-runway: var(--runway-green);
   --color-scrim: var(--void-950);
+  /* Fios de latão: divisores de 1px, molduras de diagrama, bordas de CTA. */
+  --color-hairline: color-mix(in oklch, var(--brass-500) 38%, transparent);
+  --color-hairline-strong: var(--brass-500);
+  --color-champagne: var(--brass-200);
 
   --color-success: var(--runway-green);
   --color-success-soft: var(--navy-800);
@@ -132,8 +134,11 @@
   --sidebar-width: 15.5rem;
   /* Coluna de número grande (pesos do scorecard, KPIs em régua): acompanha --text-2xl. */
   --column-kpi: calc(var(--text-2xl) * 2.5);
-  /* Respiro inferior dos heróis = altura do aviso de cookies fixo no rodapé (phone). */
-  --consent-offset: 7.5rem;
+  /*
+   * Respiro inferior dos heróis. Sem GTM o aviso de cookies não existe (nada a consentir);
+   * com GTM ele é um cartão compacto no canto que não cobre o CTA. Reserva zero.
+   */
+  --consent-offset: 0rem;
 
   /* Forma ------------------------------------------------------------------ */
   --radius-xs: 0.125rem;
@@ -142,6 +147,8 @@
   --radius-lg: 0.875rem;
   --radius-xl: 1.25rem;
   --radius-pill: 999px;
+  /* CTA arquitetônico: canto reto com chanfro fino (2px). Pílula é proibida em CTA. */
+  --radius-cta: var(--radius-xs);
   --border-width: 1px;
   --border-width-strong: 2px;
   --focus-width: 2px;
@@ -150,12 +157,16 @@
   --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.24);
   --shadow-md: 0 14px 34px oklch(0% 0 0 / 0.32), 0 2px 8px oklch(0% 0 0 / 0.2);
   --shadow-lg: 0 30px 70px oklch(0% 0 0 / 0.45), 0 8px 20px oklch(0% 0 0 / 0.25);
+  --shadow-cinema: 0 40px 120px oklch(0% 0 0 / 0.6);
 
   /* Movimento (use só dentro de prefers-reduced-motion: no-preference) ------ */
   --duration-fast: 160ms;
   --duration-base: 320ms;
   --duration-slow: 720ms;
   --duration-cinematic: 1200ms;
+  /* Fly-to do Atlas: câmera contínua em GPU (transform + opacity). */
+  --duration-flyto: 1000ms;
+  --ease-flyto: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -179,7 +190,7 @@
   --color-scrim: var(--navy-900);
 }
 
-/* Superfície void explícita (para reabrir o escuro dentro de uma seção ivory). */
+/* Superfície void explícita (reabre a obsidiana dentro de uma seção navy ou dossier). */
 [data-surface="void"] {
   --color-bg: var(--void-950);
   --color-surface: var(--navy-900);
@@ -198,35 +209,22 @@
   color-scheme: dark;
 }
 
-/* Superfície ivory (pedra clara): papel de dossiê, tabelas, dados. */
-[data-surface="ivory"] {
-  --color-bg: var(--ivory-100);
-  --color-surface: var(--ivory-50);
-  --color-surface-raised: var(--ivory-200);
-  --color-text: var(--ink-900);
-  --color-text-muted: var(--stone-600);
-  --color-border: var(--ivory-300);
-  --color-border-strong: var(--stone-600);
-  --color-accent: var(--brass-700);
-  --color-accent-strong: var(--brass-800);
-  --color-accent-soft: var(--brass-200);
-  --color-on-accent: var(--ivory-50);
-  --color-focus: var(--brass-800);
-  --color-signal: var(--signal-600);
-  --color-scrim: var(--ivory-100);
+/* Superfície dossier: grafite quente para tabelas, scorecards e dados (substitui o bege). */
+[data-surface="dossier"] {
+  --color-bg: var(--graphite-900);
+  --color-surface: var(--graphite-800);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-accent-soft: var(--brass-800);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-scrim: var(--graphite-900);
 
-  color-scheme: light;
-}
-
-/*
- * Respiro inferior dos heróis do tamanho do aviso de cookies (fixo no rodapé): o CTA
- * primário nunca fica coberto na primeira dobra. A reserva é fixa de propósito: ligar
- * e desligar conforme o aviso aparece (só depois da hidratação) deslocava o conteúdo
- * e estourava o CLS. Valores medidos do aviso: phone empilha texto e botões (7,5rem);
- * a partir de 768px o aviso é uma linha só (4,5rem).
- */
-@media (min-width: 768px) {
-  :root {
-    --consent-offset: 4.5rem;
-  }
+  color-scheme: dark;
 }

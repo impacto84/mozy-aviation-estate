@@ -46,7 +46,7 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [390, 640, 828, 1080, 1440, 1920, 2560],
     imageSizes: [96, 160, 256, 384],
-    qualities: [60, 72, 80],
+    qualities: [72, 80, 88],
     minimumCacheTTL: 2_678_400,
   },
   async headers() {
@@ -58,6 +58,10 @@ const nextConfig: NextConfig = {
       {
         source: "/frames/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/media/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=2678400, stale-while-revalidate=86400" }],
       },
     ];
   },

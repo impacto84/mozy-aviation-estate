@@ -50,7 +50,7 @@ export default function CapitalPage() {
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="stack-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="stack-titulo" data-surface="dossier">
         <div className={`${section.inner} ${sections.split}`}>
           <div>
             <h2 id="stack-titulo" className={section.title}>
@@ -76,7 +76,7 @@ export default function CapitalPage() {
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="estrutura-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="estrutura-titulo" data-surface="dossier">
         <div className={section.inner}>
           <SectionHeader id="estrutura-titulo" title={DISCIPLINE.entitiesTitle} />
           <EntitiesRow />
@@ -97,7 +97,7 @@ export default function CapitalPage() {
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="tecnologia-capital-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="tecnologia-capital-titulo" data-surface="dossier">
         <div className={`${section.inner} ${sections.split}`}>
           <h2 id="tecnologia-capital-titulo" className={section.title}>
             {TECH.title}

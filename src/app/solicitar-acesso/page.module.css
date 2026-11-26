@@ -127,7 +127,7 @@
   align-content: start;
   padding: var(--space-6);
   border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-xs);
   background-color: var(--color-surface);
   box-shadow: var(--shadow-lg);
 }
