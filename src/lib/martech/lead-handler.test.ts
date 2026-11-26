@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   MAX_LEAD_BODY_BYTES,
   clientKey,
@@ -20,6 +20,15 @@ const NOW = new Date("2026-11-24T12:00:00.000Z");
 const EVENT_ID = "3f2b8c1e-7a4d-4e9b-9c1a-5d6e7f8a9b0c";
 const TRACE_ID = "trace-0001-abcdef";
 const VALID = { name: "Ana Souza", email: "ana@empresa.com.br", profile: "Runway Signature", phone: "", company: "Empresa", message: "" } as const;
+
+// Os testes não dependem do ambiente do processo (verify.sh exporta NEXT_PUBLIC_SITE_URL).
+beforeEach(() => {
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 function options(overrides: Partial<LeadHandlerOptions> = {}): LeadHandlerOptions {
   return {
@@ -131,6 +140,39 @@ describe("createLeadHandler (JSON)", () => {
 
     expect((await problemOf(declared, 413)).type).toBe(problemType("payload-too-large"));
     expect((await problemOf(real, 413)).type).toBe(problemType("payload-too-large"));
+  });
+
+  it("aborta o stream assim que cruza o teto, sem content-length e sem ler o resto", async () => {
+    const encoder = new TextEncoder();
+    const chunk = encoder.encode("a".repeat(2048));
+    const maxReads = 200;
+    let reads = 0;
+    let wasCancelled = false;
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        reads += 1;
+        if (reads > maxReads) {
+          controller.close();
+          return;
+        }
+        controller.enqueue(chunk);
+      },
+      cancel() {
+        wasCancelled = true;
+      },
+    });
+    const request = new Request(ENDPOINT, {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: ORIGIN, host: "site.example" },
+      body: stream,
+      duplex: "half",
+    } as RequestInit);
+
+    const response = await createLeadHandler(options())(request);
+
+    expect((await problemOf(response, 413)).type).toBe(problemType("payload-too-large"));
+    expect(wasCancelled).toBe(true);
+    expect(reads).toBeLessThanOrEqual(Math.ceil(MAX_LEAD_BODY_BYTES / chunk.byteLength) + 2);
   });
 
   it.each(["{nao-e-json", "[1,2]", '"texto"', "null"])("responde 400 para corpo que não é um objeto JSON: %s", async (raw) => {
@@ -275,15 +317,51 @@ describe("isSameOrigin", () => {
     expect(isSameOrigin(request({ "sec-fetch-site": "cross-site" }))).toBe(false);
     expect(isSameOrigin(request({}))).toBe(false);
   });
+  it("com NEXT_PUBLIC_SITE_URL, compara o Origin com a origem canônica e ignora X-Forwarded-Host", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://site.example/");
+
+    expect(isSameOrigin(request({ origin: ORIGIN, host: "interno:3000" }))).toBe(true);
+    // Atacante controla Origin e X-Forwarded-Host: sem a origem canônica, isto passaria.
+    expect(isSameOrigin(request({ origin: "https://evil.example", host: "interno:3000", "x-forwarded-host": "evil.example" }))).toBe(false);
+    expect(isSameOrigin(request({ origin: "http://site.example", host: "site.example" }))).toBe(false);
+  });
+
+  it("recusa o envio forjado com 403 RFC 7807 quando a origem canônica está configurada", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://site.example");
+    const deliver = vi.fn<DeliverLead>();
+
+    const response = await createLeadHandler(options({ deliver }))(jsonRequest(VALID, { origin: "https://evil.example", "x-forwarded-host": "evil.example" }));
+
+    expect((await problemOf(response, 403)).type).toBe(problemType("forbidden-origin"));
+    expect(deliver).not.toHaveBeenCalled();
+  });
 });
 
 describe("clientKey", () => {
   const request = (headers: Readonly<Record<string, string>>): Request => new Request(ENDPOINT, { headers });
 
-  it("usa o primeiro IP de x-forwarded-for, depois x-real-ip, depois um valor fixo", () => {
-    expect(clientKey(request({ "x-forwarded-for": "203.0.113.7, 10.0.0.1" }))).toBe("203.0.113.7");
-    expect(clientKey(request({ "x-real-ip": "203.0.113.9" }))).toBe("203.0.113.9");
+  it("prefere x-real-ip, escrito pelo proxy da plataforma", () => {
+    expect(clientKey(request({ "x-real-ip": "203.0.113.9", "x-forwarded-for": "198.51.100.1, 203.0.113.9" }))).toBe("203.0.113.9");
+  });
+
+  it("sem x-real-ip, usa o último salto de x-forwarded-for (o do proxy confiável), nunca o primeiro", () => {
+    // O cliente forja "1.2.3.4"; o proxy anexa o IP real no fim.
+    expect(clientKey(request({ "x-forwarded-for": "1.2.3.4, 203.0.113.7" }))).toBe("203.0.113.7");
+    expect(clientKey(request({ "x-forwarded-for": " 203.0.113.8 " }))).toBe("203.0.113.8");
+  });
+
+  it("cai num valor fixo sem cabeçalhos de IP", () => {
     expect(clientKey(request({}))).toBe("desconhecido");
+    expect(clientKey(request({ "x-forwarded-for": " , " }))).toBe("desconhecido");
+  });
+
+  it("trocar o primeiro salto forjado não escapa do limite", async () => {
+    const handler = createLeadHandler(options({ limiter: createRateLimiter({ limit: 1, windowMs: 60_000 }) }));
+
+    await handler(jsonRequest(VALID, { "x-forwarded-for": "10.0.0.1, 203.0.113.50" }));
+    const second = await handler(jsonRequest(VALID, { "x-forwarded-for": "10.0.0.2, 203.0.113.50" }));
+
+    expect((await problemOf(second, 429)).type).toBe(problemType("rate-limited"));
   });
 });
 
@@ -316,6 +394,14 @@ describe("createWebhookDelivery", () => {
       "https://hooks.example.com/lead",
       expect.objectContaining({ method: "POST", body: JSON.stringify(delivery), headers: { "content-type": "application/json" } }),
     );
+  });
+
+  it("não segue redirect: o lead nunca é reenviado para outro host", async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(new Response(null, { status: 204 }));
+
+    await createWebhookDelivery("https://hooks.example.com/lead", fetchImpl)(delivery);
+
+    expect(fetchImpl).toHaveBeenCalledWith("https://hooks.example.com/lead", expect.objectContaining({ redirect: "error" }));
   });
 
   it("falha quando o destino responde fora de 2xx", async () => {

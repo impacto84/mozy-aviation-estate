@@ -53,6 +53,14 @@ export function createRateLimiter(options: RateLimiterOptions): RateLimiter {
       const isFresh = current === undefined || time - current.startedAt >= options.windowMs;
       if (isFresh && buckets.size >= maxKeys) {
         dropExpired(time);
+        // Ainda cheio (rajada de chaves novas na mesma janela): sai a chave mais antiga.
+        // O Map preserva a ordem de inserção, então a primeira chave é a mais antiga.
+        if (buckets.size >= maxKeys) {
+          const oldestKey = buckets.keys().next().value;
+          if (oldestKey !== undefined) {
+            buckets.delete(oldestKey);
+          }
+        }
       }
       const bucket: Bucket = isFresh ? { startedAt: time, count: 1 } : { startedAt: current.startedAt, count: current.count + 1 };
       buckets.set(key, bucket);

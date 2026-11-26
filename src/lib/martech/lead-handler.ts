@@ -84,20 +84,46 @@ type PayloadFormat = "json" | "form";
 
 const NO_STORE = { "cache-control": "no-store" } as const;
 
-/** O pedido veio de uma página do próprio site? Defesa contra envio forjado por outro site (CSRF). */
+/** Origem canônica do site (`NEXT_PUBLIC_SITE_URL`), ou `null` se ausente/inválida. */
+function configuredSiteOrigin(): string | null {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";
+  return raw !== "" && URL.canParse(raw) ? new URL(raw).origin : null;
+}
+
+/**
+ * O pedido veio de uma página do próprio site? Defesa contra envio forjado (CSRF).
+ * Com `NEXT_PUBLIC_SITE_URL` configurada, o `Origin` precisa bater com ela: cabeçalhos
+ * de host (`X-Forwarded-Host`) são controláveis pelo cliente e não decidem nada.
+ * Sem a variável (dev local), cai na comparação com o host do pedido.
+ */
 export function isSameOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
   if (origin === null) {
     return request.headers.get("sec-fetch-site") === "same-origin";
   }
+  if (!URL.canParse(origin)) {
+    return false;
+  }
+  const siteOrigin = configuredSiteOrigin();
+  if (siteOrigin !== null) {
+    return new URL(origin).origin === siteOrigin;
+  }
   const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? new URL(request.url).host;
-  return URL.canParse(origin) && new URL(origin).host === host;
+  return new URL(origin).host === host;
 }
 
-/** Chave do limite: o primeiro IP de `x-forwarded-for` (confiável só atrás do proxy da plataforma). */
+/**
+ * Chave do limite. `x-real-ip` é escrito pelo proxy da plataforma (sobrescreve o do
+ * cliente); sem ele, vale o último salto de `x-forwarded-for`, que é o anexado pelo
+ * proxy confiável. O primeiro salto é forjável pelo cliente e nunca é usado.
+ */
 export function clientKey(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
-  return forwarded !== "" ? forwarded : (request.headers.get("x-real-ip") ?? "desconhecido");
+  const realIp = request.headers.get("x-real-ip")?.trim() ?? "";
+  if (realIp !== "") {
+    return realIp;
+  }
+  const hops = (request.headers.get("x-forwarded-for") ?? "").split(",").map((hop) => hop.trim()).filter((hop) => hop !== "");
+  return hops.at(-1) ?? "desconhecido";
 }
 
 function payloadFormat(request: Request): PayloadFormat | null {
@@ -113,14 +139,48 @@ function toStringRecord(entries: Iterable<readonly [string, unknown]>): Readonly
   return Object.fromEntries(pairs);
 }
 
-/** Lê o corpo como texto, com teto de tamanho. `null` se passou do teto. */
+function concatChunks(chunks: readonly Uint8Array[], totalBytes: number): Uint8Array {
+  const merged = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return merged;
+}
+
+/**
+ * Lê o corpo como texto respeitando o teto byte a byte no stream: aborta assim que
+ * cruza `MAX_LEAD_BODY_BYTES`, sem bufferizar o resto. `null` se passou do teto.
+ */
 async function readBody(request: Request): Promise<string | null> {
   const declared = Number(request.headers.get("content-length") ?? "0");
   if (declared > MAX_LEAD_BODY_BYTES) {
     return null;
   }
-  const text = await request.text();
-  return new TextEncoder().encode(text).byteLength > MAX_LEAD_BODY_BYTES ? null : text;
+  if (request.body === null) {
+    return "";
+  }
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      totalBytes += value.byteLength;
+      if (totalBytes > MAX_LEAD_BODY_BYTES) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return new TextDecoder().decode(concatChunks(chunks, totalBytes));
 }
 
 function parsePayload(text: string, format: PayloadFormat): Readonly<Record<string, string>> | null {
@@ -267,13 +327,15 @@ export function resolveLeadWebhookUrl(raw: string | undefined): string | null {
   return url.toString();
 }
 
-/** Entrega por webhook: POST JSON com prazo. Resposta fora de 2xx é falha. */
+/** Entrega por webhook: POST JSON com prazo, sem seguir redirect. Resposta fora de 2xx é falha. */
 export function createWebhookDelivery(url: string, fetchImpl: typeof fetch = fetch): DeliverLead {
   return async (delivery) => {
     const response = await fetchImpl(url, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(delivery),
+      // Redirecionamento poderia levar o lead (PII) para outro host: tratado como falha.
+      redirect: "error",
       signal: AbortSignal.timeout(WEBHOOK_TIMEOUT_MS),
     });
     if (!response.ok) {
