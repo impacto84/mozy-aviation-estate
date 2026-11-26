@@ -52,7 +52,7 @@ export const CHAPTER_COPY = {
     intro: {
       kicker: "Orlando · Founder Estate",
       title: "Entrar na casa. A vista é a pista.",
-      body: "Central Florida — carvalhos, relva, taxiway. A câmera atravessa as portas de vidro e o jato espera do outro lado do living.",
+      body: "Carvalhos, relva e taxiway na Central Florida. Atrás das portas de vidro do living, o jato espera do outro lado.",
     },
     mid: "A casa",
     arrival: { kicker: "Você chegou", title: "A janela dá para o hangar.", body: "" },
@@ -62,7 +62,7 @@ export const CHAPTER_COPY = {
     intro: {
       kicker: "Casa + hangar",
       title: "Entra. O jato já espera.",
-      body: "A câmera avança no piso vazio — só para a frente. Da taxiway ao nariz da aeronave.",
+      body: "Hangar privativo ligado à casa e à taxiway: da pista ao nariz da aeronave, sem sair de casa.",
     },
     mid: "Avança",
     arrival: { kicker: "O cotidiano", title: "Da pista à sala.", body: "" },
@@ -100,7 +100,7 @@ export const AVIATION = {
     "Operação privada e controlada",
   ],
   masterplanTitle: "O aeroporto organiza o território — sem dominar a vida residencial.",
-  masterplanLabels: ["Pista + taxiway", "60 estates", "Aviation Club", "Terminal + Jet-A", "Preservação + segurança"],
+  masterplanLabels: ["Pista + taxiway", "60 residências", "Aviation Club", "Terminal + Jet-A", "Preservação + segurança"],
   masterplanNote:
     "Ilustração conceitual. A implantação real será refeita sobre KML, survey, wetlands, wind rose e estudo de espaço aéreo.",
 } as const;
@@ -144,7 +144,7 @@ export const DISCIPLINE = {
     "Após estabilização, Residential HOA + Airport Owners Association assumem a governança. Desenho conceitual — não é estrutura jurídica final.",
   revenuesTitle: "A venda das casas é o motor. Serviços sustentam o ativo.",
   revenuesNote: "HOA e operação aeroportuária devem ser sustentáveis sem depender de novas vendas.",
-  days90Title: "Reduzir quatro terrenos a dois finalistas.",
+  days90Title: "Reduzir os três terrenos candidatos a dois finalistas.",
   closing: "Construir o endereço onde a aviação privada encontra o seu próximo padrão de vida.",
 } as const;
 

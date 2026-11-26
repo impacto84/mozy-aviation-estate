@@ -61,6 +61,9 @@ textarea.control {
 }
 
 .submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-block-size: var(--target-min);
   padding: var(--space-3) var(--space-6);
   border: var(--border-width) solid var(--color-hairline-strong);
@@ -77,6 +80,11 @@ textarea.control {
   letter-spacing: var(--tracking-hud);
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.submitArrow {
+  margin-inline-start: var(--space-3);
+  font-family: var(--font-sans);
 }
 
 .submit:hover,

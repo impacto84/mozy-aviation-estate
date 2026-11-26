@@ -95,6 +95,9 @@ export function LeadForm({ labelledBy, fallbackErrorId, fallbackSuccessId, ...op
         <AttributionFields />
         <button type="submit" className={styles.submit} aria-disabled={isBusy}>
           {form.status === "pending" ? "Enviando…" : form.status === "success" ? "Solicitação enviada" : CTA.primary}
+          <span className={styles.submitArrow} aria-hidden="true">
+            →
+          </span>
         </button>
       </form>
       <p className={styles.status} role="status" data-lead-message={form.status}>

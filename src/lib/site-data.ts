@@ -248,7 +248,7 @@ export const timeline = [
 
 export const scorecard = [
   { weight: "25%", title: "Espaço aéreo + encaixe de pista", test: "Corredor, vento, obstáculos, airports" },
-  { weight: "20%", title: "Uplands + ambiental", test: "Wetlands, flood, wildlife, mitigação" },
+  { weight: "20%", title: "Uplands + ambiental", test: "Áreas úmidas, inundação, fauna e mitigação" },
   { weight: "20%", title: "Zoneamento + aprovações", test: "FLU, UGB, compatibilidade local" },
   { weight: "15%", title: "Mercado + acesso", test: "Orlando/MCO, rodovias, branding" },
   { weight: "10%", title: "Utilities + infraestrutura", test: "Energia, água, esgoto, fibra" },
@@ -256,10 +256,10 @@ export const scorecard = [
 ] as const;
 
 export const stack = [
-  { share: "5–10%", title: "Sponsor / seed", body: "Opção, diligência, design e approvals" },
-  { share: "20–35%", title: "Development equity", body: "Aquisição e infraestrutura inicial" },
-  { share: "35–50%", title: "Senior / construction debt", body: "Pista, horizontal e vertical" },
-  { share: "10–25%", title: "Pre-sales / deposits", body: "Redução de exposição no buildout" },
+  { share: "5–10%", title: "Sponsor / seed", body: "Opção, diligência, projeto e aprovações" },
+  { share: "20–35%", title: "Equity de desenvolvimento", body: "Aquisição e infraestrutura inicial" },
+  { share: "35–50%", title: "Dívida sênior / de construção", body: "Pista, horizontal e vertical" },
+  { share: "10–25%", title: "Pré-vendas / depósitos", body: "Redução de exposição no buildout" },
 ] as const;
 
 export const risks = [
@@ -272,12 +272,12 @@ export const risks = [
 ] as const;
 
 export const regulators = [
-  { title: "County / City", body: "Zoning · FLU · PD · public hearings" },
+  { title: "County / City", body: "Zoneamento · FLU · PD · audiências públicas" },
   { title: "FAA", body: "Part 157 · Form 7480-1 · airspace" },
   { title: "FDOT Aviation", body: "Site Approval · registration" },
   { title: "FDEP / WMD", body: "ERP · stormwater · wetlands" },
   { title: "USACE / USFWS", body: "Section 404 · IPaC · espécies" },
-  { title: "FDOT Roads / Fire", body: "Connection permit · traffic · fuel" },
+  { title: "FDOT Roads / Fire", body: "Licença de acesso viário · tráfego · combustível" },
 ] as const;
 
 export const entities = [

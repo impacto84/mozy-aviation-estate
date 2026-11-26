@@ -465,6 +465,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .reachItem {
+    row-gap: var(--space-1);
+    padding-block: var(--space-3) var(--space-4);
+  }
+
   .reachStatus {
     grid-column: 2 / -1;
     text-align: start;
