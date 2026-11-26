@@ -15,15 +15,19 @@ import localFont from "next/font/local";
  * gerava CLS de 0,06–0,07 no gate). Na V3 o display (Cormorant) também é `optional`: o `<h1>`
  * de abertura tem ~100 px e, com `swap` sob 4G lenta, a troca de fonte refluía o Ato I inteiro
  * (CLS 0,087 no desktop).
+ * Display: a Cormorant Garamond sai de `src/app/fonts/` (gerada por
+ * `scripts/patch-display-accents.mjs` a partir do mesmo `@fontsource`, OFL 1.1): os
+ * acentos dos minúsculos foram encurtados e assentados, porque no original flutuavam
+ * longe da letra nos títulos de ~100 px.
  * O carregador exige literais escritos por extenso (nada de template string ou constante).
  */
 
 export const displayFont = localFont({
   src: [
-    { path: "../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2", weight: "300", style: "normal" },
-    { path: "../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2", weight: "400", style: "italic" },
-    { path: "../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-300.woff", weight: "300", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-400.woff", weight: "400", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-400-italic.woff", weight: "400", style: "italic" },
+    { path: "./fonts/cormorant-garamond-mozy-500.woff", weight: "500", style: "normal" },
   ],
   variable: "--nf-display",
   display: "optional",
