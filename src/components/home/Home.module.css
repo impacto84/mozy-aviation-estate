@@ -252,6 +252,46 @@
   white-space: nowrap;
 }
 
+.contents {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-12);
+}
+
+.contentsLabel {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.contentsList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: var(--border-width) solid var(--color-hairline);
+}
+
+.contentsLink {
+  display: grid;
+  grid-template-columns: var(--space-10) minmax(0, 1fr);
+  align-items: baseline;
+  min-block-size: var(--target-min);
+  padding-block: var(--space-3);
+  border-block-end: var(--border-width) solid var(--color-hairline);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  text-decoration: none;
+}
+
+.contentsLink:hover,
+.contentsLink:focus-visible {
+  color: var(--color-champagne);
+}
+
 /* Coleções ---------------------------------------------------------------------- */
 
 .collections {
@@ -735,6 +775,11 @@
 
   .ledger {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .contentsList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--space-8);
   }
 
   .ledgerItem + .ledgerItem {

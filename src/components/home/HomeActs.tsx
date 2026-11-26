@@ -27,6 +27,7 @@ export function ActApproach() {
   return (
     <CinematicAct
       chapterId="approach"
+      sectionId="ato-i"
       numeral="I"
       label="Aproximação"
       headingId="hero-title"
@@ -103,6 +104,7 @@ export function ActVilla() {
   return (
     <CinematicAct
       chapterId="villa"
+      sectionId="ato-ii"
       numeral="II"
       label="Founder Residence"
       headingId="ato-residencia"
@@ -120,6 +122,7 @@ export function ActHangar() {
   return (
     <CinematicAct
       chapterId="hangar"
+      sectionId="ato-iii"
       numeral="III"
       label="Hangar & Apron"
       headingId="ato-hangar"

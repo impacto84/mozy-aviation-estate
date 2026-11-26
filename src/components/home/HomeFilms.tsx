@@ -34,7 +34,7 @@ export function NightFilm() {
 /** Convite final: o filme de fechamento, os próximos 90 dias e o acesso privado ao Data Room. */
 export function Closing() {
   return (
-    <section className={styles.closing} aria-labelledby="fechamento-titulo" data-surface="void">
+    <section id="convite" className={styles.closing} aria-labelledby="fechamento-titulo" data-surface="void">
       <div className={styles.filmMedia}>
         <AmbientVideo src="/media/closer.mp4" poster="/media/closer.jpg" label="Filme de fechamento: o jato da abertura cruzando a pista ao pôr do sol" />
         <div className={styles.closingShade} aria-hidden="true" />

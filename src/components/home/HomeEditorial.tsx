@@ -4,6 +4,16 @@ import { BRAND, COLLECTIONS, CONCEPT_CAPTION, CLUB, HANGAR_HOME, HERO, SPONSOR, 
 import { contact, stats, tech, tiers } from "@/lib/site-data";
 import styles from "./Home.module.css";
 
+/** Sumário da obra: cada ato e capítulo interativo da home tem âncora própria. */
+const CONTENTS = [
+  { href: "#colecoes", numeral: "01", label: "Coleções residenciais" },
+  { href: "#ato-ii", numeral: "02", label: "Ato II · The Founder Residence" },
+  { href: "#ato-iii", numeral: "03", label: "Ato III · Private Hangar & Apron" },
+  { href: "#escala", numeral: "04", label: "Escala real & alcance" },
+  { href: "#atlas", numeral: "05", label: "Atlas Satelital" },
+  { href: "#convite", numeral: "06", label: "Convite privado" },
+] as const;
+
 const TOTAL_RESIDENCES = tiers.reduce((sum, tier) => sum + tier.count, 0);
 
 const TIER_MEDIA = {
@@ -40,6 +50,19 @@ export function Thesis() {
             </div>
           ))}
         </dl>
+        <nav className={styles.contents} aria-label="Índice da página">
+          <p className={styles.contentsLabel}>Índice da obra</p>
+          <ol className={styles.contentsList}>
+            {CONTENTS.map((entry) => (
+              <li key={entry.href}>
+                <a className={styles.contentsLink} href={entry.href}>
+                  <span className={`${styles.ruleIndex} tnum`}>{entry.numeral}</span>
+                  {entry.label}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
       </div>
     </section>
   );
@@ -48,7 +71,7 @@ export function Thesis() {
 /** Coleções: três produtos em fotografia editorial de sangria, dados em mono. */
 export function Collections() {
   return (
-    <section className={styles.collections} aria-labelledby="colecoes-titulo" data-surface="navy">
+    <section id="colecoes" className={styles.collections} aria-labelledby="colecoes-titulo" data-surface="navy">
       <div className={styles.inner}>
         <p className={styles.kicker}>Coleções residenciais · {TOTAL_RESIDENCES} residências</p>
         <h2 id="colecoes-titulo" className={styles.sectionTitle}>

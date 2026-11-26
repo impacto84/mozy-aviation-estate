@@ -8,7 +8,7 @@ import styles from "./Home.module.css";
 /** Teaser interativo da engenharia aeronáutica: escala física e alcance real. */
 export function AviationSection() {
   return (
-    <section className={styles.instrument} aria-labelledby="escala-titulo" data-surface="dossier">
+    <section id="escala" className={styles.instrument} aria-labelledby="escala-titulo" data-surface="dossier">
       <div className={`${styles.inner} ${styles.wide}`}>
         <div className={styles.headSplit}>
           <div>
@@ -62,7 +62,7 @@ export function Discipline() {
 /** Atlas Satelital na home: a mesma câmera fly-to de /terrenos. */
 export function AtlasSection() {
   return (
-    <section className={styles.instrument} aria-labelledby="atlas-home-titulo" data-surface="void">
+    <section id="atlas" className={styles.instrument} aria-labelledby="atlas-home-titulo" data-surface="void">
       <div className={`${styles.inner} ${styles.wide}`}>
         <div className={styles.headSplit}>
           <div>

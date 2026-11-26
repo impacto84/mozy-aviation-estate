@@ -29,6 +29,8 @@ interface CinematicActProps {
   readonly arrival: ActCaption;
   /** Telemetria discreta no rodapé do palco (opcional). */
   readonly telemetry?: ReactNode;
+  /** Âncora da seção (sumário da página). */
+  readonly sectionId?: string;
 }
 
 /**
@@ -41,7 +43,7 @@ interface CinematicActProps {
  *   legendas visíveis abaixo do palco (Piso P1). Nenhum quadro é baixado.
  * - Nada por quadro passa pelo React: fase da legenda, contador e barra vivem no DOM.
  */
-export function CinematicAct({ chapterId, numeral, label, headingId, poster, opening, mid, arrival, telemetry }: CinematicActProps) {
+export function CinematicAct({ chapterId, numeral, label, headingId, poster, opening, mid, arrival, telemetry, sectionId }: CinematicActProps) {
   const chapter = findChapter(chapterId);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -49,7 +51,7 @@ export function CinematicAct({ chapterId, numeral, label, headingId, poster, ope
   const mode = useFrameScrub({ chapter, trackRef, canvasRef, stageRef });
 
   return (
-    <section className={styles.act} aria-labelledby={headingId} data-act={chapterId} data-act-mode={mode} data-forja-scene={`act-${chapterId}`} data-surface="void">
+    <section id={sectionId} className={styles.act} aria-labelledby={headingId} data-act={chapterId} data-act-mode={mode} data-forja-scene={`act-${chapterId}`} data-surface="void">
       <div ref={trackRef} className={styles.track}>
         <div ref={stageRef} className={styles.stage} data-phase="intro">
           <div className={styles.poster}>{poster}</div>
