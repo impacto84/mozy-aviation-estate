@@ -120,8 +120,10 @@ function resolveElements(refs: ScrubRefs): ScrubElements | null {
   return track === null || canvas === null || stage === null || context === null ? null : { track, canvas, context, stage };
 }
 
+type Callback = () => void;
+
 /** Dispara `start` depois do evento `load` (a pré-carga nunca disputa banda com o LCP). */
-function afterPageLoad(start: () => void): () => void {
+function afterPageLoad(start: Callback): Callback {
   if (document.readyState === "complete") {
     start();
     return () => undefined;
