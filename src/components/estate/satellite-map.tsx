@@ -29,7 +29,7 @@ export function SatelliteAtlas() {
 
   return (
     <div className="mt-12">
-      <div className="relative h-[58vh] min-h-80 overflow-hidden rounded-lg border border-border bg-void md:h-[72vh]">
+      <div className="relative h-[58vh] min-h-80 overflow-hidden border border-line bg-void md:h-[72vh]">
         <div
           className="absolute inset-0 origin-center transition-transform duration-1000 ease-out"
           style={{
@@ -58,7 +58,7 @@ export function SatelliteAtlas() {
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-void/30" />
 
-        <div className="absolute left-4 top-4 z-10 rounded-full border border-border bg-void/80 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-gold backdrop-blur-md">
+        <div className="absolute left-4 top-4 z-10 border border-line bg-void/85 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-brass backdrop-blur-md">
           {site ? site.name : "Flórida Central · satélite real"}
         </div>
 
@@ -67,10 +67,10 @@ export function SatelliteAtlas() {
             type="button"
             onClick={() => setActive("overview")}
             className={cn(
-              "rounded-full border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition-colors",
+              "border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition-colors",
               active === "overview"
-                ? "border-gold bg-gold text-void"
-                : "border-border bg-void/70 text-muted hover:text-gold",
+                ? "border-brass bg-brass text-void"
+                : "border-line bg-void/70 text-fog hover:text-brass",
             )}
           >
             Orlando
@@ -81,10 +81,10 @@ export function SatelliteAtlas() {
               key={land.id}
               onClick={() => setActive(land.id as SiteId)}
               className={cn(
-                "rounded-full border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition-colors",
+                "border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition-colors",
                 active === land.id
-                  ? "border-gold bg-gold text-void"
-                  : "border-border bg-void/70 text-muted hover:text-gold",
+                  ? "border-brass bg-brass text-void"
+                  : "border-line bg-void/70 text-fog hover:text-brass",
               )}
             >
               {land.name}
@@ -93,7 +93,7 @@ export function SatelliteAtlas() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
+      <div className="mt-10 grid gap-0 border-t border-line lg:grid-cols-3">
         {lands.map((land) => (
           <article
             key={land.id}
@@ -102,27 +102,27 @@ export function SatelliteAtlas() {
             }}
             onMouseEnter={() => setActive(land.id as SiteId)}
             className={cn(
-              "overflow-hidden rounded-lg border bg-void transition-colors",
-              active === land.id ? "border-gold" : "border-border",
+              "overflow-hidden border-b border-line transition-colors lg:border-b-0 lg:border-r lg:last:border-r-0",
+              active === land.id ? "bg-panel/40" : "bg-transparent",
             )}
           >
             <div className="relative h-52">
               <img src={land.photo} alt={`Anúncio ${land.name}`} className="h-full w-full object-cover" />
-              <span className="absolute left-3 top-3 h-3 w-3 rounded-full bg-mark ring-4 ring-mark/30" />
+              <span className="absolute left-3 top-3 h-2.5 w-2.5 bg-mark ring-4 ring-mark/25" />
             </div>
             <div className="p-6">
-              <p className="text-xs uppercase tracking-[0.16em] text-gold">{land.priority}</p>
-              <h3 className="mt-2 text-xl">{land.name}</h3>
-              <p className="text-sm text-muted">{land.place}</p>
+              <p className="text-[11px] uppercase tracking-[0.18em] text-brass">{land.priority}</p>
+              <h3 className="mt-2 text-xl tracking-tight">{land.name}</h3>
+              <p className="text-sm text-fog">{land.place}</p>
               <p className="mt-4 text-lg">{land.acres}</p>
-              <p className="text-gold-soft">{land.price}</p>
-              <p className="mt-4 text-sm text-muted">{land.zoning}</p>
-              <p className="text-sm text-muted">{land.access}</p>
-              <p className="mt-3 text-sm text-muted">{land.extra}</p>
+              <p className="text-brass-soft">{land.price}</p>
+              <p className="mt-4 text-sm text-fog">{land.zoning}</p>
+              <p className="text-sm text-fog">{land.access}</p>
+              <p className="mt-3 text-sm text-fog">{land.extra}</p>
               <p className="mt-4 text-sm">Força: {land.strength}</p>
-              <p className="text-sm text-muted">Risco: {land.risk}</p>
+              <p className="text-sm text-fog">Risco: {land.risk}</p>
               <p className="mt-3 text-sm">{land.test}</p>
-              <p className="mt-3 text-xs text-muted">{land.note}</p>
+              <p className="mt-3 text-xs text-fog">{land.note}</p>
             </div>
           </article>
         ))}

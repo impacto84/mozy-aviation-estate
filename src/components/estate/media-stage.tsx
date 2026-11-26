@@ -19,7 +19,7 @@ export function MediaStage({
   video,
   alt,
   className,
-  overlay = "from-void/70 via-void/30 to-void/80",
+  overlay = "from-void/75 via-void/25 to-void/85",
   parallax = true,
 }: Props) {
   const mediaRef = useRef<HTMLDivElement>(null);

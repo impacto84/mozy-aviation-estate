@@ -16,7 +16,7 @@ export const Route = createRootRoute({
         content:
           "Comunidade residencial de aviação privada na Flórida — 60 residências, pista para grandes jatos e hangar em cada casa.",
       },
-      { name: "theme-color", content: "#05070A" },
+      { name: "theme-color", content: "#050608" },
     ],
     links: [
       { rel: "icon", type: "image/png", href: "/favicon.png" },
@@ -27,7 +27,7 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&family=Syne:wght@500;600;700;800&display=swap",
       },
     ],
   }),
