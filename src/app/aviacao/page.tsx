@@ -43,7 +43,7 @@ export default function AviationPage() {
         lead={AVIATION.title}
         image={{ src: "/media/taxiway.jpg", width: 1792, height: 1008, position: "right" }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
-        secondaryCta={{ href: "#simulador", label: "Abrir o simulador" }}
+        secondaryCta={{ href: "#simulador", label: "Abrir o console de escala" }}
         caption={CONCEPT_CAPTION}
         facts={[
           { label: "pista como premissa inicial", value: "3.000 × 45 m" },
@@ -57,16 +57,16 @@ export default function AviationPage() {
         <div className={`${section.inner} ${section.wide}`}>
           <SectionHeader
             id="simulador-titulo"
-            index="Simulador de pista & hangar"
-            title="Escolha a aeronave e a coleção. Siga o táxi da pista ao hangar."
-            lede="Cada coleção tem um tipo de hangar: múltiplas aeronaves nas Founder Estates, hangar privativo com taxiway na Runway Signature e hangar central nas Reserve Estates."
+            index="Console de pista & frota · escala real"
+            title="Escala física e alcance real, aeronave por aeronave."
+            lede="A silhueta assume a envergadura e o comprimento publicados sobre os 45 m de largura da pista-premissa; a pista inteira mostra a decolagem publicada contra os 3.000 m; o mapa traça o raio sem escala a partir de Orlando. Escolha também a coleção para ver o tipo de hangar."
             isSplit
           />
           <FleetSimulator />
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="infra-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="infra-titulo" data-surface="dossier">
         <div className={`${section.inner} ${sections.split}`}>
           <div>
             <h2 id="infra-titulo" className={section.title}>
@@ -97,7 +97,7 @@ export default function AviationPage() {
                 width={1536}
                 height={1024}
                 sizes="(min-width: 1200px) 58vw, 100vw"
-                quality={72}
+                quality={88}
               />
             </figure>
             <figure className={sections.figure}>
@@ -108,7 +108,7 @@ export default function AviationPage() {
                 width={753}
                 height={652}
                 sizes="(min-width: 1200px) 34vw, 100vw"
-                quality={72}
+                quality={88}
               />
               <ul className={sections.legend} role="list">
                 {AVIATION.masterplanLabels.map((label) => (
@@ -122,7 +122,7 @@ export default function AviationPage() {
         </div>
       </section>
 
-      <section className={section.section} aria-labelledby="benchmarks-titulo" data-surface="ivory">
+      <section className={section.section} aria-labelledby="benchmarks-titulo" data-surface="dossier">
         <div className={section.inner}>
           <SectionHeader id="benchmarks-titulo" title={BENCHMARKS.title} lede="Quatro referências diretas e o que cada uma ensina ao projeto." isSplit />
           <BenchmarksTable />
@@ -134,13 +134,13 @@ export default function AviationPage() {
           <SectionHeader id="club-aviacao-titulo" index="Aviation Club" title={CLUB.title} lede={CLUB.amenities} isSplit />
           <div className={sections.photoGrid}>
             <div className={sections.photo}>
-              <Image className={sections.cover} src="/media/club.jpg" alt="Aviation Club ao entardecer" fill sizes="(min-width: 768px) 66vw, 100vw" quality={72} />
+              <Image className={sections.cover} src="/media/club.jpg" alt="Aviation Club ao entardecer" fill sizes="(min-width: 768px) 66vw, 100vw" quality={88} />
             </div>
             <div className={sections.photo}>
-              <Image className={sections.cover} src="/media/orlando-interior.jpg" alt="Interior residencial integrado à paisagem" fill sizes="(min-width: 768px) 33vw, 100vw" quality={72} />
+              <Image className={sections.cover} src="/media/orlando-interior.jpg" alt="Interior residencial integrado à paisagem" fill sizes="(min-width: 768px) 33vw, 100vw" quality={88} />
             </div>
             <div className={sections.photo}>
-              <Image className={sections.cover} src="/media/interior.jpg" alt="Interior residencial com vista para o hangar" fill sizes="(min-width: 768px) 33vw, 100vw" quality={72} />
+              <Image className={sections.cover} src="/media/interior.jpg" alt="Interior residencial com vista para o hangar" fill sizes="(min-width: 768px) 33vw, 100vw" quality={88} />
             </div>
           </div>
         </div>

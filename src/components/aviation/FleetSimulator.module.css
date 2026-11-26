@@ -1,17 +1,18 @@
-/* Simulador de Pista & Hangar: controles, diagrama SVG e leitura de métricas. */
+/*
+ * Console aeronáutico em escala real. Tema noturno: diagramas em fio de latão sobre
+ * grafite, rótulos em mono, sem pílulas. Texto dentro dos SVG usa a unidade do
+ * viewBox: no phone o tamanho sobe para continuar legível depois da redução.
+ */
 
-.simulator {
+.console {
   display: grid;
   gap: var(--space-8);
 }
 
-.controls {
-  display: grid;
-  gap: var(--space-6);
-  align-content: start;
-}
+/* Seletor de aeronave: régua de opções retas, não pílulas ---------------------- */
 
-.fieldset {
+.selector {
+  min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
@@ -22,271 +23,488 @@
   padding: 0;
   color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-hud);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
 }
 
 .options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-block-start: var(--border-width) solid var(--color-hairline);
+  border-inline-start: var(--border-width) solid var(--color-hairline);
 }
 
 .option {
   position: relative;
-  display: inline-flex;
-  align-items: center;
+  display: grid;
+  gap: var(--space-1);
   min-block-size: var(--target-min);
-  padding-inline: var(--space-4);
-  border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  font-size: var(--text-sm);
+  padding: var(--space-3) var(--space-4);
+  border-block-end: var(--border-width) solid var(--color-hairline);
+  border-inline-end: var(--border-width) solid var(--color-hairline);
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
 .option:has(.radio:checked) {
-  border-color: var(--color-accent);
-  background-color: var(--color-accent);
-  color: var(--color-on-accent);
+  background-color: color-mix(in oklch, var(--color-accent) 10%, var(--color-bg));
+  color: var(--color-text);
+  box-shadow: inset 0 calc(var(--border-width) * -2) 0 var(--color-accent);
 }
 
 .option:has(.radio:focus-visible) {
   outline: var(--focus-width) solid var(--color-focus);
-  outline-offset: var(--focus-offset);
+  outline-offset: calc(var(--focus-width) * -1);
 }
 
 .radio {
   position: absolute;
-  opacity: 0;
+  inset: 0;
   inline-size: 100%;
   block-size: 100%;
   margin: 0;
+  opacity: 0;
   cursor: pointer;
 }
 
+.optionName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
 .optionMeta {
-  opacity: 0.8;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  color: var(--color-text-muted);
 }
 
-.diagramFrame {
+/* Painéis ------------------------------------------------------------------- */
+
+.panels {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  min-inline-size: 0;
   margin: 0;
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-surface);
 }
 
-.diagram {
+.panelHead {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+}
+
+.panelIndex {
+  color: var(--color-accent);
+}
+
+.envelope,
+.strip,
+.map {
   inline-size: 100%;
   block-size: auto;
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-lg);
+  font-family: var(--font-mono);
 }
 
-.caption {
-  margin-block-start: var(--space-3);
-  color: var(--color-text-muted);
-  font-size: var(--text-xs);
+.map {
+  max-inline-size: calc(var(--container-max) * 0.6);
+  margin-inline: auto;
 }
+
+/* Envelope e pista ---------------------------------------------------------- */
 
 .ground {
-  fill: var(--color-surface);
-}
-
-.preserve ellipse {
-  fill: color-mix(in oklch, var(--color-runway) 22%, var(--color-surface));
+  fill: var(--color-bg);
 }
 
 .runway {
   fill: var(--color-surface-raised);
+}
+
+.edge {
   stroke: var(--color-text-muted);
-  stroke-width: 1;
+  stroke-width: 2;
 }
 
 .centerline {
-  stroke: var(--color-text);
-  stroke-width: 2;
-  stroke-dasharray: 18 14;
-}
-
-.runwayLabel {
-  fill: var(--color-accent);
-  font-family: var(--font-mono);
-  font-size: 15px;
-  letter-spacing: 0.06em;
-}
-
-.taxiway {
-  fill: color-mix(in oklch, var(--color-text-muted) 45%, var(--color-surface));
-}
-
-.building {
-  fill: var(--color-surface-raised);
-  stroke: var(--color-border-strong);
-}
-
-.zone .lot {
-  fill: var(--color-surface-raised);
-  stroke: var(--color-border-strong);
-}
-
-.zoneActive .lot {
-  fill: color-mix(in oklch, var(--color-accent) 30%, var(--color-surface));
-  stroke: var(--color-accent);
-  stroke-width: 2;
-}
-
-.lake {
-  fill: color-mix(in oklch, var(--color-text-muted) 30%, var(--color-surface));
-}
-
-.zoneLabel,
-.zoneLabelActive {
-  fill: var(--color-text-muted);
-  font-family: var(--font-sans);
-  font-size: 15px;
-}
-
-.zoneLabelActive {
-  fill: var(--color-text);
-  font-weight: var(--weight-semibold);
-}
-
-.route {
-  fill: none;
-  stroke: var(--color-accent);
+  stroke: color-mix(in oklch, var(--color-text) 45%, transparent);
   stroke-width: 3;
-  stroke-dasharray: 2 8;
-  stroke-linecap: round;
 }
 
-.plane path,
-.parked {
-  fill: var(--color-text);
-  stroke: var(--color-bg);
+.ghost {
+  fill: none;
+  stroke: color-mix(in oklch, var(--color-text) 32%, transparent);
   stroke-width: 1;
 }
 
-.parked {
-  opacity: 0.7;
+.jet {
+  fill: color-mix(in oklch, var(--color-champagne) 88%, transparent);
+  stroke: var(--color-champagne);
+  stroke-width: 1;
 }
 
-.readout {
+.dimension line,
+.clearance line,
+.scaleBar line {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.dimension .extension {
+  stroke: var(--color-hairline);
+  stroke-dasharray: 6 6;
+}
+
+.clearance line {
+  stroke: var(--color-signal);
+}
+
+.dimLabel,
+.dimLabelEnd,
+.ringLabel {
+  fill: var(--color-text-muted);
+  font-size: calc(var(--text-base) * 1.375);
+  letter-spacing: var(--tracking-hud);
+}
+
+.dimLabelEnd {
+  text-anchor: end;
+}
+
+.dimValue {
+  fill: var(--color-text);
+  font-size: calc(var(--text-base) * 1.875);
+}
+
+.takeoff {
+  fill: color-mix(in oklch, var(--color-accent) 30%, transparent);
+}
+
+.takeoffEnd {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+/* Mapa de alcance ----------------------------------------------------------- */
+
+.ocean {
+  fill: var(--color-bg);
+}
+
+.discEdge {
+  fill: none;
+  stroke: var(--color-hairline-strong);
+  stroke-width: 1.5;
+}
+
+.graticule {
+  fill: none;
+  stroke: color-mix(in oklch, var(--color-text) 9%, transparent);
+  stroke-width: 1;
+}
+
+.land {
+  fill: color-mix(in oklch, var(--color-text) 11%, var(--color-bg));
+  stroke: color-mix(in oklch, var(--color-text) 26%, transparent);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.distanceRing {
+  fill: none;
+  stroke: color-mix(in oklch, var(--color-text) 18%, transparent);
+  stroke-dasharray: 3 7;
+}
+
+.ringLabel {
+  font-size: calc(var(--text-base) * 1.125);
+}
+
+.rangeFill {
+  fill: color-mix(in oklch, var(--color-accent) 12%, transparent);
+}
+
+.rangeRing {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.route {
+  stroke-width: 2;
+}
+
+.hubDot {
+  stroke: var(--color-bg);
+  stroke-width: 3;
+}
+
+.hubLabel {
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: calc(var(--text-base) * 1.5);
+  font-weight: var(--weight-medium);
+}
+
+.hubMeta {
+  fill: var(--color-text-muted);
+  font-size: calc(var(--text-base) * 1.125);
+}
+
+.hub[data-reach="nonstop"] .route {
+  stroke: var(--color-accent);
+}
+
+.hub[data-reach="nonstop"] .hubDot,
+.origin {
+  fill: var(--color-accent);
+}
+
+.hub[data-reach="limit"] .route {
+  stroke: var(--color-accent);
+  stroke-dasharray: 10 8;
+}
+
+.hub[data-reach="limit"] .hubDot {
+  fill: var(--color-champagne);
+}
+
+.hub[data-reach="out"] .route {
+  stroke: color-mix(in oklch, var(--color-text) 28%, transparent);
+  stroke-dasharray: 3 9;
+}
+
+.hub[data-reach="out"] .hubDot {
+  fill: var(--color-signal);
+}
+
+.hub[data-reach="out"] .hubLabel {
+  fill: var(--color-text-muted);
+}
+
+.legendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.legendRow li::before,
+.reachItem::before {
+  display: inline-block;
+  inline-size: var(--space-4);
+  block-size: var(--border-width-strong);
+  margin-inline-end: var(--space-2);
+  vertical-align: middle;
+  background-color: var(--color-accent);
+  content: "";
+}
+
+.legendRow li[data-reach="limit"]::before,
+.reachItem[data-reach="limit"]::before {
+  background-color: var(--color-champagne);
+}
+
+.legendRow li[data-reach="out"]::before,
+.reachItem[data-reach="out"]::before {
+  background-color: var(--color-signal);
+}
+
+/* Leitura ------------------------------------------------------------------- */
+
+.readout,
+.tierBlock {
   display: grid;
   gap: var(--space-5);
   align-content: start;
-  padding: var(--space-6);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-surface);
+  padding-block-start: var(--space-6);
+  border-block-start: var(--border-width) solid var(--color-hairline);
 }
 
 .readoutTitle {
+  display: grid;
+  gap: var(--space-2);
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
   line-height: var(--leading-snug);
 }
 
-.readoutModel {
+.readoutKicker {
   color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
 }
 
-.metrics {
+.specs {
   display: grid;
-  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-6);
   margin: 0;
 }
 
-.metric {
+.specs > div {
   display: grid;
   gap: var(--space-1);
   padding-block-start: var(--space-3);
   border-block-start: var(--border-width) solid var(--color-border);
 }
 
-.metric dt {
+.specs dt {
   color: var(--color-text-muted);
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
-.metric dd {
-  display: flex;
+.specs dd {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.reachList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reachItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-3);
-  margin: 0;
-}
-
-.shareBar {
-  position: relative;
-  flex: 1 1 auto;
-  block-size: var(--space-1);
-  background-color: var(--color-border);
-  overflow: clip;
-}
-
-.shareBar::after {
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-accent);
-  transform-origin: left center;
-  transform: scaleX(var(--share, 0));
-  content: "";
-}
-
-.price {
-  color: var(--color-accent);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
-}
-
-.readoutNote {
-  color: var(--color-text-muted);
+  min-block-size: var(--target-min);
+  border-block-end: var(--border-width) solid var(--color-border);
   font-size: var(--text-sm);
 }
 
+.reachItem::before {
+  inline-size: var(--space-3);
+  margin: 0;
+}
+
+.reachCity {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.reachStatus {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-align: end;
+  text-transform: uppercase;
+}
+
+.note {
+  max-inline-size: var(--measure);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-body);
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .rangeFill {
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
   .option {
     transition:
       background-color var(--duration-fast) var(--ease-out),
       color var(--duration-fast) var(--ease-out);
   }
+}
 
-  .zone .lot,
-  .zoneActive .lot {
-    transition: fill var(--duration-base) var(--ease-out);
+/* phone: rótulos do SVG maiores em unidades do viewBox (o desenho encolhe ~2,5x) */
+@media (max-width: 767px) {
+  .dimLabel,
+  .dimLabelEnd {
+    font-size: calc(var(--text-base) * 1.875);
   }
 
-  .shareBar::after {
-    transition: transform var(--duration-slow) var(--ease-out);
+  .dimValue {
+    font-size: calc(var(--text-base) * 2.5);
+  }
+
+  .hubLabel {
+    font-size: calc(var(--text-base) * 2.125);
+  }
+
+  .hubMeta,
+  .ringLabel {
+    font-size: calc(var(--text-base) * 1.625);
+  }
+
+  .specs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .reachStatus {
+    grid-column: 2 / -1;
+    text-align: start;
   }
 }
 
 @media (min-width: 768px) {
-  .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1200px) {
-  .simulator {
-    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-    grid-template-areas:
-      "controls controls"
-      "diagram readout";
-    column-gap: var(--space-8);
-  }
-
-  .controls {
-    grid-area: controls;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-    column-gap: var(--space-10);
-  }
-
-  .diagramFrame {
-    grid-area: diagram;
-  }
-
   .readout {
-    grid-area: readout;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-16);
+    align-items: start;
   }
 
-  .metrics {
-    grid-template-columns: minmax(0, 1fr);
+  .readoutTitle,
+  .readout .note {
+    grid-column: 1 / -1;
   }
+
+  .options {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .panels {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .tierBlock {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .tierBlock .note {
+    grid-column: 1 / -1;
+  }
+
 }

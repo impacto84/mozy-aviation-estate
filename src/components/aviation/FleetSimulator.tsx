@@ -1,147 +1,159 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
-import { AVIATION } from "@/lib/editorial";
-import { aircraft, tiers } from "@/lib/site-data";
-import { MOTION_DURATION_MS, MOTION_EASE_POINTS } from "@/lib/motion/tokens";
+import { useState } from "react";
+import { hubReach, REACH_LABEL } from "@/lib/aviation/range";
+import { AIRCRAFT_SPECS, RUNWAY_PREMISE, findAircraft, formatKm, formatMeters, formatNm, lateralClearance, nmToKm, runwayUse } from "@/lib/aviation/specs";
+import type { AircraftName } from "@/lib/aviation/specs";
+import { tiers } from "@/lib/site-data";
 import styles from "./FleetSimulator.module.css";
-import { RunwayDiagram } from "./RunwayDiagram";
-import { TIER_ROUTES, TOTAL_UNITS, describeSelection, findTier, headingDegrees, unitShare } from "./simulator-model";
-import type { AircraftName, TierName } from "./simulator-model";
+import { RangeMap } from "./RangeMap";
+import { RunwayEnvelope, RunwayLength } from "./RunwayDiagram";
+import { TOTAL_UNITS, findTier, percent, unitShare } from "./simulator-model";
+import type { TierName } from "./simulator-model";
 
-const TAXI_DURATION_MS = MOTION_DURATION_MS.slow * 2.5;
-const TAXI_EASING = `cubic-bezier(${MOTION_EASE_POINTS.inOut.join(", ")})`;
-const PATH_SAMPLES = 32;
-const MOTION_ALLOWED_QUERY = "(prefers-reduced-motion: no-preference)";
-
-/** Quadros de transformação ao longo do caminho de táxi (SVG em unidades de usuário). */
-function taxiKeyframes(path: SVGPathElement): Keyframe[] {
-  const length = path.getTotalLength();
-  const frames: Keyframe[] = [];
-  let previous = path.getPointAtLength(0);
-  for (let step = 0; step <= PATH_SAMPLES; step += 1) {
-    const point = path.getPointAtLength((length * step) / PATH_SAMPLES);
-    const ahead = path.getPointAtLength(Math.min(length, (length * (step + 1)) / PATH_SAMPLES));
-    const angle = step === PATH_SAMPLES ? headingDegrees(point.x - previous.x, point.y - previous.y) : headingDegrees(ahead.x - point.x, ahead.y - point.y);
-    frames.push({ transform: `translate(${point.x}px, ${point.y}px) rotate(${angle}deg)` });
-    previous = point;
-  }
-  return frames;
+interface FleetSimulatorProps {
+  /** `teaser` (home): só a aeronave. `full` (/aviacao): aeronave + coleção + gabarito da pista inteira. */
+  readonly variant?: "teaser" | "full";
 }
 
+const SPEC_NOTE =
+  "Números públicos do fabricante da aeronave de referência, arredondados: alcance nominal sem vento nem reservas adicionais; decolagem com peso máximo, nível do mar, ISA. A pista do projeto é a premissa inicial de 3.000 × 45 m; IFR / GPS sujeito à aprovação.";
+
 /**
- * Simulador interativo: aeronave crítica × coleção residencial. A escolha atualiza
- * as métricas (só dados do brief) e anima, uma vez, o táxi da pista até o hangar
- * da coleção. Sem laço contínuo; com movimento reduzido a aeronave vai direto ao destino.
+ * Console aeronáutico em escala real: a aeronave crítica escolhida aparece em
+ * silhueta métrica sobre a largura da pista-premissa, na pista inteira (decolagem
+ * publicada × 3.000 m) e no mapa hemisférico de alcance a partir de Orlando.
+ * Estado só de escolha (clique), nada por quadro.
  */
-export function FleetSimulator() {
+export function FleetSimulator({ variant = "full" }: FleetSimulatorProps) {
   const [model, setModel] = useState<AircraftName>("Global 7000 / 7500");
   const [tierName, setTierName] = useState<TierName>("Founder Estates");
-  const pathRef = useRef<SVGPathElement | null>(null);
-  const planeRef = useRef<SVGGElement | null>(null);
+  const spec = findAircraft(model);
   const tier = findTier(tierName);
-  const route = TIER_ROUTES[tierName];
-
-  useEffect(() => {
-    const path = pathRef.current;
-    const plane = planeRef.current;
-    if (path === null || plane === null || typeof plane.animate !== "function") {
-      return undefined;
-    }
-    const frames = taxiKeyframes(path);
-    const last = frames.at(-1);
-    const shouldAnimate = window.matchMedia(MOTION_ALLOWED_QUERY).matches;
-    if (!shouldAnimate || last === undefined) {
-      plane.style.transform = typeof last?.transform === "string" ? last.transform : "";
-      return undefined;
-    }
-    plane.style.transform = "";
-    const animation = plane.animate(frames, { duration: TAXI_DURATION_MS, easing: TAXI_EASING, fill: "forwards" });
-    return () => animation.cancel();
-  }, [model, tierName]);
+  const reach = hubReach(spec);
+  const isFull = variant === "full";
+  const groupName = `aeronave-${variant}`;
 
   return (
-    <div className={styles.simulator}>
-      <div className={styles.controls}>
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Aeronave crítica</legend>
-          <div className={styles.options}>
-            {aircraft.map((name) => (
-              <label key={name} className={styles.option}>
-                <input className={styles.radio} type="radio" name="aeronave" value={name} checked={model === name} onChange={() => setModel(name)} />
-                <span>{name}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Coleção residencial</legend>
-          <div className={styles.options}>
-            {tiers.map((entry) => (
-              <label key={entry.name} className={styles.option}>
-                <input className={styles.radio} type="radio" name="colecao" value={entry.name} checked={tierName === entry.name} onChange={() => setTierName(entry.name)} />
-                <span>
-                  {entry.name} <span className={`${styles.optionMeta} tnum`}>· {entry.count} un.</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      </div>
+    <div className={styles.console} data-variant={variant}>
+      <fieldset className={styles.selector}>
+        <legend className={styles.legend}>Aeronave crítica</legend>
+        <div className={styles.options}>
+          {AIRCRAFT_SPECS.map((entry) => (
+            <label key={entry.name} className={styles.option}>
+              <input className={styles.radio} type="radio" name={groupName} value={entry.name} checked={model === entry.name} onChange={() => setModel(entry.name)} />
+              <span className={styles.optionName}>{entry.name}</span>
+              <span className={`${styles.optionMeta} tnum`}>{formatMeters(entry.wingspanM)}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
-      <figure className={styles.diagramFrame}>
-        <RunwayDiagram activeTier={tierName} pathRef={pathRef} planeRef={planeRef} planeLabel={model} label={describeSelection(model, tierName)} />
-        <figcaption className={styles.caption}>Esquema conceitual, fora de escala. {AVIATION.masterplanNote}</figcaption>
-      </figure>
+      <div className={styles.panels}>
+        <figure className={styles.panel}>
+          <figcaption className={styles.panelHead}>
+            <span className={styles.panelIndex}>01</span> Envelope de pista em escala física · 1 m = 1 m
+          </figcaption>
+          <RunwayEnvelope spec={spec} />
+          {isFull ? <RunwayLength spec={spec} /> : null}
+        </figure>
+        <figure className={styles.panel}>
+          <figcaption className={styles.panelHead}>
+            <span className={styles.panelIndex}>02</span> Alcance sem escala a partir de Orlando · MCO
+          </figcaption>
+          <RangeMap spec={spec} />
+          <ul className={styles.legendRow} role="list">
+            <li data-reach="nonstop">{REACH_LABEL.nonstop}</li>
+            <li data-reach="limit">{REACH_LABEL.limit} (90–100%)</li>
+            <li data-reach="out">{REACH_LABEL.out}</li>
+          </ul>
+        </figure>
+      </div>
 
       <div className={styles.readout} aria-live="polite">
         <p className={styles.readoutTitle}>
-          <span className={styles.readoutModel}>{model}</span> → {route.destination}
+          <span className={styles.readoutKicker}>Especificação pública da aeronave de referência</span>
+          {spec.reference}
         </p>
-        <dl className={styles.metrics}>
-          <div className={styles.metric}>
-            <dt>Pista</dt>
-            <dd className="tnum">{AVIATION.infrastructure[0]}</dd>
+        <dl className={styles.specs}>
+          <div>
+            <dt>Envergadura</dt>
+            <dd className="tnum">{formatMeters(spec.wingspanM)}</dd>
           </div>
-          <div className={styles.metric}>
-            <dt>Coleção</dt>
+          <div>
+            <dt>Comprimento</dt>
+            <dd className="tnum">{formatMeters(spec.lengthM)}</dd>
+          </div>
+          <div>
+            <dt>Alcance nominal</dt>
             <dd className="tnum">
-              {tier.name} · {tier.count} de {TOTAL_UNITS} residências
+              {formatNm(spec.rangeNm)} · {formatKm(nmToKm(spec.rangeNm))}
             </dd>
           </div>
-          <div className={styles.metric}>
-            <dt>Participação no total</dt>
-            <dd>
-              <span className={styles.shareBar} style={{ "--share": unitShare(tier) } as CSSProperties} aria-hidden="true" />
-              <span className="tnum">{Math.round(unitShare(tier) * 100)}%</span>
-            </dd>
-          </div>
-          <div className={styles.metric}>
-            <dt>Hangar</dt>
-            <dd>{tier.hangar}</dd>
-          </div>
-          <div className={styles.metric}>
-            <dt>Lote · área</dt>
+          <div>
+            <dt>Decolagem publicada</dt>
             <dd className="tnum">
-              {tier.acres} · {tier.size}
+              {formatMeters(spec.takeoffM)} · {percent(runwayUse(spec))} de {RUNWAY_PREMISE.lengthM.toLocaleString("pt-BR")} m
             </dd>
           </div>
-          <div className={styles.metric}>
-            <dt>Faixa de preço</dt>
-            <dd className={`${styles.price} tnum`}>{tier.price}</dd>
-          </div>
-          <div className={styles.metric}>
-            <dt>Serviços</dt>
-            <dd>{AVIATION.infrastructure[3]}</dd>
-          </div>
-          <div className={styles.metric}>
-            <dt>Procedimentos</dt>
-            <dd>{AVIATION.infrastructure[4]}</dd>
+          <div>
+            <dt>Folga lateral na pista de {RUNWAY_PREMISE.widthM} m</dt>
+            <dd className="tnum">{formatMeters(lateralClearance(spec))} por lado</dd>
           </div>
         </dl>
-        <p className={styles.readoutNote}>{tier.note}</p>
+        <ol className={styles.reachList}>
+          {reach.map((entry) => (
+            <li key={entry.hub.id} className={styles.reachItem} data-reach={entry.status}>
+              <span className={styles.reachCity}>{entry.hub.city}</span>
+              <span className="tnum">{formatNm(entry.distanceNm)}</span>
+              <span className={styles.reachStatus}>{REACH_LABEL[entry.status]}</span>
+            </li>
+          ))}
+        </ol>
+        <p className={styles.note}>{SPEC_NOTE}</p>
       </div>
+
+      {isFull ? (
+        <div className={styles.tierBlock}>
+          <fieldset className={styles.selector}>
+            <legend className={styles.legend}>Coleção residencial</legend>
+            <div className={styles.options}>
+              {tiers.map((entry) => (
+                <label key={entry.name} className={styles.option}>
+                  <input className={styles.radio} type="radio" name="colecao" value={entry.name} checked={tierName === entry.name} onChange={() => setTierName(entry.name)} />
+                  <span className={styles.optionName}>{entry.name}</span>
+                  <span className={`${styles.optionMeta} tnum`}>{entry.count} un.</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <dl className={styles.specs} aria-live="polite">
+            <div>
+              <dt>Hangar</dt>
+              <dd>{tier.hangar}</dd>
+            </div>
+            <div>
+              <dt>Lote · área</dt>
+              <dd className="tnum">
+                {tier.acres} · {tier.size}
+              </dd>
+            </div>
+            <div>
+              <dt>Faixa</dt>
+              <dd className="tnum">{tier.price}</dd>
+            </div>
+            <div>
+              <dt>Participação</dt>
+              <dd className="tnum">
+                {tier.count} de {TOTAL_UNITS} residências · {percent(unitShare(tier))}
+              </dd>
+            </div>
+          </dl>
+          <p className={styles.note}>
+            {model} → {tier.hangar.toLowerCase()} ({tier.name}). {tier.note}.
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }
