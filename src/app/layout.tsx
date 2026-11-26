@@ -73,7 +73,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <a className="skip-link" href="#conteudo">
           Pular para o conteúdo
         </a>
-        <MartechProvider gtmId={gtmId}>
+        <MartechProvider gtmId={gtmId} hideBannerWithoutTracking={gtmId === null}>
           <ScrollProvider>
             <SiteHeader />
             <main id="conteudo">{children}</main>

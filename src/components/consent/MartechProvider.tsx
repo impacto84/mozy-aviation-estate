@@ -19,6 +19,8 @@ interface MartechProviderProps {
   readonly gtmId: string | null;
   /** Link da política de privacidade mostrado no aviso. */
   readonly policyHref?: string;
+  /** Quando verdadeiro e `gtmId === null`, não exibe barra de cookies na primeira dobra. */
+  readonly hideBannerWithoutTracking?: boolean;
   readonly children: ReactNode;
 }
 
@@ -59,7 +61,7 @@ function saveChoice(choice: ConsentChoice): void {
  *   3. mostra o aviso de cookies enquanto o visitante não decidiu, e o diálogo de preferências.
  * Os filhos chegam do servidor: este componente não transforma a página em cliente.
  */
-export function MartechProvider({ gtmId, policyHref, children }: MartechProviderProps) {
+export function MartechProvider({ gtmId, policyHref, hideBannerWithoutTracking = false, children }: MartechProviderProps) {
   const state = useConsentState();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const [dialogVersion, setDialogVersion] = useState(0);
@@ -76,10 +78,11 @@ export function MartechProvider({ gtmId, policyHref, children }: MartechProvider
     setAnnouncement(SAVED_MESSAGE);
   };
   const value = useMemo<MartechContextValue>(() => ({ config, openPreferences }), [config, openPreferences]);
+  const shouldShowBanner = state?.status === "unknown" && !(hideBannerWithoutTracking && gtmId === null);
 
   return (
     <MartechContext value={value}>
-      {state?.status === "unknown" ? (
+      {shouldShowBanner ? (
         <ConsentBanner
           policyHref={policyHref}
           onAccept={() => decide("all")}

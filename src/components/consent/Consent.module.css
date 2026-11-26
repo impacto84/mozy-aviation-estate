@@ -3,17 +3,23 @@
  * (o aviso aparece parado, então não há estado de movimento reduzido para tratar).
  */
 
+/*
+ * Padrão compacto: só aparece com GTM configurado (sem tags não há o que consentir).
+ * Cartão discreto no canto inferior, com fio de latão, que nunca cobre a dobra inteira.
+ */
 .banner {
   --consent-gap: var(--space-2);
 
   position: fixed;
-  inset-inline: 0;
-  inset-block-end: 0;
+  inset-inline: var(--space-3);
+  inset-block-end: var(--space-3);
   z-index: var(--z-overlay);
   display: grid;
   gap: var(--consent-gap);
-  padding: var(--space-3) var(--container-gutter);
-  border-block-start: var(--border-width) solid var(--color-border);
+  max-inline-size: 26rem;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-sm);
   background-color: var(--color-surface-raised);
   color: var(--color-text);
   box-shadow: var(--shadow-md);
