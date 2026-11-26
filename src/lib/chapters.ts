@@ -1,7 +1,10 @@
 /**
- * Capítulos cinematográficos a partir das sequências reais de frames (`public/frames/*`).
- * Funções puras: quais quadros carregar, em que ordem, com que largura e qual
- * quadro desenhar para um progresso de rolagem. Testadas em `chapters.test.ts`.
+ * Atos cinematográficos a partir das sequências reais de quadros (`public/frames/*`).
+ *
+ * Pipeline direto (FORJA 1.1 §2.1): cada quadro é o arquivo WebP original servido como
+ * estático (`/frames/<ato>/frame-XXXX.webp`), nunca pelo otimizador `/_next/image`.
+ * Densidade: sequências curtas em passo 1 (phone 2); a longa (villa, 722) em passo 2
+ * (phone 3). Funções puras, testadas em `chapters.test.ts`.
  */
 
 export type ChapterId = "approach" | "villa" | "hangar";
@@ -13,26 +16,28 @@ export interface ChapterSource {
   readonly count: number;
   /** Passo de amostragem no desktop/tablet (1 = todos os quadros). */
   readonly step: number;
-  /** Passo no phone: menos quadros, mesma duração. */
+  /** Passo no phone: menos quadros, mesma duração de trilha. */
   readonly phoneStep: number;
   /** Quadro nítido usado como pôster e no modo de movimento reduzido (1-based). */
   readonly stillFrame: number;
   readonly width: number;
   readonly height: number;
+  /** Altura da trilha de rolagem (svh) no desktop/tablet e no phone. */
+  readonly trackSvh: number;
+  readonly phoneTrackSvh: number;
+  /** `immediate`: pré-carga logo após a montagem (Ato I); `near`: quando a trilha se aproxima. */
+  readonly preload: "immediate" | "near";
 }
 
 export const CHAPTERS: readonly ChapterSource[] = [
-  { id: "approach", dir: "/frames/approach", count: 121, step: 1, phoneStep: 2, stillFrame: 84, width: 1920, height: 1082 },
-  { id: "villa", dir: "/frames/villa", count: 722, step: 4, phoneStep: 6, stillFrame: 600, width: 1600, height: 900 },
-  { id: "hangar", dir: "/frames/hangar", count: 361, step: 2, phoneStep: 3, stillFrame: 300, width: 1600, height: 900 },
+  { id: "approach", dir: "/frames/approach", count: 121, step: 1, phoneStep: 2, stillFrame: 1, width: 1920, height: 1082, trackSvh: 420, phoneTrackSvh: 400, preload: "immediate" },
+  { id: "villa", dir: "/frames/villa", count: 722, step: 2, phoneStep: 3, stillFrame: 600, width: 1600, height: 900, trackSvh: 520, phoneTrackSvh: 480, preload: "near" },
+  { id: "hangar", dir: "/frames/hangar", count: 361, step: 1, phoneStep: 2, stillFrame: 300, width: 1600, height: 900, trackSvh: 460, phoneTrackSvh: 440, preload: "near" },
 ];
 
-/** Larguras que o otimizador de imagem aceita (`next.config.ts`, `deviceSizes`). */
-export const FRAME_WIDTHS: readonly number[] = [640, 828, 1080, 1440];
-export const FRAME_QUALITY = 60;
 /** Primeiro passe: um quadro a cada KEYFRAME_STRIDE, para o scrub nunca ficar vazio. */
 export const KEYFRAME_STRIDE = 8;
-const PHONE_MAX_WIDTH = 767;
+export const PHONE_MAX_WIDTH = 767;
 
 export function findChapter(id: ChapterId): ChapterSource {
   const chapter = CHAPTERS.find((entry) => entry.id === id);
@@ -42,13 +47,27 @@ export function findChapter(id: ChapterId): ChapterSource {
   return chapter;
 }
 
+/** Caminho estático do quadro (1-based): `/frames/villa/frame-0042.webp`. */
 export function framePath(dir: string, frame: number): string {
   return `${dir}/frame-${String(frame).padStart(4, "0")}.webp`;
 }
 
-/** Números (1-based) dos quadros usados para a largura de tela atual. */
+/**
+ * URL do quadro no canal direto: o próprio arquivo WebP original, sem `/_next/image`
+ * nem recompressão (`q=60` borrava cada quadro e custava CPU no servidor).
+ */
+export function frameUrl(dir: string, frame: number): string {
+  return framePath(dir, frame);
+}
+
+/** Passo de amostragem para a largura de tela atual. */
+export function stepFor(chapter: ChapterSource, viewportWidth: number): number {
+  return viewportWidth <= PHONE_MAX_WIDTH ? chapter.phoneStep : chapter.step;
+}
+
+/** Números (1-based) dos quadros usados para a largura de tela atual (sempre inclui o último). */
 export function sampledFrames(chapter: ChapterSource, viewportWidth: number): readonly number[] {
-  const step = viewportWidth <= PHONE_MAX_WIDTH ? chapter.phoneStep : chapter.step;
+  const step = stepFor(chapter, viewportWidth);
   const frames: number[] = [];
   for (let frame = 1; frame <= chapter.count; frame += step) {
     frames.push(frame);
@@ -85,16 +104,9 @@ export function loadOrder(length: number, stride: number = KEYFRAME_STRIDE): rea
   return [...keys, ...rest];
 }
 
-/** Menor largura do otimizador que cobre o canvas (CSS × DPR limitado a 2). */
-export function frameWidthFor(cssWidth: number, devicePixelRatio: number): number {
-  const ratio = Math.min(Math.max(devicePixelRatio, 1), 2);
-  const needed = Math.max(cssWidth, 1) * ratio;
-  return FRAME_WIDTHS.find((width) => width >= needed) ?? FRAME_WIDTHS.at(-1) ?? needed;
-}
-
-/** URL do quadro pelo otimizador do Next (WebP redimensionado e em cache). */
-export function frameUrl(dir: string, frame: number, width: number): string {
-  return `/_next/image?url=${encodeURIComponent(framePath(dir, frame))}&w=${width}&q=${FRAME_QUALITY}`;
+/** Largura do bitmap decodificado: o buffer do canvas, nunca acima do arquivo original. */
+export function decodeWidthFor(canvasBufferWidth: number, sourceWidth: number): number {
+  return Math.max(1, Math.min(Math.round(canvasBufferWidth), sourceWidth));
 }
 
 /** Índice (0-based) do quadro para um progresso de 0 a 1. */
@@ -102,8 +114,12 @@ export function frameIndexFor(progress: number, length: number): number {
   if (length <= 0) {
     return 0;
   }
-  const clamped = Number.isFinite(progress) ? Math.min(Math.max(progress, 0), 1) : 0;
-  return Math.round(clamped * (length - 1));
+  return Math.round(clampProgress(progress) * (length - 1));
+}
+
+/** Progresso limitado a [0, 1]; valores não finitos viram 0. */
+export function clampProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.min(Math.max(progress, 0), 1) : 0;
 }
 
 /** Quadro carregado mais próximo do desejado; -1 se nenhum carregou ainda. */
@@ -123,12 +139,15 @@ export function nearestLoaded(target: number, isLoaded: (index: number) => boole
 
 export type CaptionPhase = "intro" | "mid" | "arrival";
 
-/** Legenda ativa para o progresso: entrada, meio e chegada, como na V05. */
+/** Fronteiras das legendas (fração da trilha). */
+export const CAPTION_BOUNDS = { mid: 0.34, arrival: 0.68 } as const;
+
+/** Legenda ativa para o progresso: entrada, meio e chegada. */
 export function captionPhase(progress: number): CaptionPhase {
-  if (progress < 0.34) {
+  if (progress < CAPTION_BOUNDS.mid) {
     return "intro";
   }
-  return progress < 0.68 ? "mid" : "arrival";
+  return progress < CAPTION_BOUNDS.arrival ? "mid" : "arrival";
 }
 
 /** Retângulo de desenho equivalente a `object-fit: cover`. */
@@ -142,4 +161,10 @@ export function coverRect(
   const width = imageWidth * scale;
   const height = imageHeight * scale;
   return { x: (canvasWidth - width) / 2, y: (canvasHeight - height) / 2, width, height };
+}
+
+/** Contador de quadro exibido no HUD: `QDR 042/121`. */
+export function frameCounter(frame: number, count: number): string {
+  const digits = String(count).length;
+  return `QDR ${String(frame).padStart(digits, "0")}/${count}`;
 }

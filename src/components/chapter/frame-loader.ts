@@ -1,14 +1,15 @@
 /**
- * Carregador de quadros em lote com memória limitada.
+ * Carregador de quadros com rede em lote e memória limitada.
  *
- * - Rede: todos os quadros do capítulo são baixados como blobs comprimidos (WebP
- *   redimensionado pelo otimizador, ~50 kB cada), em lote e com concorrência
- *   limitada, quadros-chave primeiro (`loadOrder`).
- * - Memória: só uma janela de quadros em volta da posição atual fica decodificada
- *   (`ImageBitmap`, já no tamanho do canvas). Fora da janela, `close()` libera a
- *   memória. Sem isso, 121 quadros 1920 px decodificados passam de 1 GB e a aba cai.
+ * - Rede: os quadros do ato são baixados direto do arquivo WebP original
+ *   (`/frames/<ato>/frame-XXXX.webp`, cache imutável), com concorrência limitada,
+ *   quadros-chave primeiro (`loadOrder`). Quando o visitante salta para longe, os
+ *   quadros em volta da posição nova passam para a frente da fila (`focus`).
+ * - Memória: só uma janela deslizante em volta da posição atual fica decodificada
+ *   (`ImageBitmap` já na largura do buffer do canvas). Fora da janela, `close()`
+ *   libera a memória. Os blobs comprimidos ficam guardados para voltar sem rede.
  *
- * Sem React: o componente cria um por capítulo e chama `dispose()` na troca.
+ * Sem React: o componente cria um por ato e chama `dispose()` ao desmontar.
  */
 
 import { loadOrder } from "@/lib/chapters";
@@ -16,16 +17,18 @@ import { loadOrder } from "@/lib/chapters";
 export interface FrameLoader {
   readonly bitmapAt: (index: number) => ImageBitmap | undefined;
   readonly isDecoded: (index: number) => boolean;
-  /** Recentra a janela decodificada em `index` (chame a cada mudança de progresso). */
+  /** Recentra a janela decodificada e a prioridade de rede em `index`. */
   readonly focus: (index: number) => void;
+  /** Quantos quadros já chegaram pela rede (para o HUD e para os testes). */
+  readonly loadedCount: () => number;
   readonly dispose: () => void;
 }
 
 export interface FrameLoaderOptions {
   readonly urls: readonly string[];
   readonly concurrency: number;
-  /** Largura alvo do bitmap (px do buffer do canvas). */
-  readonly targetWidth: number;
+  /** Largura alvo do bitmap (px do buffer do canvas), lida a cada decodificação. */
+  readonly targetWidth: () => number;
   /** Quadros decodificados de cada lado da posição atual. */
   readonly window: number;
   /** Chamado quando um quadro novo fica pronto para desenhar. */
@@ -34,9 +37,18 @@ export interface FrameLoaderOptions {
 
 /** Folga além da janela antes de liberar um bitmap (evita decodificar de novo ao ir e voltar). */
 const EVICT_MARGIN = 4;
+/** Quadros em volta do foco que furam a fila de rede. */
+const PRIORITY_RADIUS = 12;
 
 function distance(a: number, b: number): number {
   return Math.abs(a - b);
+}
+
+/** Move para a frente da fila os índices a até `radius` do centro, mais perto primeiro. */
+export function prioritizeQueue(queue: readonly number[], center: number, radius: number): number[] {
+  const near = queue.filter((index) => distance(index, center) <= radius).sort((a, b) => distance(a, center) - distance(b, center));
+  const nearSet = new Set(near);
+  return [...near, ...queue.filter((index) => !nearSet.has(index))];
 }
 
 export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
@@ -44,10 +56,11 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
   const blobs: (Blob | null)[] = urls.map(() => null);
   const bitmaps = new Map<number, ImageBitmap>();
   const decoding = new Set<number>();
-  const queue = [...loadOrder(urls.length)];
+  let queue: number[] = [...loadOrder(urls.length)];
   const controller = new AbortController();
   let center = 0;
   let inFlight = 0;
+  let loaded = 0;
   let isDisposed = false;
 
   const evict = (): void => {
@@ -65,7 +78,7 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
       return;
     }
     decoding.add(index);
-    createImageBitmap(blob, { resizeWidth: targetWidth, resizeQuality: "medium" })
+    createImageBitmap(blob, { resizeWidth: targetWidth(), resizeQuality: "high" })
       .then((bitmap) => {
         decoding.delete(index);
         if (isDisposed || distance(index, center) > radius + EVICT_MARGIN) {
@@ -76,7 +89,7 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
         onFrame(index);
       })
       .catch(() => {
-        // Quadro que não decodificou fica de fora: o scrub usa o vizinho mais próximo.
+        // Quadro que não decodificou fica de fora: o scrub desenha o vizinho mais próximo.
         decoding.delete(index);
       });
   };
@@ -91,9 +104,10 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
 
   const pump = (): void => {
     while (!isDisposed && inFlight < concurrency && queue.length > 0) {
-      const index = queue.shift();
+      const [index, ...rest] = queue;
+      queue = rest;
       const url = index === undefined ? undefined : urls[index];
-      if (index === undefined || url === undefined) {
+      if (index === undefined || url === undefined || blobs[index] !== null) {
         continue;
       }
       inFlight += 1;
@@ -101,12 +115,15 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
         .then((response) => (response.ok ? response.blob() : null))
         .then((blob) => {
           blobs[index] = blob;
+          if (blob !== null) {
+            loaded += 1;
+          }
           if (distance(index, center) <= radius) {
             decode(index);
           }
         })
         .catch(() => {
-          // Rede falhou ou troca de capítulo abortou: o quadro fica de fora.
+          // Rede falhou ou o ato foi desmontado: o quadro fica de fora.
         })
         .finally(() => {
           inFlight -= 1;
@@ -121,12 +138,16 @@ export function createFrameLoader(options: FrameLoaderOptions): FrameLoader {
     bitmapAt: (index) => bitmaps.get(index),
     isDecoded: (index) => bitmaps.has(index),
     focus: (index) => {
-      center = index;
+      if (index !== center) {
+        center = index;
+        queue = prioritizeQueue(queue, center, PRIORITY_RADIUS);
+      }
       decodeWindow();
     },
+    loadedCount: () => loaded,
     dispose: () => {
       isDisposed = true;
-      queue.length = 0;
+      queue = [];
       controller.abort();
       for (const bitmap of bitmaps.values()) {
         bitmap.close();
