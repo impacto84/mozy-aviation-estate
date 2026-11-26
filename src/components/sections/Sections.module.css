@@ -234,6 +234,13 @@
 }
 
 @media (min-width: 1200px) {
+  /* Coluna do título acompanha a lista enquanto ela rola: nada de coluna vazia. */
+  .split > :first-child {
+    position: sticky;
+    inset-block-start: calc(var(--header-height) + var(--space-8));
+    align-self: start;
+  }
+
   .split {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     column-gap: var(--space-16);

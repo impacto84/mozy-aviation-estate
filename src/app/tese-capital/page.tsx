@@ -8,11 +8,11 @@ import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { BRAND, CONCEPT_CAPTION, CTA, DISCIPLINE, SPONSOR, TECH } from "@/lib/editorial";
+import { BRAND, CONCEPT_CAPTION, CTA, DISCIPLINE, SPONSOR } from "@/lib/editorial";
 import { faqPageJsonLd } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
-import { contact, tech } from "@/lib/site-data";
+import { contact } from "@/lib/site-data";
 import styles from "./page.module.css";
 import { CAPITAL_FAQ } from "./faq";
 
@@ -103,25 +103,6 @@ export default function CapitalPage() {
         <div className={section.inner}>
           <SectionHeader id="riscos-titulo" title={DISCIPLINE.risksTitle} />
           <RiskList />
-        </div>
-      </section>
-
-      <section className={section.section} aria-labelledby="tecnologia-capital-titulo" data-surface="dossier">
-        <div className={`${section.inner} ${sections.split}`}>
-          <h2 id="tecnologia-capital-titulo" className={section.title}>
-            {TECH.title}
-          </h2>
-          <ol className={sections.ruled}>
-            {tech.map((item) => (
-              <li key={item.n} className={sections.ruledItem}>
-                <span className={`${sections.ruledIndex} tnum`}>{item.n}</span>
-                <span className={sections.ruledContent}>
-                  <span className={sections.ruledTitle}>{item.title}</span>
-                  <span className={`${sections.ruledBody} tnum`}>{item.body}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 

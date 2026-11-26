@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SatelliteAtlas } from "@/components/atlas/SatelliteAtlas";
 import { PageHero } from "@/components/page/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
-import { CorridorsTable, GatesRail, RegulatorsMatrix, ScorecardBars } from "@/components/sections/DataBlocks";
+import { CorridorsTable, RegulatorsMatrix, ScorecardBars } from "@/components/sections/DataBlocks";
 import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
@@ -87,13 +87,6 @@ export default function LandsPage() {
         <div className={section.inner}>
           <SectionHeader id="reguladores-titulo" title={DISCIPLINE.regulatorsTitle} isSplit lede="Aprovações conduzidas em paralelo; nenhuma, sozinha, garante o empreendimento." />
           <RegulatorsMatrix />
-        </div>
-      </section>
-
-      <section className={section.section} aria-labelledby="gates-titulo" data-surface="navy">
-        <div className={section.inner}>
-          <SectionHeader id="gates-titulo" title={DISCIPLINE.title} />
-          <GatesRail />
         </div>
       </section>
 

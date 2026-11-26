@@ -101,15 +101,6 @@ export default function AviationPage() {
               />
             </figure>
             <figure className={sections.figure}>
-              <Image
-                className={sections.figureImage}
-                src="/media/masterplan-diagram.jpg"
-                alt="Diagrama do master plan com a organização entre pista, residências e serviços"
-                width={753}
-                height={652}
-                sizes="(min-width: 1200px) 34vw, 100vw"
-                quality={88}
-              />
               <ul className={sections.legend} role="list">
                 {AVIATION.masterplanLabels.map((label) => (
                   <li key={label} className={sections.legendItem}>
@@ -117,6 +108,7 @@ export default function AviationPage() {
                   </li>
                 ))}
               </ul>
+              <figcaption className={sections.tableNote}>{AVIATION.masterplanNote}</figcaption>
             </figure>
           </div>
         </div>

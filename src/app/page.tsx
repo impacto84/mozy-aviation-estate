@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { ActApproach, ActHangar, ActVilla } from "@/components/home/HomeActs";
-import { ClubBand, Collections, HangarPrelude, ResidencePrelude, Sponsor, TechList, Thesis } from "@/components/home/HomeEditorial";
+import { ClubBand, Collections, HangarPrelude, ResidencePrelude, TechList, Thesis } from "@/components/home/HomeEditorial";
 import { Closing, NightFilm } from "@/components/home/HomeFilms";
-import { AtlasSection, AviationSection, CapitalTeaser, Discipline } from "@/components/home/HomeInteractive";
+import { AtlasSection, AviationSection, CapitalTeaser } from "@/components/home/HomeInteractive";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { placeJsonLd } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
@@ -52,10 +52,8 @@ export default function HomePage() {
       <AviationSection />
       <ClubBand />
       <TechList />
-      <Discipline />
       <AtlasSection />
       <CapitalTeaser />
-      <Sponsor />
       <Closing />
     </>
   );

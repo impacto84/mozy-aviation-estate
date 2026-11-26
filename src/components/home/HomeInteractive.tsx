@@ -2,7 +2,7 @@ import { SatelliteAtlas } from "@/components/atlas/SatelliteAtlas";
 import { FleetSimulator } from "@/components/aviation/FleetSimulator";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { DISCIPLINE, LANDS } from "@/lib/editorial";
-import { capital, gates } from "@/lib/site-data";
+import { capital } from "@/lib/site-data";
 import styles from "./Home.module.css";
 
 /** Teaser interativo da engenharia aeronáutica: escala física e alcance real. */
@@ -28,32 +28,6 @@ export function AviationSection() {
             Abrir o console completo de pista & frota
           </LinkButton>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/** Disciplina: os sete stage-gates em régua. */
-export function Discipline() {
-  return (
-    <section className={styles.ruledSection} aria-labelledby="disciplina-titulo" data-surface="dossier">
-      <div className={`${styles.inner} ${styles.split}`}>
-        <div>
-          <p className={styles.kicker}>Disciplina de capital</p>
-          <h2 id="disciplina-titulo" className={styles.sectionTitle}>
-            {DISCIPLINE.title}
-          </h2>
-          <p className={styles.bodyText}>{DISCIPLINE.rejection}</p>
-        </div>
-        <ol className={styles.gates}>
-          {gates.map((gate) => (
-            <li key={gate.n} className={styles.gate}>
-              <span className={`${styles.gateNumber} tnum`}>{gate.n}</span>
-              <span className={styles.gateTitle}>{gate.title}</span>
-              <span className={styles.gateBody}>{gate.body}</span>
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );
@@ -110,6 +84,7 @@ export function CapitalTeaser() {
           </p>
         )}
         <p className={styles.note}>{DISCIPLINE.capitalDisclaimer}</p>
+        <p className={styles.note}>{DISCIPLINE.rejection} Os sete stage-gates estão na tese de capital.</p>
         <div className={styles.rowActions}>
           <LinkButton href="/tese-capital" variant="ghost">
             Estrutura, stage-gates e governança

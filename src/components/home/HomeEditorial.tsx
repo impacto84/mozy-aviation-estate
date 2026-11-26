@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { LinkButton } from "@/components/ui/LinkButton";
-import { BRAND, COLLECTIONS, CONCEPT_CAPTION, CLUB, HANGAR_HOME, HERO, SPONSOR, TECH, VISION } from "@/lib/editorial";
-import { contact, stats, tech, tiers } from "@/lib/site-data";
+import { BRAND, COLLECTIONS, CONCEPT_CAPTION, CLUB, HANGAR_HOME, HERO, TECH, VISION } from "@/lib/editorial";
+import { stats, tech, tiers } from "@/lib/site-data";
 import styles from "./Home.module.css";
 
 /** Sumário da obra: cada ato e capítulo interativo da home tem âncora própria. */
@@ -204,38 +204,6 @@ export function TechList() {
             </div>
           ))}
         </dl>
-      </div>
-    </section>
-  );
-}
-
-/** Sponsor: quem executa, com os papéis declarados. */
-export function Sponsor() {
-  return (
-    <section className={styles.ruledSection} aria-labelledby="sponsor-titulo" data-surface="navy">
-      <div className={`${styles.inner} ${styles.split}`}>
-        <div className={styles.sponsorIdentity}>
-          <Image src="/media/logo.png" alt="Logotipo MOZY Construction" width={534} height={380} sizes="160px" className={styles.sponsorLogo} />
-          <p className={styles.sponsorName}>{BRAND.sponsor}</p>
-          <p className={styles.meta}>{BRAND.sponsorDetail}</p>
-          <p className={styles.meta}>{contact.address}</p>
-          <p className={styles.meta}>{BRAND.sponsorRegion}</p>
-        </div>
-        <div>
-          <h2 id="sponsor-titulo" className={styles.sectionTitle}>
-            {SPONSOR.title}
-          </h2>
-          <ol className={styles.rules}>
-            {SPONSOR.roles.map((role, index) => (
-              <li key={role} className={styles.rule}>
-                <span className={styles.ruleName}>
-                  <span className={`${styles.ruleIndex} tnum`}>{String(index + 1).padStart(2, "0")}</span>
-                  {role}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
       </div>
     </section>
   );

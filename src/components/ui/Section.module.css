@@ -56,6 +56,7 @@
 
 @media (min-width: 1200px) {
   .headerSplit {
+    position: relative;
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     align-items: end;
     column-gap: var(--space-16);
