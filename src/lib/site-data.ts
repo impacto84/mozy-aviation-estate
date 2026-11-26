@@ -56,7 +56,7 @@ export const tiers = [
     size: "6.000–12.000 ft²",
     hangar: "Maior silêncio · hangar central",
     price: "$7–15M",
-    note: "Lake / green views",
+    note: "Vista para lagos e áreas verdes",
   },
 ] as const;
 
@@ -146,7 +146,7 @@ export const lands = [
     satWide: "/media/sat/honey-wide.jpg",
     ox: "75.1%",
     oy: "17.7%",
-    note: "Anúncio ativo. Nenhum runway fit confirmado. Solicitar survey, wetlands, wind rose e estudo FAA/FDOT antes de preço.",
+    note: "Anúncio ativo. Nenhum encaixe de pista confirmado. Solicitar survey, wetlands, wind rose e estudo FAA/FDOT antes de preço.",
   },
   {
     id: "peace",
@@ -197,7 +197,7 @@ export const gates = [
   { n: "3", title: "Aviação", body: "FAA + FDOT" },
   { n: "4", title: "Ambiental", body: "ERP + 404 + espécies" },
   { n: "5", title: "Infra", body: "Acesso + utilities" },
-  { n: "6", title: "Economia", body: "Go / redesign / reject" },
+  { n: "6", title: "Economia", body: "Seguir / redesenhar / rejeitar" },
 ] as const;
 
 export const capital = [
@@ -211,7 +211,7 @@ export const days90 = [
   "Obter Parcel IDs, KML/KMZ e data rooms",
   "Produzir layouts sobre limites reais",
   "Screening de zoning, wetlands e espaço aéreo",
-  "Estimar custo e residual land value",
+  "Estimar custo e valor residual do terreno",
   "Negociar opção de compra com contingências",
 ] as const;
 
@@ -247,12 +247,12 @@ export const timeline = [
 ] as const;
 
 export const scorecard = [
-  { weight: "25%", title: "Espaço aéreo + runway fit", test: "Corredor, vento, obstáculos, airports" },
+  { weight: "25%", title: "Espaço aéreo + encaixe de pista", test: "Corredor, vento, obstáculos, airports" },
   { weight: "20%", title: "Uplands + ambiental", test: "Wetlands, flood, wildlife, mitigação" },
-  { weight: "20%", title: "Zoning + approvals", test: "FLU, UGB, compatibilidade local" },
+  { weight: "20%", title: "Zoneamento + aprovações", test: "FLU, UGB, compatibilidade local" },
   { weight: "15%", title: "Mercado + acesso", test: "Orlando/MCO, rodovias, branding" },
   { weight: "10%", title: "Utilities + infraestrutura", test: "Energia, água, esgoto, fibra" },
-  { weight: "10%", title: "Economia da aquisição", test: "Preço, termos, residual land value" },
+  { weight: "10%", title: "Economia da aquisição", test: "Preço, termos, valor residual do terreno" },
 ] as const;
 
 export const stack = [
@@ -281,7 +281,7 @@ export const regulators = [
 ] as const;
 
 export const entities = [
-  { title: "Mozy / Sponsor", body: "Estratégia · capital · execução" },
+  { title: "MOZY / Sponsor", body: "Estratégia · capital · execução" },
   { title: "HoldCo", body: "Governança do investimento" },
   { title: "Land / DevCo", body: "Aquisição · entitlements · construção" },
   { title: "Airport OpCo", body: "Pista · fuel · terminal · operação" },

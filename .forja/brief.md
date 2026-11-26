@@ -28,7 +28,7 @@ Fatos, números e copys reais auditados (fonte única: `src/lib/site-data.ts` e 
 - **Coleções Residenciais (`tiers`)**:
   - **Founder Estates (`12` unidades)**: `5–10 acres` · `12.000–25.000+ ft²` · Hangar para múltiplas aeronaves, 3–4 pavimentos · `$20–40M` · Lotes maiores, múltiplos jatos, máxima personalização.
   - **Runway Signature (`30` unidades)**: `3–5 acres` · `8.000–15.000 ft²` · Hangar privativo + taxiway · `$12–25M` · Núcleo do sellout, acesso direto.
-  - **Reserve Estates (`18` unidades)**: `2–4 acres` · `6.000–12.000 ft²` · Maior silêncio, hangar central · `$7–15M` · Lake / green views.
+  - **Reserve Estates (`18` unidades)**: `2–4 acres` · `6.000–12.000 ft²` · Maior silêncio, hangar central · `$7–15M` · Vista para lagos e áreas verdes.
 - **Aeronaves Críticas Suportadas (`aircraft`)**: `G450 / G550`, `Global 6000`, `Global 7000 / 7500`, `Falcon 2000`, `Falcon 8X`, `Falcon 900XP`.
 - **Infraestrutura & Operação**: Taxiway paralelo e áreas de proteção; terminal privado, apron e hangares; Jet-A, Fire Rescue e meteorologia; IFR/GPS sujeito à aprovação; operação privada e controlada.
 - **Aviation Club**: Hospitalidade seis estrelas para proprietários, convidados e tripulações (restaurante, lounge, business center, wellness, piscina, simuladores, eventos).
@@ -49,12 +49,12 @@ Fatos, números e copys reais auditados (fonte única: `src/lib/site-data.ts` e 
   - `03 Polk · Lakeland / Fort Meade` (`Orlando + Tampa`)
   - `04 Marion · Ocala` (`Cultura equestre e aeronáutica`)
 - **Terrenos Candidatos (`lands`)**:
-  - **Prioridade 1 — Honey Bee Ranch**: `19543 E Colonial Drive · Orlando, Orange County` · `1.100 acres` · `Sob consulta` · Zoning `PD e A-2 · Future Land Use R` · `≈1 milha de frente pela SR 50 / E Colonial Drive` · `Mais de 5 milhas de waterfront em lagos de água profunda` · Satélites: `/media/sat/honey-wide.jpg`, `/media/sat/honey-close.jpg`, Foto: `/media/listing-honey.jpg`. Nota: Anúncio ativo; nenhum runway fit confirmado; solicitar survey, wetlands, wind rose e estudo FAA/FDOT antes de preço.
+  - **Prioridade 1 — Honey Bee Ranch**: `19543 E Colonial Drive · Orlando, Orange County` · `1.100 acres` · `Sob consulta` · Zoning `PD e A-2 · Future Land Use R` · `≈1 milha de frente pela SR 50 / E Colonial Drive` · `Mais de 5 milhas de waterfront em lagos de água profunda` · Satélites: `/media/sat/honey-wide.jpg`, `/media/sat/honey-close.jpg`, Foto: `/media/listing-honey.jpg`. Nota: Anúncio ativo; nenhum encaixe de pista confirmado; solicitar survey, wetlands, wind rose e estudo FAA/FDOT antes de preço.
   - **Prioridade 2 — Peace River Legacy East**: `Homeland–Garfield Road · Fort Meade, Polk County` · `1.693 acres` · `$10,0M · $5.907/acre` · Zoning `A/RR · Agricultural Residential Rural` · `Mais de 1.000 ft de frente pavimentada em county road` · `Energia, dois poços, ponds · ≈30 min Lakeland · ≈1h20 Orlando · ≈1h10 Tampa` · Satélites: `/media/sat/peace-wide.jpg`, `/media/sat/peace-close.jpg`, Foto: `/media/listing-peace.jpg`. Nota: Melhor base econômica conhecida; APNs no data room.
   - **Prioridade 3 — Osceola Ranch**: `Holopaw Groves Road · St. Cloud, Osceola County` · `1.230 acres` · `$5,5M · $4.472/acre` · Zoning `A · pecuário · múltiplos APNs` · `US 441 e corredor St. Cloud / Orlando` · Satélites: `/media/sat/osceola-wide.jpg`, `/media/sat/osceola-close.jpg`, Foto: `/media/listing-osceola.jpg`. Nota: Maior risco ambiental; status de anúncio agosto 2026.
   - Overview satélite: `/media/sat/overview-marked.jpg`, `/media/sat/overview.jpg`, `/media/sat/orlando.jpg`.
-- **Stage-Gates (`gates` 0..6)**: `0 Controle`, `1 Terreno`, `2 Local`, `3 Aviação (FAA + FDOT)`, `4 Ambiental (ERP + 404 + espécies)`, `5 Infra`, `6 Economia (Go / redesign / reject)`.
-- **Scorecard de Seleção (`scorecard`)**: `25% Espaço aéreo + runway fit`, `20% Uplands + ambiental`, `20% Zoning + approvals`, `15% Mercado + acesso`, `10% Utilities + infraestrutura`, `10% Economia da aquisição`.
+- **Stage-Gates (`gates` 0..6)**: `0 Controle`, `1 Terreno`, `2 Local`, `3 Aviação (FAA + FDOT)`, `4 Ambiental (ERP + 404 + espécies)`, `5 Infra`, `6 Economia (Seguir / redesenhar / rejeitar)`.
+- **Scorecard de Seleção (`scorecard`)**: `25% Espaço aéreo + encaixe de pista`, `20% Uplands + ambiental`, `20% Zoneamento + aprovações`, `15% Mercado + acesso`, `10% Utilities + infraestrutura`, `10% Economia da aquisição`.
 - **Escala & Capital (`capital`, `stack`, disclaimers)**:
   - Fases: `$10–50M+` (Controle, terreno e entitlements), `$150–250M` (Aeroporto, horizontal e comuns), `$300–600M` (60 casas e hangares privados), `$550M–$1,0B+` (Faixa de investimento construída).
   - Underwriting ilustrativo (com aviso legal obrigatório): margem bruta `25–35%`, líquida `15–25%`, IRR `18–25%`.

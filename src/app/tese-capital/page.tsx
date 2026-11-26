@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { PageHero } from "@/components/page/PageHero";
 import { CapitalPhases, CapitalStack, EntitiesRow, RevenueGrid, RiskList, TimelineGantt } from "@/components/sections/CapitalBlocks";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -30,8 +31,8 @@ export default function CapitalPage() {
       <PageHero
         kicker="Tese de capital · estrutura e governança"
         title="Capital que entra por gates."
-        lead={DISCIPLINE.stackTitle}
-        image={{ src: "/media/hero.jpg", width: 1920, height: 1088, position: "right" }}
+        lead="Quatro faixas de capital, de $10–50M+ em controle, terreno e entitlements a $550M–$1,0B+ construídos, liberadas gate a gate, com HoldCo, DevCo, Airport OpCo e Club separando desenvolvimento, ativos e operação."
+        image={{ src: "/media/estate-dusk.jpg", width: 1672, height: 942, position: "right" }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
         secondaryCta={{ href: "#fases", label: "Ver as fases" }}
         caption={CONCEPT_CAPTION}
@@ -49,6 +50,14 @@ export default function CapitalPage() {
           <CapitalPhases />
         </div>
       </section>
+
+      <figure className={styles.band}>
+        <Image className={styles.bandImage} src="/media/sat/overview.jpg" alt="Satélite real da Central Florida, região dos três terrenos candidatos" fill sizes="100vw" quality={88} />
+        <figcaption className={styles.bandCaption}>
+          <span className={styles.bandKicker}>Satélite real · Central Florida</span>
+          <span className={styles.bandText}>O capital entra sobre terra real: cada gate é medido em terrenos candidatos, não em render.</span>
+        </figcaption>
+      </figure>
 
       <section className={section.section} aria-labelledby="stack-titulo" data-surface="dossier">
         <div className={`${section.inner} ${sections.split}`}>
