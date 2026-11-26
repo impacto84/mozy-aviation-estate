@@ -53,10 +53,12 @@ export function Scrollymation({
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const section = sectionRef.current;
-    const canvas = canvasRef.current;
-    if (!section || !canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const canvasEl = canvasRef.current;
+    if (!section || !canvasEl) return;
+    const canvas: HTMLCanvasElement = canvasEl;
+    const maybeCtx = canvas.getContext("2d");
+    if (!maybeCtx) return;
+    const ctx: CanvasRenderingContext2D = maybeCtx;
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "medium";
 
@@ -65,8 +67,8 @@ export function Scrollymation({
     const inflight = new Set<number>();
 
     function computeRect() {
-      const w = canvas!.clientWidth;
-      const h = canvas!.clientHeight;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
       const img = imagesRef.current.find((i) => i?.naturalWidth);
       const ir = img?.naturalWidth ? img.naturalWidth / img.naturalHeight : 16 / 9;
       const cr = w / h;
@@ -90,7 +92,7 @@ export function Scrollymation({
       const img = imagesRef.current[nearest(index)];
       if (!img || !img.naturalWidth) return;
       drawnRef.current = index;
-      ctx.clearRect(0, 0, canvas!.clientWidth, canvas!.clientHeight);
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
       ctx.drawImage(img, dest.dx, dest.dy, dest.dw, dest.dh);
     }
 
@@ -98,10 +100,10 @@ export function Scrollymation({
       const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       const w = window.innerWidth;
       const h = window.innerHeight;
-      canvas!.width = Math.round(w * dpr);
-      canvas!.height = Math.round(h * dpr);
-      canvas!.style.width = `${w}px`;
-      canvas!.style.height = `${h}px`;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "medium";
@@ -215,9 +217,11 @@ export function Scrollymation({
           className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-5 bg-void transition-opacity duration-700"
           style={{ opacity: ready ? 0 : 1, pointerEvents: ready ? "none" : "auto" }}
         >
-          <p className="font-display text-base tracking-wide text-fg/80">Preparando a aproximação</p>
-          <div className="h-0.5 w-40 overflow-hidden rounded-full bg-border">
-            <div className="h-full w-1/3 animate-pulse bg-gold" />
+          <p className="font-display text-sm tracking-[0.18em] text-paper/70">
+            PREPARANDO A APROXIMAÇÃO
+          </p>
+          <div className="h-px w-36 overflow-hidden bg-line">
+            <div className="h-full w-1/3 animate-pulse bg-brass" />
           </div>
         </div>
 
@@ -227,17 +231,21 @@ export function Scrollymation({
           style={{ opacity: ready ? 1 : 0 }}
         />
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-void/50 via-transparent to-void/70" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-void/55 via-transparent to-void/75" />
 
         <div
           ref={introRef}
-          className="relative z-10 flex h-full flex-col justify-center px-5 md:px-12 lg:px-16"
+          className="relative z-10 flex h-full flex-col justify-end px-5 pb-24 md:px-12 md:pb-28 lg:px-16"
         >
-          <div className="max-w-xl">
-            <p className="text-xs uppercase tracking-[0.32em] text-gold">{intro.kicker}</p>
-            <h1 className="font-display mt-6 text-4xl leading-[1.05] sm:text-6xl md:text-7xl">{intro.title}</h1>
+          <div className="max-w-2xl">
+            <p className="section-kicker">{intro.kicker}</p>
+            <h2 className="font-display mt-5 text-3xl leading-[1.05] text-paper sm:text-5xl md:text-6xl">
+              {intro.title}
+            </h2>
             {intro.body ? (
-              <p className="mt-5 max-w-md text-base leading-relaxed text-muted md:text-lg">{intro.body}</p>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-fog md:text-lg">
+                {intro.body}
+              </p>
             ) : null}
           </div>
         </div>
@@ -246,17 +254,19 @@ export function Scrollymation({
           ref={hintRef}
           className="pointer-events-none absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
         >
-          <span className="text-xs uppercase tracking-[0.22em] text-gold-soft">Role para avançar</span>
-          <span className="block h-8 w-px bg-gold/50" />
+          <span className="text-[10px] uppercase tracking-[0.28em] text-brass-soft">
+            Role para avançar
+          </span>
+          <span className="block h-10 w-px bg-brass/40" />
         </div>
 
         {mid ? (
           <div
             ref={midRef}
-            className="pointer-events-none absolute inset-x-0 bottom-14 z-10 flex justify-center"
+            className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex justify-center"
             style={{ opacity: 0 }}
           >
-            <span className="rounded-full border border-border bg-void/70 px-4 py-2 text-xs uppercase tracking-[0.28em] text-fg backdrop-blur-md">
+            <span className="border-b border-brass/50 pb-1 text-[11px] uppercase tracking-[0.32em] text-paper">
               {mid}
             </span>
           </div>
@@ -264,12 +274,16 @@ export function Scrollymation({
 
         <div
           ref={arrivalRef}
-          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-end px-6 pb-20 text-center"
+          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-start justify-end px-5 pb-24 md:px-12 md:pb-28 lg:px-16"
           style={{ opacity: 0 }}
         >
-          <p className="text-xs uppercase tracking-[0.32em] text-gold">{arrival.kicker}</p>
-          <h2 className="font-display mt-4 max-w-3xl text-3xl leading-tight md:text-6xl">{arrival.title}</h2>
-          {arrival.body ? <p className="mt-4 max-w-lg text-muted">{arrival.body}</p> : null}
+          <p className="section-kicker">{arrival.kicker}</p>
+          <h2 className="font-display mt-4 max-w-3xl text-3xl leading-tight text-paper md:text-5xl">
+            {arrival.title}
+          </h2>
+          {arrival.body ? (
+            <p className="mt-4 max-w-lg text-fog">{arrival.body}</p>
+          ) : null}
         </div>
       </section>
     </div>
