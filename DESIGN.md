@@ -1,85 +1,79 @@
-# DESIGN — MOZY Private Aviation Estate (Flagship V2 · FORJA 1.0)
+# DESIGN — MOZY Private Aviation Estate (Flagship V3 · FORJA 1.1 · `--profile flagship`)
 
 Documento de direção visual. Fonte de verdade dos valores: `src/styles/tokens.css`
 (CSS) e `src/lib/motion/tokens.ts` (movimento em JS). Este arquivo explica **por quê**.
 
-## 1. Direções avaliadas
+## 0. Direção travada: Cinematográfico & Ultra-Luxury Soberano
 
-| # | Direção | Ideia | Por que ficou / saiu |
-| :-- | :-- | :-- | :-- |
-| A | **Gallery White / Swiss Real Estate** | Fundo claro, grotesca única, grade rígida, fotos em moldura. | Lê como loteamento premium genérico; apaga o crepúsculo e a pista iluminada, que são o ativo emocional do projeto. **Descartada.** |
-| B | **Aviation HUD / Cockpit Tech** | Fundo preto, mono em tudo, verde de instrumento, linhas de HUD. | Forte para a página de aviação, mas fria e "gamer" para compradores UHNWI e family offices; o tom técnico competiria com a tese de capital. **Descartada** (aproveitada só como acento: leituras em mono). |
-| C | **High-Altitude Architectural Luxury / Sovereign Aviation Club** | Noite de crepúsculo (void/navy) alternada com papel de dossiê (ivory), serifa display editorial, latão como única cor de acento, dados em mono tabular. | Une o tom de clube privado (residência) com o rigor de dossiê de investimento (tabelas, scorecard, stage-gates). **Escolhida.** |
+Território 5 de `skills/ui-craft/references/direcoes-estudio.md` (FORJA 1.1). A V2 foi
+rejeitada por ler como landing B2B/SaaS (pílulas amarelas, paredes bege, capítulos em
+abas, frames recomprimidos, fly-to removido, diagrama de aviação fora de escala, aviso de
+cookies na dobra). A V3 inverte cada um desses pontos:
 
-## 2. Paleta (OKLCH)
+| Defeito da V2 | Decisão da V3 |
+| :-- | :-- |
+| Pílulas `999px` amarelas em toda seção | CTA arquitetônico: canto reto (`--radius-cta` = 2px), fio de latão de 1px, superfície lapidada escura; CTA primário só na dobra, no cabeçalho fixo (inclusive phone) e no convite final |
+| Superfície `ivory` (bege) com tabelas | Superfície `dossier` = grafite quente `oklch(16%)`; todas as rotas ≥ 85% noturnas |
+| 3 filmes em abas num bloco de 180svh, passo 4, `/_next/image q=60` | 3 atos independentes em tela cheia (420 / 520 / 460 svh), WebP original direto, passos 1 / 2 / 1 (phone 2 / 3 / 2) |
+| Hero estático + shader `ogl` quase invisível | Ato I é a própria dobra: pôster `hero.jpg` q88 (LCP) + canvas da sequência `approach` em fusão com a rolagem |
+| Atlas com cortes secos | Fly-to GPU: `transform-origin` no marcador, `scale(4.4)`, 1000 ms `cubic-bezier(0.22, 1, 0.36, 1)`, fusão no pouso |
+| `RunwayDiagram` wireframe fora de escala | Envelope de pista em escala métrica real + pista inteira (3.000 m) + mapa hemisférico azimutal equidistante a partir de MCO |
+| Aviso de cookies na dobra sem GTM | `MartechProvider hideBannerWithoutTracking`: sem `NEXT_PUBLIC_GTM_ID`, nada a consentir, nenhum aviso; preferências no rodapé |
+
+## 1. Paleta (OKLCH)
 
 Camada literal (nunca usada direto em componente) → camada semântica (`--color-*`).
 
 | Literal | Valor | Papel |
 | :-- | :-- | :-- |
-| `--void-950` | `oklch(13.5% 0.018 255)` | Fundo padrão (noite) |
-| `--navy-900` / `--navy-800` / `--navy-700` | `oklch(19.5% 0.034 252)` / `oklch(23.5% 0.04 252)` / `oklch(29% 0.042 252)` | Superfícies e bordas no escuro |
-| `--mist-100` / `--mist-400` | `oklch(94% 0.008 245)` / `oklch(72% 0.022 245)` | Texto e texto secundário no escuro |
-| `--ivory-100` / `--ivory-50` | `oklch(95% 0.012 85)` / `oklch(97.5% 0.008 85)` | Papel de dossiê (superfície clara) |
-| `--ink-900` / `--stone-600` | `oklch(19% 0.03 252)` / `oklch(43% 0.022 250)` | Texto no claro |
-| `--brass-300` / `--brass-700` | `oklch(83% 0.1 80)` / `oklch(47% 0.09 68)` | Acento (latão) no escuro / no claro |
-| `--signal-400` | `oklch(68% 0.19 32)` | Alerta / risco |
-| `--runway-green` | `oklch(74% 0.14 150)` | Sucesso / luz de pista |
+| `--void-950` | `oklch(11.5% 0.012 262)` | Obsidiana: fundo padrão |
+| `--navy-900` / `--navy-800` / `--navy-700` | `oklch(14.5%)` / `oklch(18%)` / `oklch(24%)` | Carvão: superfícies e bordas |
+| `--graphite-900` / `--graphite-800` | `oklch(16% 0.01 75)` / `oklch(19.5% 0.012 75)` | Grafite de dossiê (tabelas, scorecards, console) |
+| `--mist-100` / `--mist-400` | `oklch(94.5% 0.012 85)` / `oklch(73% 0.014 80)` | Texto e texto secundário (marfim sobre obsidiana, AA) |
+| `--brass-200` … `--brass-800` | champanhe → latão escovado | Único acento: fios de 1px, rótulos mono, CTA |
+| `--signal-400` | `oklch(70% 0.16 34)` | Risco / fora do alcance |
 
-**Superfícies por seção**: `data-surface="void" | "navy" | "ivory"` reescreve os tokens
-semânticos e o `color-scheme`. O ritmo da home alterna noite → dossiê → noite.
-Contraste AA verificado por teste (`glass-tokens.test.ts` refaz a conta do vidro sobre
-o pior fundo nas superfícies void e ivory).
+Semânticos novos: `--color-hairline` (latão 38%), `--color-hairline-strong`, `--color-champagne`.
+Superfícies por `data-surface="void" | "navy" | "dossier"`; não existe superfície clara.
+Contraste AA provado por teste (`glass-tokens.test.ts` refaz a conta sobre void e dossier).
 
-## 3. Tipografia (dupla `@fontsource`, servida localmente)
+## 2. Tipografia
 
-- **Display**: Cormorant Garamond (300/400/500 + itálico 400) — títulos, números editoriais, citações.
-- **Texto/UI**: Manrope Variable — corpo, botões, formulário.
-- **Acento técnico**: JetBrains Mono Variable — kickers, índices, leituras de HUD, tabelas (`tabular-nums`).
-- Escala fluida `--text-2xs` … `--text-display` com `clamp()`; nunca `system-ui`/Arial em display.
-- Carregamento: `next/font/local` sobre os arquivos `@fontsource` (`src/app/fonts.ts`), com preload
-  e fallback de métricas ajustadas; texto/UI em `display: optional` (sem troca no meio da leitura,
-  CLS ≈ 0), display em `swap`. Os tokens `--font-*` leem as variáveis `--nf-*`.
+- **Display**: Cormorant Garamond (300/400/500 + itálico) — títulos, números editoriais, legendas de filme.
+- **Texto/UI**: Manrope Variable — corpo e formulário.
+- **Mono tabular**: JetBrains Mono Variable — rótulos, coordenadas, envergaduras, contadores `QDR`, CTAs.
+- `next/font/local` sobre os arquivos `@fontsource` (preload + fallback de métricas): CLS ≈ 0.
 
-## 4. Espaço, forma e camadas
+## 3. Forma e composição
 
-- Espaço base 4 px (`--space-0-5` … `--space-32`) + `--space-section` fluido.
-- Layout: `--container-max: 82rem`, `--container-wide: 96rem`, medida de leitura `60ch`.
-- `--column-kpi: calc(var(--text-2xl) * 2.5)`: coluna de número grande que acompanha a
-  fonte (pesos do scorecard em `/terrenos`), para o número nunca invadir o texto.
-- `--consent-offset`: respiro inferior fixo dos heróis do tamanho do aviso de cookies
-  (7,5rem no phone, 4,5rem a partir de 768 px). Fixo de propósito: ligar/desligar com o
-  aviso (que só aparece após a hidratação) deslocava o conteúdo e estourava o CLS.
-- Raios discretos (`--radius-sm` a `--radius-xl`), alvos de toque ≥ `--target-min` (44 px).
+- Raios: `--radius-cta` (2px) em todo controle; pílula só em marcadores circulares do mapa.
+- Divisores: sempre `1px` em `--color-hairline`; marcas de enquadramento (cantos em latão) nos atos.
+- Fotografia em sangria arquitetônica, `quality={88}`, com a legenda "Imagem: ilustração conceitual do projeto." nos renders.
+- Ritmo da home: Ato I → tese → coleções (sangria alternada) → díptico Orlando → Ato II → filme noturno → casa + hangar → Ato III → console aeronáutico → Club → tecnologia → stage-gates → Atlas → capital → sponsor → convite final em filme.
 
-## 5. Movimento
+## 4. Movimento
 
 | Token | Valor | Uso |
 | :-- | :-- | :-- |
-| `--duration-fast` | 160 ms | hover, foco, abas |
-| `--duration-base` | 320 ms | entrada do canvas, painéis |
-| `--duration-slow` | 720 ms | legendas do capítulo, reveals |
-| `--duration-cinematic` | 1200 ms | transições de cena |
-| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | padrão de entrada |
-| `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | cenas e scrub |
+| `--duration-fast` | 160 ms | hover, foco |
+| `--duration-base` / `--duration-slow` | 320 / 720 ms | legendas por fase, fusões |
+| `--duration-flyto` | 1000 ms | câmera do Atlas |
+| `--ease-out` / `--ease-flyto` | `cubic-bezier(0.16, 1, 0.3, 1)` / `cubic-bezier(0.22, 1, 0.36, 1)` | entradas / fly-to |
 
-Regras: toda transição/animação vive dentro de `@media (prefers-reduced-motion: no-preference)`;
-um único relógio `rAF` (Lenis + ScrollTrigger + palco WebGL); nada por frame passa pelo React;
-palco WebGL e vídeo pausam fora da tela e com a aba oculta. Com movimento reduzido, o capítulo
-cinematográfico vira quadro estático nítido com todas as legendas visíveis.
+Regras: um relógio (Lenis + ScrollTrigger no `gsap.ticker`); nada por quadro passa pelo React
+(`--act-progress`, `data-phase` e o contador são escritos no DOM); canvas com DPR ≤ 2; o canvas
+nunca é limpo antes de haver quadro decodificado (zero piscada); vídeos pausam fora da tela e com
+a aba oculta e têm botão de pausa; com `prefers-reduced-motion: reduce` os atos viram quadro fixo
+com as legendas abaixo, trilha compacta, nenhum quadro baixado, e o fly-to vira troca direta.
 
-## 6. Componentes-assinatura
+## 5. Componentes-assinatura
 
-- **Hero híbrido**: pôster LCP no servidor + luz de pista em WebGL2 (`ogl`) carregada depois da pintura, com fallback e tratamento de perda de contexto.
-- **Capítulo scrollytelling**: três sequências reais de frames (aproximação, residência, hangar), trilho de 180svh com palco sticky.
-- **Vidro** (`GlassPanel`): `backdrop-filter` só dentro de `@supports`, fallback opaco AA.
-- **Simulador de frota/pista** (`/aviacao`), **Atlas satelital** (`/terrenos`), **Data Room** (`/solicitar-acesso`).
+- **`CinematicAct`** (`src/components/chapter/`): trilha alta + palco sticky 100svh + pôster SSR + canvas 2D + legendas por fase + HUD (`ATO · barra · QDR`).
+- **`FleetSimulator`** (`src/components/aviation/`): seletor das 6 aeronaves; `RunwayEnvelope` (1 m = 11 unidades, silhueta gerada da envergadura × comprimento públicos, outras 5 em contorno), `RunwayLength` (3.000 m em escala), `RangeMap` (azimutal equidistante, anel de alcance exato).
+- **`SatelliteAtlas`**: fly-to contínuo da carta regional para satélite amplo / próximo / foto do anúncio, com retorno à carta.
 
-## 7. Exceções registradas
+## 6. Exceções registradas
 
-- Literais de cor/medida existem **apenas** em `tokens.css`; o teste `src/styles/design-tokens.test.ts`
-  falha se qualquer `var(--…)` usado em `src/**/*.css` não estiver declarado.
-- Propriedades escritas em tempo de execução (`--x`, `--y`, `--share`, `--scrub-progress`,
-  `--reveal-index`, `--marquee-duration`, `--glass-refraction-filter`) e contratos entre
-  módulos (`--glass-text-muted`, `--hero-color-*`) ficam numa lista explícita do teste, que
-  confere se a origem realmente as escreve.
+- Literais de cor/medida existem **apenas** em `tokens.css`; `src/styles/design-tokens.test.ts` falha se algum `var(--…)` não estiver declarado.
+- Propriedades escritas em tempo de execução (`--x`, `--y`, `--act-progress`, `--reveal-index`, `--marquee-duration`, `--glass-refraction-filter`) ficam numa lista explícita do teste, que confere a origem.
+- Texto dentro dos SVG do console usa `font-size` em unidades do viewBox derivadas de `--text-base` e sobe no phone para continuar legível depois da redução.
