@@ -1,3 +1,9 @@
+/*
+ * Atlas Satelital com câmera fly-to. Só `transform` e `opacity` animam (GPU), em
+ * 1000 ms com --ease-flyto, e só com movimento permitido. Sem pílulas: alternadores
+ * retos com fio de latão.
+ */
+
 .atlas {
   display: grid;
   gap: var(--space-6);
@@ -15,28 +21,51 @@
 }
 
 .toggle,
-.toggleSmall {
+.toggleSmall,
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   min-block-size: var(--target-min);
   padding-inline: var(--space-4);
-  border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-cta);
   background-color: transparent;
   color: var(--color-text);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
 }
 
-.toggleSmall {
+.toggleIndex {
+  color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-2xs);
+}
+
+.toggleSmall,
+.back {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+}
+
+.back {
+  border-color: var(--color-hairline-strong);
+  color: var(--color-champagne);
 }
 
 .toggle[aria-pressed="true"],
 .toggleSmall[aria-pressed="true"] {
   border-color: var(--color-accent);
-  background-color: var(--color-accent);
-  color: var(--color-on-accent);
+  background-color: color-mix(in oklch, var(--color-accent) 14%, var(--color-bg));
+  color: var(--color-champagne);
+}
+
+.toggleSmall:disabled,
+.back:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .body {
@@ -46,17 +75,44 @@
 
 .stage {
   position: relative;
+  isolation: isolate;
   margin: 0;
   aspect-ratio: 1920 / 1400;
   overflow: clip;
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border: var(--border-width) solid var(--color-hairline);
   background-color: var(--color-surface);
 }
 
-.image {
+.regional,
+.detail {
   position: absolute;
   inset: 0;
+}
+
+.regional {
+  z-index: 1;
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--origin, 50% 50%);
+}
+
+.stage[data-camera="site"] .regional {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.detail {
+  z-index: 0;
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+.detail[data-active="true"] {
+  z-index: 2;
+  opacity: 1;
+  transform: none;
+}
+
+.image {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
@@ -71,16 +127,22 @@
   inline-size: var(--target-min);
   block-size: var(--target-min);
   padding: 0;
-  border: var(--border-width-strong) solid var(--color-text);
+  border: var(--border-width) solid var(--color-champagne);
   border-radius: var(--radius-pill);
-  background-color: color-mix(in oklch, var(--color-signal) 35%, transparent);
+  background-color: color-mix(in oklch, var(--color-bg) 35%, transparent);
   translate: -50% -50%;
 }
 
+.marker::after {
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  content: "";
+}
+
 .marker[aria-pressed="true"] {
-  border-color: var(--color-accent);
-  background-color: color-mix(in oklch, var(--color-accent) 45%, transparent);
-  box-shadow: 0 0 0 var(--space-2) color-mix(in oklch, var(--color-accent) 35%, transparent);
+  box-shadow: 0 0 0 var(--space-2) color-mix(in oklch, var(--color-accent) 30%, transparent);
 }
 
 .markerLabel {
@@ -88,10 +150,12 @@
   inset-block-start: calc(100% + var(--space-1));
   padding-block: var(--space-1);
   padding-inline: var(--space-2);
-  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--color-hairline);
   background-color: var(--color-bg);
   color: var(--color-text);
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
   white-space: nowrap;
 }
 
@@ -99,6 +163,7 @@
   position: absolute;
   inset-block-end: var(--space-3);
   inset-inline: var(--space-3);
+  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -109,54 +174,63 @@
 .stageCaption span {
   padding-block: var(--space-1);
   padding-inline: var(--space-3);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-bg);
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: color-mix(in oklch, var(--color-bg) 86%, transparent);
   color: var(--color-text);
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
 .dossier {
   display: grid;
   gap: var(--space-3);
   align-content: start;
+  min-inline-size: 0;
   padding: var(--space-6);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border: var(--border-width) solid var(--color-hairline);
   background-color: var(--color-surface);
 }
 
 .priority {
   color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-hud);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
 }
 
 .name {
   font-size: var(--text-2xl);
-  font-weight: var(--weight-regular);
+  font-weight: var(--weight-light);
   line-height: var(--leading-snug);
 }
 
 .place {
   color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
 
 .kpi {
   display: grid;
   gap: var(--space-1);
   padding-block: var(--space-4);
-  border-block: var(--border-width) solid var(--color-border);
+  border-block: var(--border-width) solid var(--color-hairline);
+}
+
+.kpiAcres {
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-light);
+  line-height: var(--leading-snug);
 }
 
 .kpiPrice {
   color: var(--color-accent);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-hud);
 }
 
 .facts {
@@ -167,11 +241,15 @@
 
 .facts dt {
   color: var(--color-text-muted);
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
 .facts dd {
   margin: 0;
+  font-size: var(--text-sm);
 }
 
 .note {
@@ -182,25 +260,40 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .image {
-    animation: atlas-fade var(--duration-slow) var(--ease-out);
+  /* Voltando à carta: a carta reaparece já no começo e recua o zoom. */
+  .regional {
+    transition:
+      transform var(--duration-flyto) var(--ease-flyto),
+      opacity var(--duration-base) var(--ease-out);
+    will-change: transform;
+  }
+
+  /* Indo ao terreno: zoom contínuo e, perto do pouso, a carta se dissolve no detalhe. */
+  .stage[data-camera="site"] .regional {
+    transition:
+      transform var(--duration-flyto) var(--ease-flyto),
+      opacity var(--duration-base) var(--ease-out) calc(var(--duration-flyto) * 0.6);
+  }
+
+  .detail {
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-flyto) var(--ease-flyto);
+  }
+
+  .stage[data-camera="site"] .detail[data-active="true"] {
+    transition:
+      opacity var(--duration-slow) var(--ease-out) calc(var(--duration-flyto) * 0.5),
+      transform var(--duration-flyto) var(--ease-flyto) calc(var(--duration-flyto) * 0.5);
   }
 
   .toggle,
-  .toggleSmall {
+  .toggleSmall,
+  .back {
     transition:
+      border-color var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out),
       color var(--duration-fast) var(--ease-out);
-  }
-}
-
-@keyframes atlas-fade {
-  from {
-    opacity: 0.2;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 
@@ -208,6 +301,7 @@
   .toolbar {
     grid-template-columns: auto auto;
     justify-content: space-between;
+    align-items: start;
   }
 }
 
