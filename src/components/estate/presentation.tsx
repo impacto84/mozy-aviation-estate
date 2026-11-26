@@ -22,7 +22,44 @@ import { SatelliteAtlas } from "./satellite-map";
 import { MediaStage } from "./media-stage";
 import { Reveal } from "./reveal";
 import { SiteNav } from "./nav";
-import { Scrollymation } from "./scrollymation";
+
+function CinematicBeat({
+  id,
+  image,
+  video,
+  alt,
+  kicker,
+  title,
+  body,
+}: {
+  id: string;
+  image: string;
+  video?: string;
+  alt: string;
+  kicker: string;
+  title: string;
+  body?: string;
+}) {
+  return (
+    <section id={id} className="relative min-h-[100svh] overflow-hidden">
+      <MediaStage
+        image={image}
+        video={video}
+        alt={alt}
+        overlay="from-void/55 via-void/25 to-void/85"
+      />
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-20 pt-28 md:px-8 md:pb-28">
+        <Reveal className="max-w-2xl">
+          <p className="section-kicker">{kicker}</p>
+          <h2 className="mt-5 text-3xl leading-[1.08] text-paper sm:text-5xl md:text-6xl">
+            {title}
+          </h2>
+          {body ? <p className="mt-5 max-w-xl text-base leading-relaxed text-fog md:text-lg">{body}</p> : null}
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
 function SectionShell({
   id,
@@ -102,40 +139,23 @@ export function Presentation() {
         </div>
       </section>
 
-      <Scrollymation
+      <CinematicBeat
         id="aproximacao"
-        dir="/frames/approach"
-        count={121}
-        heightVh={520}
-        intro={{
-          kicker: "Florida · Private Aviation Estate",
-          title: "Aproximação. Luzes acesas. Sol no mesmo lugar.",
-          body: "Não um loteamento com pista — um território pensado para quem voa no quotidiano.",
-        }}
-        mid="A pista"
-        arrival={{
-          kicker: "O gesto",
-          title: "O jato atravessa o quadro.",
-          body: "Só para frente. O destino já é o endereço.",
-        }}
+        image="/media/runway-night.jpg"
+        video="/media/closer.mp4"
+        alt="Aproximação noturna à pista privada"
+        kicker="Florida · Private Aviation Estate"
+        title="Aproximação. Luzes acesas. Sol no mesmo lugar."
+        body="Não um loteamento com pista — um território pensado para quem voa no quotidiano."
       />
 
-      <Scrollymation
+      <CinematicBeat
         id="residencia"
-        dir="/frames/villa"
-        count={722}
-        heightVh={720}
-        midAt={0.5}
-        intro={{
-          kicker: "Orlando · Founder Estate",
-          title: "Entrar na casa. A vista é a pista.",
-          body: "Central Florida — carvalhos, relva, taxiway. A câmara atravessa as portas de vidro e o jato espera do outro lado do living.",
-        }}
-        mid="A casa"
-        arrival={{
-          kicker: "Você chegou",
-          title: "A janela dá para o hangar.",
-        }}
+        image="/media/living-hangar.jpg"
+        alt="Living com vista para hangar e jato"
+        kicker="Orlando · Founder Estate"
+        title="Entrar na casa. A vista é a pista."
+        body="Central Florida — carvalhos, relva, taxiway. A janela dá para o hangar."
       />
 
       <SectionShell id="visao" tone="ink">
@@ -149,22 +169,13 @@ export function Presentation() {
         <StatRow />
       </SectionShell>
 
-      <Scrollymation
+      <CinematicBeat
         id="gesto"
-        dir="/frames/hangar"
-        count={361}
-        heightVh={560}
-        midAt={0.5}
-        intro={{
-          kicker: "Casa + hangar",
-          title: "Entra. O jato já espera.",
-          body: "A câmara avança no piso vazio — só para a frente. Da taxiway ao nariz da aeronave.",
-        }}
-        mid="Avança"
-        arrival={{
-          kicker: "O quotidiano",
-          title: "Da pista à sala.",
-        }}
+        image="/media/hangar-dual-cinematic.jpg"
+        alt="Hangar com aeronaves integrado à residência"
+        kicker="Casa + hangar"
+        title="Entra. O jato já espera."
+        body="Da taxiway ao nariz da aeronave — a pista como extensão do quotidiano."
       />
 
       <SectionShell>
