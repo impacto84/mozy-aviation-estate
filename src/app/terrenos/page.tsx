@@ -85,7 +85,7 @@ export default function LandsPage() {
 
       <section className={section.section} aria-labelledby="reguladores-titulo" data-surface="void">
         <div className={section.inner}>
-          <SectionHeader id="reguladores-titulo" title={DISCIPLINE.regulatorsTitle} isSplit lede="Aprovações conduzidas em paralelo; nenhuma, sozinha, garante o empreendimento." />
+          <SectionHeader id="reguladores-titulo" title={DISCIPLINE.regulatorsTitle} isSplit lede="Município e condado, FAA, FDOT, FDEP / WMD, USACE / USFWS e acesso viário: as seis frentes correm em paralelo desde o primeiro gate." />
           <RegulatorsMatrix />
         </div>
       </section>

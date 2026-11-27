@@ -240,6 +240,7 @@
 .railStep {
   position: relative;
   display: grid;
+  align-content: start;
   grid-template-columns: var(--space-12) minmax(0, 1fr);
   column-gap: var(--space-4);
   padding-block: var(--space-4);

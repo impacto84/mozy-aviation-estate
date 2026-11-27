@@ -161,9 +161,10 @@
   white-space: nowrap;
 }
 
+/* No topo: a carta regional já traz uma caixa de rótulo no canto inferior esquerdo. */
 .stageCaption {
   position: absolute;
-  inset-block-end: var(--space-3);
+  inset-block-start: var(--space-3);
   inset-inline: var(--space-3);
   z-index: 3;
   display: flex;

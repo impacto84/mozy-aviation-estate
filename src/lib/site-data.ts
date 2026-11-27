@@ -264,7 +264,7 @@ export const stack = [
 
 export const risks = [
   { level: "Alto", title: "FAA / espaço aéreo", body: "Favorável antes do fechamento" },
-  { level: "Alto", title: "Wetlands / wildlife", body: "Evitar; mitigar apenas o residual" },
+  { level: "Alto", title: "Áreas úmidas / fauna", body: "Evitar; mitigar apenas o residual" },
   { level: "Alto", title: "Zoning / oposição", body: "Pré-aprovação + carta + estratégia pública" },
   { level: "Médio", title: "Custos / inflação", body: "Design-to-budget + contingência" },
   { level: "Médio", title: "Absorção de luxo", body: "Pré-vendas + fases + produto raro" },
@@ -285,7 +285,7 @@ export const entities = [
   { title: "HoldCo", body: "Governança do investimento" },
   { title: "Land / DevCo", body: "Aquisição · entitlements · construção" },
   { title: "Airport OpCo", body: "Pista · fuel · terminal · operação" },
-  { title: "Club / Amenities", body: "Hospitalidade · memberships · eventos" },
+  { title: "Clube / amenidades", body: "Hospitalidade · memberships · eventos" },
 ] as const;
 
 export const revenues = [

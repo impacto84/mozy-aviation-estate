@@ -167,3 +167,46 @@
     align-items: start;
   }
 }
+
+/* O que acontece depois do envio: régua de três passos sob as faixas de preço. */
+.next {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-8);
+}
+
+.nextTitle {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.steps {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: var(--border-width) solid var(--color-hairline);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: var(--space-10) minmax(0, 1fr);
+  padding-block: var(--space-4);
+  border-block-end: var(--border-width) solid var(--color-hairline);
+  font-size: var(--text-sm);
+}
+
+.stepIndex {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.stepLink {
+  color: var(--color-champagne);
+  overflow-wrap: anywhere;
+}

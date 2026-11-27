@@ -103,7 +103,14 @@
   object-position: 22% 50%;
 }
 
+/* tablet (retrato): o jato fica fora do quadro, à esquerda, longe do sobretítulo. */
 @media (min-width: 768px) {
+  .heroPoster {
+    object-position: 62% 50%;
+  }
+}
+
+@media (min-width: 1200px) {
   .heroPoster {
     object-position: 34% 50%;
   }

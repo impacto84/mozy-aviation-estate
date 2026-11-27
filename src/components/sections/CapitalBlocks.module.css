@@ -116,14 +116,14 @@
   position: relative;
   display: block;
   block-size: var(--space-3);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background-color: var(--color-surface-raised);
 }
 
 .range {
   position: absolute;
   inset-block: 0;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background-color: var(--color-accent);
 }
 
@@ -203,7 +203,7 @@
   padding-block: var(--space-1);
   padding-inline: var(--space-3);
   border: var(--border-width) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
 }

@@ -4,7 +4,7 @@ import { LeadForm } from "@/components/lead/LeadForm";
 import { BRAND, CTA, LEGAL } from "@/lib/editorial";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
-import { tiers } from "@/lib/site-data";
+import { contact, tiers } from "@/lib/site-data";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -36,7 +36,7 @@ export default function AccessPage() {
           </p>
         </section>
 
-        <aside className={styles.aside} aria-label="Coleções residenciais">
+        <aside className={styles.aside} aria-label="Coleções residenciais e próximos passos">
           <ul className={styles.tiers} role="list">
             {tiers.map((tier) => (
               <li key={tier.name} className={styles.tier}>
@@ -45,6 +45,32 @@ export default function AccessPage() {
               </li>
             ))}
           </ul>
+          <div className={styles.next}>
+            <h2 className={styles.nextTitle}>Depois do envio</h2>
+            <ol className={styles.steps}>
+              <li className={styles.step}>
+                <span className={`${styles.stepIndex} tnum`}>01</span>
+                <span>A confirmação aparece nesta mesma página, sem redirecionamento.</span>
+              </li>
+              <li className={styles.step}>
+                <span className={`${styles.stepIndex} tnum`}>02</span>
+                <span>A equipe {BRAND.sponsor} faz o contato pelos dados informados.</span>
+              </li>
+              <li className={styles.step}>
+                <span className={`${styles.stepIndex} tnum`}>03</span>
+                <span>
+                  Contato direto a qualquer momento:{" "}
+                  <a className={styles.stepLink} href={contact.phoneHref}>
+                    <span className="tnum">{contact.phone}</span>
+                  </a>{" "}
+                  ·{" "}
+                  <a className={styles.stepLink} href={contact.emailHref}>
+                    {contact.email}
+                  </a>
+                </span>
+              </li>
+            </ol>
+          </div>
         </aside>
 
         <section className={styles.formPanel} aria-labelledby={FORM_TITLE_ID}>
