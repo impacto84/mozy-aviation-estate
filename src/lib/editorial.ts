@@ -15,7 +15,7 @@ export const BRAND = {
 export const HERO = {
   kicker: "Florida · Private Aviation Estate",
   title: "Uma comunidade residencial de aviação privada.",
-  body: "Não um loteamento com pista. Sessenta residências, hangar em cada casa e uma pista para grandes jatos, na região de Orlando.",
+  body: "Para proprietários de jatos e suas famílias: sessenta residências com hangar e uma pista para grandes jatos, na região de Orlando.",
   positioning:
     "Um endereço privado e seguro desenhado para proprietários de aeronaves executivas, famílias UHNWI e investidores institucionais viverem, receberem, trabalharem e decolarem com autonomia completa.",
 } as const;
@@ -50,7 +50,7 @@ export const CHAPTER_COPY = {
   villa: {
     label: "Residência",
     intro: {
-      kicker: "Orlando · Founder Estate",
+      kicker: "Orlando",
       title: "Entrar na casa. A vista é a pista.",
       body: "Carvalhos, relva e taxiway na Central Florida. Atrás das portas de vidro do living, o jato espera do outro lado.",
     },

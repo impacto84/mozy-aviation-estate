@@ -31,7 +31,7 @@ export default function CapitalPage() {
       <PageHero
         kicker="Tese de capital · estrutura e governança"
         title="Capital que entra por gates."
-        lead="Quatro faixas de capital, de $10–50M+ em controle, terreno e entitlements a $550M–$1,0B+ construídos, liberadas gate a gate, com HoldCo, DevCo, Airport OpCo e Club separando desenvolvimento, ativos e operação."
+        lead="Quatro faixas de capital, de $10–50M+ a $550M–$1,0B+ construídos, liberadas gate a gate."
         image={{ src: "/media/estate-dusk.jpg", width: 1672, height: 942, position: "right" }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
         secondaryCta={{ href: "#fases", label: "Ver as fases" }}

@@ -7,7 +7,7 @@ import sections from "@/components/sections/Sections.module.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import section from "@/components/ui/Section.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { CTA, DISCIPLINE, LANDS, LANDS_HERO, LEGAL } from "@/lib/editorial";
+import { CTA, DISCIPLINE, LANDS, LANDS_HERO } from "@/lib/editorial";
 import { placeJsonLd } from "@/lib/martech/seo/json-ld";
 import type { JsonLdNode } from "@/lib/martech/seo/json-ld";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
@@ -65,7 +65,6 @@ export default function LandsPage() {
             isSplit
           />
           <SatelliteAtlas />
-          <p className={section.note}>{LEGAL.disclaimer}</p>
         </div>
       </section>
 

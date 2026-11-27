@@ -98,7 +98,7 @@ function ActOpening({ id, kicker, title, body }: ActOpeningProps) {
   );
 }
 
-/** Ato II — The Founder Residence: da entrada da casa ao living com vista para o hangar. */
+/** Ato II — Residência Founder: da entrada da casa ao living com vista para o hangar. */
 export function ActVilla() {
   const copy = CHAPTER_COPY.villa;
   return (
@@ -106,17 +106,17 @@ export function ActVilla() {
       chapterId="villa"
       sectionId="ato-ii"
       numeral="II"
-      label="Founder Residence"
+      label="Residência Founder"
       headingId="ato-residencia"
-      poster={<FramePoster id="villa" alt="Living da Founder Residence com a pista e o hangar do outro lado do vidro" />}
-      opening={<ActOpening id="ato-residencia" kicker={`Ato II · The Founder Residence · ${copy.intro.kicker}`} title={copy.intro.title} body={copy.intro.body} />}
+      poster={<FramePoster id="villa" alt="Living da Residência Founder com a pista e o hangar do outro lado do vidro" />}
+      opening={<ActOpening id="ato-residencia" kicker={`Ato II · Residência Founder · ${copy.intro.kicker}`} title={copy.intro.title} body={copy.intro.body} />}
       mid={copy.mid}
       arrival={copy.arrival}
     />
   );
 }
 
-/** Ato III — Private Hangar & Apron: da taxiway ao nariz da aeronave, dentro do hangar. */
+/** Ato III — Hangar privativo e pátio: da taxiway ao nariz da aeronave, dentro do hangar. */
 export function ActHangar() {
   const copy = CHAPTER_COPY.hangar;
   return (
@@ -124,10 +124,10 @@ export function ActHangar() {
       chapterId="hangar"
       sectionId="ato-iii"
       numeral="III"
-      label="Hangar & Apron"
+      label="Hangar e pátio"
       headingId="ato-hangar"
       poster={<FramePoster id="hangar" alt="Interior do hangar privativo com o jato estacionado sobre o piso claro" />}
-      opening={<ActOpening id="ato-hangar" kicker={`Ato III · Private Hangar & Apron · ${copy.intro.kicker}`} title={copy.intro.title} body={copy.intro.body} />}
+      opening={<ActOpening id="ato-hangar" kicker={`Ato III · Hangar privativo e pátio · ${copy.intro.kicker}`} title={copy.intro.title} body={copy.intro.body} />}
       mid={copy.mid}
       arrival={copy.arrival}
     />

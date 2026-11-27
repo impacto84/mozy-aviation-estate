@@ -140,7 +140,7 @@ export function FleetSimulator({ variant = "full" }: FleetSimulatorProps) {
             </div>
             <div>
               <dt>Faixa</dt>
-              <dd className="tnum">{tier.price}</dd>
+              <dd className={`${styles.price} tnum`}>{tier.price}</dd>
             </div>
             <div>
               <dt>Participação</dt>

@@ -513,3 +513,11 @@
   }
 
 }
+
+/* Faixa de preço: mesmo tratamento em todo o site (serifa display, champanhe). */
+.specs dd.price {
+  color: var(--color-champagne);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+}

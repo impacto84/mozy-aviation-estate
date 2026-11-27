@@ -123,7 +123,8 @@
   --space-section-tight: clamp(3.5rem, 2.5rem + 4vw, 6rem);
 
   /* Layout ----------------------------------------------------------------- */
-  --container-max: 82rem;
+  /* Uma só grade de margem: conteúdo, cabeçalho e rodapé alinham na mesma borda. */
+  --container-max: 96rem;
   --container-wide: 96rem;
   --container-gutter: clamp(1.25rem, 0.4rem + 3.6vw, 3.5rem);
   --measure: 60ch;

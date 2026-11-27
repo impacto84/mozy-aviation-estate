@@ -65,6 +65,7 @@ export function SatelliteAtlas({ dossierId = "dossie-titulo" }: SatelliteAtlasPr
       </div>
 
       <div className={styles.body}>
+        <div className={styles.stageColumn}>
         <figure className={styles.stage} data-camera={camera} data-atlas-stage="">
           <div
             className={styles.regional}
@@ -105,6 +106,19 @@ export function SatelliteAtlas({ dossierId = "dossie-titulo" }: SatelliteAtlasPr
             <span className="tnum">{isSite ? `ZOOM ${FLY_TO_SCALE.toLocaleString("pt-BR")}×` : "ESCOLHA UM TERRENO"}</span>
           </figcaption>
         </figure>
+        <p className={styles.credit}>Satélite real · Esri World Imagery · Central Florida. Marcadores e fotos de anúncio verificados em agosto de 2026.</p>
+        <ol className={styles.legend}>
+          {lands.map((entry, index) => (
+            <li key={entry.id} className={styles.legendItem} data-active={entry.id === landId}>
+              <span className={`${styles.toggleIndex} tnum`}>{String(index + 1).padStart(2, "0")}</span>
+              <span className={styles.legendName}>{entry.name}</span>
+              <span className={`${styles.legendFacts} tnum`}>
+                {entry.acres} · {entry.price}
+              </span>
+            </li>
+          ))}
+        </ol>
+        </div>
 
         <article className={styles.dossier} aria-live="polite" aria-labelledby={dossierId}>
           <p className={styles.priority}>{land.priority}</p>

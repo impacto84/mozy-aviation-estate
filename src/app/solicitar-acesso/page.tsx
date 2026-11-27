@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { LeadForm } from "@/components/lead/LeadForm";
-import { BRAND, CTA, LEGAL } from "@/lib/editorial";
+import { BRAND, CTA } from "@/lib/editorial";
 import { buildPageMetadata } from "@/lib/martech/seo/metadata";
 import { ACCESS_PATH, SITE_NAME } from "@/lib/martech/seo/site";
 import { contact, tiers } from "@/lib/site-data";
@@ -85,7 +85,6 @@ export default function AccessPage() {
             fallbackErrorId="envio-nao-concluido"
             fallbackSuccessId="envio-recebido"
           />
-          <p className={styles.legal}>{LEGAL.disclaimer}</p>
         </section>
       </div>
     </div>

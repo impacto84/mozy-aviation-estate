@@ -7,8 +7,8 @@ import styles from "./Home.module.css";
 /** Sumário da obra: cada ato e capítulo interativo da home tem âncora própria. */
 const CONTENTS = [
   { href: "#colecoes", numeral: "01", label: "Coleções residenciais" },
-  { href: "#ato-ii", numeral: "02", label: "Ato II · The Founder Residence" },
-  { href: "#ato-iii", numeral: "03", label: "Ato III · Private Hangar & Apron" },
+  { href: "#ato-ii", numeral: "02", label: "Ato II · Residência Founder" },
+  { href: "#ato-iii", numeral: "03", label: "Ato III · Hangar privativo e pátio" },
   { href: "#escala", numeral: "04", label: "Escala real & alcance" },
   { href: "#atlas", numeral: "05", label: "Atlas por satélite" },
   { href: "#convite", numeral: "06", label: "Convite privado" },
@@ -127,7 +127,7 @@ export function Collections() {
 }
 
 /**
- * Prelúdio do Ato II: a Founder Residence de Orlando tem linguagem própria (pedra clássica
+ * Prelúdio do Ato II: a Residência Founder de Orlando tem linguagem própria (pedra clássica
  * sob carvalhos), diferente da contemporânea das demais coleções. O díptico anuncia isso
  * antes do filme, para as duas linguagens lerem como escolha e não como acaso.
  */
@@ -135,7 +135,7 @@ export function ResidencePrelude() {
   return (
     <section className={styles.prelude} aria-labelledby="residencia-titulo" data-surface="void">
       <div className={`${styles.inner} ${styles.preludeHead}`}>
-        <p className={styles.kicker}>The Founder Residence · Orlando</p>
+        <p className={styles.kicker}>Residência Founder · Orlando</p>
         <h2 id="residencia-titulo" className={styles.sectionTitle}>
           Duas linguagens, um só endereço: contemporânea na pista, clássica em pedra sob os carvalhos.
         </h2>

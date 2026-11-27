@@ -87,8 +87,10 @@
 }
 
 .tier :global(.tnum) {
-  color: var(--color-accent);
-  font-weight: var(--weight-semibold);
+  color: var(--color-champagne);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
 }
 
 .direct {

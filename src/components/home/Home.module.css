@@ -261,7 +261,10 @@
 
 .ledgerLabel {
   color: var(--color-text-muted);
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
 }
 
 .ledgerValue {
