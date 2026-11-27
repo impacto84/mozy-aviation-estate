@@ -128,6 +128,19 @@
   border-radius: var(--radius-xs);
 }
 
+/* Master plan: o arquivo traz um letreiro em inglês no topo; o enquadramento o deixa de fora. */
+.masterplan {
+  aspect-ratio: 1536 / 900;
+  overflow: clip;
+  border: var(--border-width) solid var(--color-hairline);
+}
+
+.masterplan .figureImage {
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;

@@ -440,6 +440,16 @@
 
 /* Díptico (prelúdio do Ato II) ---------------------------------------------- */
 
+.prelude {
+  padding-block: var(--space-section-tight) 0;
+}
+
+.preludeHead {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-end: var(--space-10);
+}
+
 .diptych {
   display: grid;
   gap: var(--space-1);

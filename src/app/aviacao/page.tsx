@@ -87,13 +87,13 @@ export default function AviationPage() {
 
       <section className={section.section} aria-labelledby="masterplan-titulo" data-surface="void">
         <div className={`${section.inner} ${section.wide}`}>
-          <SectionHeader id="masterplan-titulo" title={AVIATION.masterplanTitle} isSplit lede={AVIATION.masterplanNote} />
+          <SectionHeader id="masterplan-titulo" title={AVIATION.masterplanTitle} isSplit lede="Pista, taxiway, residências, Aviation Club, terminal e preservação organizados numa só implantação conceitual." />
           <div className={`${sections.split}`}>
-            <figure className={sections.figure}>
+            <figure className={`${sections.figure} ${sections.masterplan}`}>
               <Image
                 className={sections.figureImage}
                 src="/media/masterplan.jpg"
-                alt="Master plan conceitual: pista, taxiway, 60 estates, Aviation Club e preservação"
+                alt="Master plan conceitual: pista, taxiway, 60 residências, Aviation Club e preservação"
                 width={1536}
                 height={1024}
                 sizes="(min-width: 1200px) 58vw, 100vw"

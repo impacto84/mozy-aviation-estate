@@ -21,7 +21,7 @@ export default function AccessPage() {
   return (
     <div className={styles.page} data-surface="void">
       <div className={styles.media} aria-hidden="true">
-        <Image className={styles.image} src="/media/orlando-entrance.jpg" alt="" fill sizes="(min-width: 1200px) 45vw, 100vw" quality={60} priority />
+        <Image className={styles.image} src="/media/pool.jpg" alt="" fill sizes="(min-width: 1200px) 45vw, 100vw" quality={88} priority />
         <div className={styles.shade} />
       </div>
       <div className={styles.layout}>

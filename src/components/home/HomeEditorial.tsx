@@ -10,7 +10,7 @@ const CONTENTS = [
   { href: "#ato-ii", numeral: "02", label: "Ato II · The Founder Residence" },
   { href: "#ato-iii", numeral: "03", label: "Ato III · Private Hangar & Apron" },
   { href: "#escala", numeral: "04", label: "Escala real & alcance" },
-  { href: "#atlas", numeral: "05", label: "Atlas Satelital" },
+  { href: "#atlas", numeral: "05", label: "Atlas por satélite" },
   { href: "#convite", numeral: "06", label: "Convite privado" },
 ] as const;
 
@@ -126,10 +126,22 @@ export function Collections() {
   );
 }
 
-/** Prelúdio do Ato II: a entrada e o interior da casa de Orlando, em díptico de sangria. */
+/**
+ * Prelúdio do Ato II: a Founder Residence de Orlando tem linguagem própria (pedra clássica
+ * sob carvalhos), diferente da contemporânea das demais coleções. O díptico anuncia isso
+ * antes do filme, para as duas linguagens lerem como escolha e não como acaso.
+ */
 export function ResidencePrelude() {
   return (
-    <div className={styles.diptych} data-surface="void">
+    <section className={styles.prelude} aria-labelledby="residencia-titulo" data-surface="void">
+      <div className={`${styles.inner} ${styles.preludeHead}`}>
+        <p className={styles.kicker}>The Founder Residence · Orlando</p>
+        <h2 id="residencia-titulo" className={styles.sectionTitle}>
+          Duas linguagens, um só endereço: contemporânea na pista, clássica em pedra sob os carvalhos.
+        </h2>
+        <p className={styles.bodyText}>Ilustrações conceituais das linguagens arquitetônicas em estudo para as residências.</p>
+      </div>
+      <div className={styles.diptych}>
       <figure className={styles.diptychFigure} data-shape="tall">
         <Image src="/media/orlando-entrance.jpg" alt="Entrada da residência em pedra clara sob carvalhos, com o hangar e o jato ao fundo" fill sizes="(min-width: 768px) 50vw, 100vw" quality={88} className={styles.cover} />
         <figcaption className={styles.mediaCaption}>Orlando · entrada · {CONCEPT_CAPTION}</figcaption>
@@ -138,7 +150,8 @@ export function ResidencePrelude() {
         <Image src="/media/orlando-interior.jpg" alt="Living com portas de vidro abertas para a taxiway e o jato estacionado diante do hangar" fill sizes="(min-width: 768px) 50vw, 100vw" quality={88} className={styles.cover} />
         <figcaption className={styles.mediaCaption}>Orlando · living · {CONCEPT_CAPTION}</figcaption>
       </figure>
-    </div>
+      </div>
+    </section>
   );
 }
 

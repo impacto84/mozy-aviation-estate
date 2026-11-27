@@ -33,14 +33,14 @@ export function AviationSection() {
   );
 }
 
-/** Atlas Satelital na home: a mesma câmera fly-to de /terrenos. */
+/** Atlas por satélite na home: a mesma câmera fly-to de /terrenos. */
 export function AtlasSection() {
   return (
     <section id="atlas" className={styles.instrument} aria-labelledby="atlas-home-titulo" data-surface="void">
       <div className={`${styles.inner} ${styles.wide}`}>
         <div className={styles.headSplit}>
           <div>
-            <p className={styles.kicker}>Atlas Satelital · Central Florida</p>
+            <p className={styles.kicker}>Atlas por satélite · Central Florida</p>
             <h2 id="atlas-home-titulo" className={styles.sectionTitle}>
               {LANDS.title}
             </h2>
