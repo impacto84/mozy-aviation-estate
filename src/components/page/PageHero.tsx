@@ -38,7 +38,7 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
         alt=""
         width={image.width}
         height={image.height}
-        sizes="(max-width: 767px) 270vw, 100vw"
+        sizes="(max-width: 767px) 200vw, 100vw"
         quality={88}
         priority
       />
