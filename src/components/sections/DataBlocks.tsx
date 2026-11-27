@@ -48,7 +48,7 @@ export function CorridorsTable() {
         <caption className="visually-hidden">Corredores regionais avaliados, por ordem de prioridade</caption>
         <thead>
           <tr>
-            <th scope="col">Rank</th>
+            <th scope="col">Ordem</th>
             <th scope="col">Corredor</th>
             <th scope="col">Conectividade</th>
             <th scope="col">Tese</th>
