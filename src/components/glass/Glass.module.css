@@ -1,0 +1,264 @@
+/*
+ * Vidro do FORJA: GlassPanel e GlassPill.
+ *
+ * Camadas, de baixo para cima (cada uma é um elemento, na ordem do DOM):
+ *   .surface   raio, sombra e cor do texto
+ *   .backdrop  blur + saturação do que está atrás (e a refração, onde existe)
+ *   .tint      tinta: a camada que garante o contraste do texto
+ *   .sheen     brilho
+ *   .rim       borda de 1px em gradiente, recortada por máscara
+ *   .content   o conteúdo
+ *
+ * Variantes: .panel (bloco com conteúdo), .pill (rótulo ou link) e .lens
+ * (decorativa, sem conteúdo, com tinta rala para a refração aparecer).
+ *
+ * Regras que este arquivo cumpre:
+ *   - Piso P7 (GLASS-SUPPORTS): todo backdrop-filter fica dentro de @supports;
+ *     fora dele a camada .backdrop é opaca, em declaração separada.
+ *   - A tinta tem alfa de 80%. Com os tokens da fixture, o texto (--color-text) e
+ *     o texto secundário do vidro (--glass-text-muted) passam de 4,5:1 contra
+ *     qualquer fundo. `glass-tokens.test.ts` refaz a conta a cada mudança.
+ *   - Sem movimento por padrão; a transição do brilho só existe com
+ *     prefers-reduced-motion: no-preference.
+ *
+ * Tokens do vidro: defina --glass-* em qualquer ancestral (ou em tokens.css)
+ * para ajustar. Sem definição, valem os padrões abaixo, derivados dos tokens.
+ *
+ * Borda por máscara (.rim): técnica adaptada de rdev/liquid-glass-react
+ * (https://github.com/rdev/liquid-glass-react), licença MIT, Copyright 2025
+ * MAX ROVENSKY. Reescrita em CSS Module com tokens e com fallback em borda simples.
+ */
+
+.surface {
+  --_glass-blur: var(--glass-blur, var(--space-6));
+  --_glass-saturate: var(--glass-saturate, 1.6);
+  --_glass-tint: var(--glass-tint, var(--color-surface));
+  --_glass-tint-alpha: var(--glass-tint-alpha, 80%);
+  --_glass-solid: var(--glass-solid, var(--color-surface));
+  --_glass-sheen-alpha: var(--glass-sheen-alpha, 8%);
+  --_glass-rim-alpha: var(--glass-rim-alpha, 60%);
+  --_glass-radius: var(--glass-radius, var(--radius-lg));
+  --_glass-padding: var(--glass-padding, var(--space-6));
+  --_glass-shadow: var(--glass-shadow, var(--shadow-sm), var(--shadow-md));
+  /* Luz e sombra do vidro: sempre claro e sempre escuro, nos dois esquemas. */
+  --_glass-highlight: var(--color-bg);
+  --_glass-shade: var(--color-text);
+  /* Texto secundário para usar sobre o vidro, no lugar de --color-text-muted. */
+  --glass-text-muted: var(--color-text);
+
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--_glass-radius);
+  box-shadow: var(--_glass-shadow);
+  color: var(--color-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  .surface {
+    --_glass-highlight: var(--color-text);
+    --_glass-shade: var(--color-bg);
+  }
+}
+
+@supports (color: light-dark(white, black)) {
+  .surface {
+    --_glass-highlight: light-dark(var(--color-bg), var(--color-text));
+    --_glass-shade: light-dark(var(--color-text), var(--color-bg));
+  }
+}
+
+/* Força o esquema do vidro: "smoked" sobre fundo claro, "frosted" sobre fundo escuro. */
+.surface[data-glass-tone="light"] {
+  color-scheme: light;
+}
+
+.surface[data-glass-tone="dark"] {
+  color-scheme: dark;
+}
+
+.panel {
+  display: block;
+}
+
+.pill {
+  --_glass-radius: var(--glass-radius, var(--radius-pill));
+  --_glass-shadow: var(--glass-shadow, var(--shadow-sm));
+
+  display: inline-flex;
+  max-inline-size: 100%;
+  text-decoration: none;
+}
+
+/* Lente decorativa: tinta rala e pouco blur. Não leva conteúdo (ver GlassLens.tsx). */
+.lens {
+  --_glass-blur: var(--glass-lens-blur, var(--space-1));
+  --_glass-tint-alpha: var(--glass-lens-tint-alpha, 22%);
+
+  display: block;
+  /* Sem vidro, uma lente opaca seria só um bloco vazio: some, mas guarda o lugar. */
+  visibility: hidden;
+}
+
+.backdrop,
+.tint,
+.sheen,
+.rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Sem backdrop-filter: superfície opaca. É o fallback do Piso P7. */
+.backdrop {
+  background: var(--_glass-solid);
+}
+
+/* Sem máscara composta: borda simples. */
+.rim {
+  border: var(--border-width) solid var(--color-border);
+}
+
+/* O <svg> só carrega o <filter>; não ocupa espaço nem recebe foco. */
+.defs {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  min-inline-size: 0;
+}
+
+.panel > .content {
+  padding: var(--_glass-padding);
+}
+
+.pill > .content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+}
+
+/*
+ * Vidro de verdade. Exige backdrop-filter (para o blur) e color-mix() (para a
+ * tinta translúcida): sem um dos dois, vale a superfície opaca acima.
+ */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) and (color: color-mix(in oklab, white, black)) {
+  .surface {
+    --glass-text-muted: color-mix(in oklab, var(--color-text) 88%, var(--_glass-tint));
+  }
+
+  .lens {
+    visibility: visible;
+  }
+
+  .backdrop {
+    background: transparent;
+    /* --glass-refraction-filter só existe onde GlassBackdrop confirmou suporte; sem ela, o var() fica vazio. */
+    -webkit-backdrop-filter: var(--glass-refraction-filter, ) blur(var(--_glass-blur)) saturate(var(--_glass-saturate));
+    backdrop-filter: var(--glass-refraction-filter, ) blur(var(--_glass-blur)) saturate(var(--_glass-saturate));
+  }
+
+  .tint {
+    background: color-mix(in oklab, var(--_glass-tint) var(--_glass-tint-alpha), transparent);
+  }
+
+  .sheen {
+    background: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--_glass-highlight) var(--_glass-sheen-alpha), transparent) 0%,
+      transparent 55%
+    );
+    opacity: 0.6;
+  }
+}
+
+/* Borda de 1px em gradiente: o anel do padding é o único trecho que a máscara deixa visível. */
+@supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) and (color: color-mix(in oklab, white, black)) {
+  .rim {
+    border: 0;
+    padding: var(--border-width);
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, var(--_glass-highlight) var(--_glass-rim-alpha), transparent) 0%,
+      color-mix(in oklab, var(--_glass-highlight) 12%, transparent) 32%,
+      color-mix(in oklab, var(--_glass-shade) 10%, transparent) 68%,
+      color-mix(in oklab, var(--_glass-highlight) 36%, transparent) 100%
+    );
+    /* As cores da máscara só valem pelo alfa. */
+    -webkit-mask:
+      linear-gradient(black 0 0) content-box,
+      linear-gradient(black 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(black 0 0) content-box,
+      linear-gradient(black 0 0);
+    mask-composite: exclude;
+  }
+}
+
+/* Longe da viewport (marcado por glass-visibility.ts): sem filtro para compor. */
+.backdrop[data-glass-idle="true"] {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Quem pede menos transparência ou mais contraste, e a impressão, recebem a superfície opaca. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), print {
+  .backdrop {
+    background: var(--_glass-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .lens {
+    visibility: hidden;
+  }
+}
+
+/* Cores forçadas: gradiente e sombra somem; a borda vira borda de sistema. */
+@media (forced-colors: active) {
+  .backdrop {
+    background: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .tint,
+  .sheen {
+    display: none;
+  }
+
+  .lens {
+    visibility: hidden;
+  }
+
+  .rim {
+    border: var(--border-width) solid CanvasText;
+    padding: 0;
+    background: none;
+    -webkit-mask: none;
+    mask: none;
+  }
+}
+
+/* Pill clicável: o brilho sobe no hover e no foco. O contraste já conta com o brilho inteiro. */
+.interactive:hover > .sheen,
+.interactive:focus-visible > .sheen {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .interactive > .sheen {
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+}

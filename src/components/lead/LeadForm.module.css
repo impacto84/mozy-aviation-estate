@@ -1,0 +1,152 @@
+/*
+ * Formulário de lead: uma coluna em toda largura, rótulo acima do campo,
+ * alvos de toque com a altura mínima do token. Só tokens.
+ */
+
+.shell {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.field {
+  display: grid;
+  /* Rótulo mais perto do próprio campo do que do campo vizinho. */
+  gap: var(--space-2);
+}
+
+.label {
+  font-weight: var(--weight-medium);
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+}
+
+.control {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  /* Nunca abaixo de 1rem: evita o zoom automático do iOS ao focar. */
+  font-size: max(var(--text-base), 1em);
+}
+
+textarea.control {
+  resize: vertical;
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--color-text);
+  border-inline-start-width: var(--space-1);
+}
+
+.error {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.error[hidden] {
+  display: none;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--target-min);
+  padding: var(--space-3) var(--space-6);
+  border: var(--border-width) solid var(--color-hairline-strong);
+  border-radius: var(--radius-cta);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--color-accent) 16%, var(--color-bg)) 0%,
+    color-mix(in oklch, var(--color-accent) 6%, var(--color-bg)) 100%
+  );
+  color: var(--color-champagne);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.submitArrow {
+  margin-inline-start: var(--space-3);
+  font-family: var(--font-sans);
+}
+
+.submit:hover,
+.submit:focus-visible {
+  border-color: var(--color-champagne);
+  color: var(--color-text);
+}
+
+.submit[aria-disabled="true"] {
+  cursor: progress;
+}
+
+.status {
+  min-block-size: var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* Aviso do envio sem JavaScript: só aparece quando a URL aponta para ele (#id). */
+.fallbackError {
+  display: none;
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-text);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.fallbackError:target {
+  display: block;
+}
+
+/* Campo-isca: fora da vista e do fluxo, mas presente no DOM para quem preenche tudo. */
+.trap {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .submit {
+    justify-self: start;
+  }
+}
+
+.fieldHint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* Seta do select desenhada no sistema: chevron de fio de latão, sem a seta nativa. */
+select.control {
+  appearance: none;
+  padding-inline-end: var(--space-10);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-accent) 50%),
+    linear-gradient(135deg, var(--color-accent) 50%, transparent 50%);
+  background-position:
+    calc(100% - var(--space-5)) 50%,
+    calc(100% - var(--space-4)) 50%;
+  background-repeat: no-repeat;
+  background-size: var(--space-1) var(--space-1);
+}

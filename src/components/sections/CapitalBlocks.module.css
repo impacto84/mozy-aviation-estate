@@ -1,0 +1,258 @@
+/* Blocos da tese de capital: fases, metas, stack, Gantt, veículos, receitas e riscos. */
+
+.disclaimer {
+  max-inline-size: var(--measure);
+  margin-block-start: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.phases {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.phaseList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phase,
+.phaseTotal {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-6);
+  border-block-start: var(--border-width) solid var(--color-border-strong);
+}
+
+.phaseTotal {
+  border-block: var(--border-width-strong) solid var(--color-accent);
+}
+
+.phaseRange {
+  font-size: var(--text-2xl);
+  white-space: nowrap;
+  font-weight: var(--weight-light);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.phaseTotal .phaseRange {
+  color: var(--color-accent);
+  font-size: var(--text-kpi);
+}
+
+.phaseLabel {
+  color: var(--color-text-muted);
+}
+
+.targets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+}
+
+.targets dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.targets dd {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+}
+
+.stack,
+.gantt {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.stackList,
+.ganttList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stackRow,
+.ganttRow {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-block-start: var(--border-width) solid var(--color-border);
+}
+
+.stackHead,
+.ganttHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.stackTitle,
+.ganttTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.stackShare,
+.ganttWhen {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.track {
+  position: relative;
+  display: block;
+  block-size: var(--space-3);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-surface-raised);
+}
+
+.range {
+  position: absolute;
+  inset-block: 0;
+  border-radius: var(--radius-xs);
+  background-color: var(--color-accent);
+}
+
+.stackBody,
+.ganttBody {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.entities,
+.revenues {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entity,
+.revenue {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  padding-block: var(--space-5);
+  border-block-start: var(--border-width) solid var(--color-border-strong);
+}
+
+.entityIndex {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.entityTitle,
+.revenueTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.entityBody {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.revenue:first-child .revenueTitle {
+  font-size: var(--text-2xl);
+  color: var(--color-accent);
+}
+
+.risks {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.risk {
+  display: grid;
+  grid-template-columns: var(--space-20) minmax(0, 1fr);
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  padding-block: var(--space-5);
+  border-block-start: var(--border-width) solid var(--color-border);
+}
+
+.riskLevel {
+  grid-row: span 2;
+  align-self: start;
+  justify-self: start;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.risk[data-level="Alto"] .riskLevel {
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+}
+
+.riskTitle {
+  font-weight: var(--weight-semibold);
+}
+
+@media (min-width: 768px) {
+  .phaseList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+
+  .phaseTotal {
+    grid-column: 1 / -1;
+  }
+
+  .entities {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+
+  .revenues {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-8);
+  }
+
+  .revenue:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .risks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-8);
+  }
+}
+
+@media (min-width: 1200px) {
+  .entities {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .revenues {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

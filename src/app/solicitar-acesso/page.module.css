@@ -1,0 +1,214 @@
+.page {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.media {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: var(--z-base);
+  block-size: 70svh;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 78%, transparent) 50%, color-mix(in oklch, var(--color-bg) 55%, transparent) 100%);
+}
+
+.layout {
+  position: relative;
+  z-index: var(--z-raised);
+  display: grid;
+  grid-template-areas:
+    "intro"
+    "form"
+    "aside";
+  gap: var(--space-12);
+  max-inline-size: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: calc(var(--header-height) + var(--space-12)) var(--space-section-tight);
+}
+
+.intro,
+.aside {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.intro {
+  grid-area: intro;
+}
+
+.aside {
+  grid-area: aside;
+}
+
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.title {
+  max-inline-size: 16ch;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-tight);
+}
+
+.lead {
+  max-inline-size: var(--measure-narrow);
+  font-size: var(--text-lg);
+}
+
+.tiers {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tier {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-block-start: var(--border-width) solid var(--color-border-strong);
+}
+
+.tier :global(.tnum) {
+  color: var(--color-champagne);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+}
+
+.direct {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.directTitle {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.directLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  color: var(--color-text);
+  font-size: var(--text-lg);
+  text-decoration: none;
+}
+
+.directLink:hover {
+  color: var(--color-accent);
+}
+
+.address {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.formPanel {
+  grid-area: form;
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.formTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+}
+
+.formNote,
+.legal {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.legal {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-xs);
+}
+
+@media (min-width: 768px) {
+  .formPanel {
+    padding: var(--space-10);
+  }
+}
+
+@media (min-width: 1200px) {
+  .layout {
+    grid-template-areas:
+      "intro form"
+      "aside form";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-20);
+    row-gap: var(--space-10);
+    align-items: start;
+  }
+}
+
+/* O que acontece depois do envio: régua de três passos sob as faixas de preço. */
+.next {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-8);
+}
+
+.nextTitle {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.steps {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: var(--border-width) solid var(--color-hairline);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: var(--space-10) minmax(0, 1fr);
+  padding-block: var(--space-4);
+  border-block-end: var(--border-width) solid var(--color-hairline);
+  font-size: var(--text-sm);
+}
+
+.stepIndex {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.stepLink {
+  color: var(--color-champagne);
+  overflow-wrap: anywhere;
+}

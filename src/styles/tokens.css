@@ -1,0 +1,231 @@
+/*
+ * Design tokens — MOZY Private Aviation Estate (V3 · FORJA 1.1 · --profile flagship)
+ * Direção: "Cinematográfico & Ultra-Luxury Soberano" (ver DESIGN.md).
+ *
+ * Fonte única de cor, tipo, espaço, raio, sombra, movimento e camadas.
+ * CSS Modules só consomem os tokens SEMÂNTICOS (--color-*, --font-*, --space-*…).
+ *
+ * Camadas:
+ *   1. literais   (--void-*, --navy-*, --mist-*, --brass-*, --signal-*) — nunca usados direto em componente
+ *   2. semânticos (--color-*, …) — o que os componentes leem
+ *
+ * Superfícies: o site inteiro é noturno (obsidiana / carvão / grafite de dossiê, todas
+ * entre oklch 11% e 17%). Seções alternam o degrau com `data-surface="void" | "navy" |
+ * "dossier"`; não existe mais superfície clara (bege) em nenhuma rota.
+ *
+ * Breakpoints (media query não aceita var(); use os números):
+ *   phone <= 767px | tablet 768px a 1199px | desktop >= 1200px
+ */
+
+:root {
+  /* 1. Literais ---------------------------------------------------------- */
+  /* Obsidiana → carvão → grafite: o degrau é pequeno de propósito (imersão >= 85% noturna). */
+  --void-950: oklch(11.5% 0.012 262);
+  --void-900: oklch(13% 0.013 262);
+  --navy-900: oklch(14.5% 0.014 260);
+  --navy-800: oklch(18% 0.016 258);
+  --navy-700: oklch(24% 0.018 256);
+  --navy-600: oklch(33% 0.02 255);
+  --graphite-900: oklch(16% 0.01 75);
+  --graphite-800: oklch(19.5% 0.012 75);
+  --mist-400: oklch(73% 0.014 80);
+  --mist-300: oklch(82% 0.014 80);
+  --mist-100: oklch(94.5% 0.012 85);
+
+  /* Latão escovado / champanhe: único acento, usado em fio (1px), rótulo e CTA. */
+  --brass-200: oklch(90% 0.045 86);
+  --brass-300: oklch(83% 0.072 83);
+  --brass-400: oklch(76% 0.085 79);
+  --brass-500: oklch(66% 0.08 75);
+  --brass-700: oklch(47% 0.06 70);
+  --brass-800: oklch(30% 0.04 70);
+
+  --signal-400: oklch(70% 0.16 34);
+  --signal-600: oklch(58% 0.16 32);
+  --runway-green: oklch(76% 0.12 150);
+
+  /* 2. Semânticos: cor (superfície padrão = void, escura) ----------------- */
+  --color-bg: var(--void-950);
+  --color-surface: var(--navy-900);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-accent-soft: var(--brass-800);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-runway: var(--runway-green);
+  --color-scrim: var(--void-950);
+  /* Fios de latão: divisores de 1px, molduras de diagrama, bordas de CTA. */
+  --color-hairline: color-mix(in oklch, var(--brass-500) 38%, transparent);
+  --color-hairline-strong: var(--brass-500);
+  --color-champagne: var(--brass-200);
+
+  --color-success: var(--runway-green);
+  --color-success-soft: var(--navy-800);
+  --color-warning: var(--brass-300);
+  --color-warning-soft: var(--brass-800);
+  --color-danger: var(--signal-400);
+  --color-danger-soft: var(--navy-800);
+
+  /* Tipografia ------------------------------------------------------------ */
+  /* --nf-*: famílias de next/font (src/app/fonts.ts) com fallback de métricas ajustadas. */
+  --font-display: var(--nf-display, "Cormorant Garamond"), "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-sans: var(--nf-sans, "Manrope Variable"), "Avenir Next", "Segoe UI", Helvetica, sans-serif;
+  --font-mono: var(--nf-mono, "JetBrains Mono Variable"), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-display);
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: clamp(1.125rem, 1.0554rem + 0.2857vw, 1.3125rem);
+  --text-xl: clamp(1.375rem, 1.1893rem + 0.7619vw, 1.875rem);
+  --text-2xl: clamp(1.875rem, 1.3643rem + 2.0952vw, 3.25rem);
+  --text-3xl: clamp(2.375rem, 1.4929rem + 3.619vw, 4.75rem);
+  --text-display: clamp(2.875rem, 1.5286rem + 5.5238vw, 6.5rem);
+  --text-kpi: clamp(2.5rem, 1.3857rem + 4.5714vw, 5.5rem);
+
+  --leading-tight: 1.02;
+  --leading-snug: 1.22;
+  --leading-body: 1.62;
+  --tracking-display: -0.018em;
+  --tracking-tight: -0.012em;
+  --tracking-wide: 0.14em;
+  --tracking-hud: 0.08em;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 650;
+
+  /* Espaço (base 4px) ------------------------------------------------------ */
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-section: clamp(5rem, 3rem + 8vw, 10rem);
+  --space-section-tight: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+
+  /* Layout ----------------------------------------------------------------- */
+  /* Uma só grade de margem: conteúdo, cabeçalho e rodapé alinham na mesma borda. */
+  --container-max: 96rem;
+  --container-wide: 96rem;
+  --container-gutter: clamp(1.25rem, 0.4rem + 3.6vw, 3.5rem);
+  --measure: 60ch;
+  --measure-narrow: 42ch;
+  --measure-title: 17ch;
+  --target-min: 2.75rem;
+  --header-height: 4.5rem;
+  --sidebar-width: 15.5rem;
+  /* Coluna de número grande (pesos do scorecard, KPIs em régua): acompanha --text-2xl. */
+  --column-kpi: calc(var(--text-2xl) * 2.5);
+  /*
+   * Respiro inferior dos heróis. Sem GTM o aviso de cookies não existe (nada a consentir);
+   * com GTM ele é um cartão compacto no canto que não cobre o CTA. Reserva zero.
+   */
+  --consent-offset: 0rem;
+
+  /* Forma ------------------------------------------------------------------ */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 999px;
+  /* CTA arquitetônico: canto reto com chanfro fino (2px). Pílula é proibida em CTA. */
+  --radius-cta: var(--radius-xs);
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.24);
+  --shadow-md: 0 14px 34px oklch(0% 0 0 / 0.32), 0 2px 8px oklch(0% 0 0 / 0.2);
+  --shadow-lg: 0 30px 70px oklch(0% 0 0 / 0.45), 0 8px 20px oklch(0% 0 0 / 0.25);
+  --shadow-cinema: 0 40px 120px oklch(0% 0 0 / 0.6);
+
+  /* Movimento (use só dentro de prefers-reduced-motion: no-preference) ------ */
+  --duration-fast: 160ms;
+  --duration-base: 320ms;
+  --duration-slow: 720ms;
+  --duration-cinematic: 1200ms;
+  /* Fly-to do Atlas: câmera contínua em GPU (transform + opacity). */
+  --duration-flyto: 1000ms;
+  --ease-flyto: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Camadas ---------------------------------------------------------------- */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 50;
+  --z-header: 100;
+  --z-overlay: 1000;
+
+  color-scheme: dark;
+}
+
+/* Superfície navy: um degrau mais clara, para alternar ritmo com o void. */
+[data-surface="navy"] {
+  --color-bg: var(--navy-900);
+  --color-surface: var(--navy-800);
+  --color-surface-raised: var(--navy-700);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-scrim: var(--navy-900);
+}
+
+/* Superfície void explícita (reabre a obsidiana dentro de uma seção navy ou dossier). */
+[data-surface="void"] {
+  --color-bg: var(--void-950);
+  --color-surface: var(--navy-900);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-scrim: var(--void-950);
+
+  color-scheme: dark;
+}
+
+/* Superfície dossier: grafite quente para tabelas, scorecards e dados (substitui o bege). */
+[data-surface="dossier"] {
+  --color-bg: var(--graphite-900);
+  --color-surface: var(--graphite-800);
+  --color-surface-raised: var(--navy-800);
+  --color-text: var(--mist-100);
+  --color-text-muted: var(--mist-400);
+  --color-border: var(--navy-700);
+  --color-border-strong: var(--navy-600);
+  --color-accent: var(--brass-300);
+  --color-accent-strong: var(--brass-400);
+  --color-accent-soft: var(--brass-800);
+  --color-on-accent: var(--void-950);
+  --color-focus: var(--brass-300);
+  --color-signal: var(--signal-400);
+  --color-scrim: var(--graphite-900);
+
+  color-scheme: dark;
+}

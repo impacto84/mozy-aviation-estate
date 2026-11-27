@@ -1,0 +1,110 @@
+/*
+ * Marquee. Padrão (movimento reduzido, sem JavaScript, impressão): grade estática,
+ * com todos os itens visíveis e a cópia escondida. A faixa em movimento só existe
+ * onde há script (para o botão de pausa funcionar) e o visitante aceita movimento.
+ */
+.marquee {
+  --marquee-gap: var(--space-12);
+  --marquee-fade: 12%;
+  display: grid;
+  /* minmax(0, …): sem isto a coluna do grid cresce até a largura somada dos itens e a página ganha rolagem horizontal. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  justify-items: center;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.viewport {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6) var(--marquee-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.group[aria-hidden="true"] {
+  display: none;
+}
+
+.item {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.toggle {
+  display: none;
+  align-items: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: var(--color-text);
+}
+
+@media screen and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .viewport {
+    display: flex;
+    gap: var(--marquee-gap);
+    overflow: clip;
+    /* A largura da faixa não depende do conteúdo: o pai (grid ou flex) nunca é esticado pelos itens. */
+    contain: inline-size;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--marquee-fade),
+      black calc(100% - var(--marquee-fade)),
+      transparent
+    );
+  }
+
+  /* Cada grupo ocupa ao menos a largura da faixa: duas cópias fecham o laço em qualquer tela. */
+  .group,
+  .group[aria-hidden="true"] {
+    display: flex;
+    flex: none;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    min-inline-size: 100%;
+    animation: marquee-slide var(--marquee-duration, calc(var(--duration-slow) * 50)) linear infinite;
+  }
+
+  .marquee[data-marquee-paused="true"] .group,
+  .marquee[data-marquee-idle="true"] .group,
+  .viewport:focus-within .group {
+    animation-play-state: paused;
+  }
+
+  @media (hover: hover) {
+    .viewport:hover .group {
+      animation-play-state: paused;
+    }
+  }
+
+  .toggle {
+    display: inline-flex;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+}
+
+@keyframes marquee-slide {
+  to {
+    translate: calc(-100% - var(--marquee-gap)) 0;
+  }
+}

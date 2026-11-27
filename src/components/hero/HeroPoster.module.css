@@ -1,0 +1,147 @@
+/*
+ * Pôster do hero: o que o visitante vê antes do canvas, sem JS, sem WebGL2,
+ * com Save-Data, e quando o contexto se perde (Piso P2, GL-FALLBACK).
+ *
+ * Cada variante imita a composição da cena com as mesmas cores (--hero-color-*):
+ * a troca para o canvas é um fade, não um salto.
+ *
+ * .detail é a parte do desenho que o canvas transparente substitui; some quando
+ * o palco entra (:has). Em navegador sem :has() ela fica atrás do canvas.
+ */
+
+.poster {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  overflow: clip;
+  background-color: var(--hero-color-base);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.detail {
+  position: absolute;
+  inset: 0;
+}
+
+.poster:has(~ [data-hero-state="live"], ~ [data-hero-state="still"]) .detail {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .detail {
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+}
+
+/* bands: par do ShaderHero. Faixas inclinadas embaixo (telas estreitas) ou à direita (desktop). */
+.bands {
+  --poster-calm: linear-gradient(to bottom, var(--hero-color-base) 54%, transparent 96%);
+  --poster-band-soft: color-mix(in oklch, var(--hero-color-soft) 70%, var(--hero-color-base));
+
+  background-image:
+    var(--poster-calm),
+    repeating-linear-gradient(
+      60deg,
+      var(--poster-band-soft) 0%,
+      var(--hero-color-soft) 5%,
+      var(--hero-color-accent) 13%,
+      var(--poster-band-soft) 13.2%
+    );
+}
+
+/* field: par do ParticlesHero. Clarão suave; os pontos estáticos são o detalhe. */
+.field {
+  --poster-glow-position: 50% 100%;
+  --poster-mask: linear-gradient(to bottom, transparent 56%, black 86%);
+
+  background-image: radial-gradient(
+    ellipse 90% 60% at var(--poster-glow-position),
+    var(--hero-color-soft) 0%,
+    transparent 70%
+  );
+}
+
+.field .detail {
+  background-image: radial-gradient(circle, var(--hero-color-accent) 0, var(--hero-color-accent) 18%, transparent 22%);
+  background-size: var(--space-4) var(--space-3);
+  mask-image: var(--poster-mask);
+  opacity: 0.55;
+}
+
+/* orbit: par do R3FHero. Clarão; a esfera e o anel de CSS são o detalhe. */
+.orbit {
+  --poster-object-x: 50%;
+  --poster-object-y: 82%;
+  --poster-object-size: calc(var(--space-24) * 1.5);
+
+  background-image: radial-gradient(
+    circle at var(--poster-object-x) var(--poster-object-y),
+    var(--hero-color-soft) 0%,
+    transparent 46%
+  );
+}
+
+.orbit .detail::before,
+.orbit .detail::after {
+  position: absolute;
+  inset-block-start: var(--poster-object-y);
+  inset-inline-start: var(--poster-object-x);
+  border-radius: 50%;
+  translate: -50% -50%;
+  content: "";
+}
+
+.orbit .detail::before {
+  inline-size: var(--poster-object-size);
+  block-size: var(--poster-object-size);
+  background-image: radial-gradient(
+    circle at 34% 30%,
+    color-mix(in oklch, var(--hero-color-accent) 55%, var(--hero-color-base)) 0%,
+    var(--hero-color-accent) 58%,
+    color-mix(in oklch, var(--hero-color-accent) 78%, var(--hero-color-ink)) 100%
+  );
+}
+
+.orbit .detail::after {
+  inline-size: calc(var(--poster-object-size) * 1.8);
+  block-size: calc(var(--poster-object-size) * 0.95);
+  border: var(--border-width) solid var(--hero-color-ink);
+  rotate: -4deg;
+  opacity: 0.55;
+}
+
+/* tablet: 768px a 1199px */
+@media (min-width: 768px) {
+  .orbit {
+    --poster-object-size: calc(var(--space-24) * 3);
+  }
+}
+
+/* desktop: >= 1200px. A luz vai para a direita; o texto ocupa a esquerda. */
+@media (min-width: 1200px) {
+  .bands {
+    --poster-calm: linear-gradient(to right, var(--hero-color-base) 46%, transparent 90%);
+  }
+
+  .field {
+    --poster-glow-position: 82% 100%;
+    --poster-mask:
+      linear-gradient(to right, transparent 46%, black 80%), linear-gradient(to bottom, transparent 40%, black 80%);
+  }
+
+  .field .detail {
+    mask-composite: intersect;
+  }
+
+  .orbit {
+    --poster-object-x: 76%;
+    --poster-object-y: 50%;
+  }
+}

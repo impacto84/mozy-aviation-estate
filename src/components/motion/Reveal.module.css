@@ -1,0 +1,56 @@
+/*
+ * Reveal: o estado padrão é o final. Nada aqui esconde conteúdo sozinho.
+ * Quem escreve `data-reveal-state` é `src/lib/motion/reveal.ts`, depois que o
+ * JavaScript rodou, e só fora de `prefers-reduced-motion: reduce`.
+ */
+.reveal {
+  --reveal-distance: var(--space-6);
+  --reveal-stagger: calc(var(--duration-fast) / 2);
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  .reveal[data-reveal-state="pending"] {
+    opacity: 0;
+  }
+
+  .reveal[data-reveal="up"][data-reveal-state="pending"] {
+    translate: 0 var(--reveal-distance);
+  }
+
+  .reveal[data-reveal="scale"][data-reveal-state="pending"] {
+    scale: 0.96;
+  }
+
+  /* A transição mora no estado de chegada: sair de "pending" para "in" anima; a limpeza não. */
+  .reveal[data-reveal-state="in"] {
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      translate var(--duration-slow) var(--ease-out),
+      scale var(--duration-slow) var(--ease-out);
+    transition-delay: calc(var(--reveal-index, 0) * var(--reveal-stagger));
+  }
+}
+
+/*
+ * Variante sem JavaScript: animação dirigida pela rolagem (scroll-driven).
+ * Melhoria progressiva: sem suporte, o elemento fica no estado final.
+ * Só geometria (scale e translate), nunca opacidade: o elemento já está na tela
+ * enquanto a animação anda, e texto meio transparente reprova em contraste.
+ */
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .scrub {
+      --reveal-distance: var(--space-8);
+      animation: reveal-scrub-in auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+}
+
+@keyframes reveal-scrub-in {
+  from {
+    scale: 0.94;
+    translate: 0 var(--reveal-distance);
+  }
+}

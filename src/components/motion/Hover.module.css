@@ -1,0 +1,102 @@
+/*
+ * Hover por CSS. Regras:
+ *   - o estado parado é completo; o hover é um acréscimo, nunca a única pista;
+ *   - `:focus-visible` recebe o mesmo destaque do hover;
+ *   - mudança de cor fica fora da media query (não é movimento);
+ *   - deslocamento e escala só em aparelho com hover de verdade e sem pedido de movimento reduzido;
+ *   - só `transform`, `translate`, `scale` e `opacity`; nunca `transition: all`.
+ */
+
+/* Botão ou link com seta: a seta avança, o botão afunda um pouco no clique. */
+.arrowLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.arrow {
+  flex: none;
+}
+
+/* Link de texto: já nasce sublinhado em tom discreto; no hover, o sublinhado na cor do texto cresce da esquerda. */
+.underlineLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(var(--color-text-muted), var(--color-text-muted));
+  background-repeat: no-repeat;
+  background-position: 0 85%;
+  background-size: 100% var(--border-width);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.underlineLink:hover,
+.underlineLink:focus-visible {
+  color: var(--color-accent);
+}
+
+/* Cartão: sobe um passo e ganha sombra. */
+.liftCard {
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+
+.liftCard:hover,
+.liftCard:focus-within {
+  border-color: var(--color-accent);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .arrowLink {
+    transition: scale var(--duration-fast) var(--ease-out);
+  }
+
+  .arrowLink:active {
+    scale: 0.97;
+  }
+
+  .arrow {
+    transition: translate var(--duration-base) var(--ease-out);
+  }
+
+  .arrowLink:hover .arrow,
+  .arrowLink:focus-visible .arrow {
+    translate: var(--space-1) 0;
+  }
+
+  .underlineLink {
+    background-size:
+      0% var(--border-width),
+      100% var(--border-width);
+    transition:
+      background-size var(--duration-base) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .underlineLink:hover,
+  .underlineLink:focus-visible {
+    background-size: 100% var(--border-width);
+  }
+
+  .liftCard {
+    transition:
+      translate var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .liftCard:hover,
+  .liftCard:focus-within {
+    translate: 0 calc(var(--space-1) * -1);
+    box-shadow: var(--shadow-md);
+  }
+}

@@ -1,0 +1,146 @@
+/*
+ * Estilos globais do site MOZY. Só o mínimo: reset em camada baixa, base de
+ * elementos, foco e utilitários de acessibilidade. Todo o resto mora em
+ * CSS Modules, que não usam camada e por isso vencem estas regras.
+ */
+@layer reset, base, utilities;
+
+@layer reset {
+  /* Na camada mais baixa: qualquer regra de componente sobrescreve. */
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+
+  :where(body, h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote) {
+    margin: 0;
+  }
+
+  :where(ul, ol)[role="list"] {
+    padding: 0;
+    list-style: none;
+  }
+
+  :where(img, svg, video, canvas) {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  :where(img, video) {
+    block-size: auto;
+  }
+
+  :where(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    font-size: 100%;
+    line-height: var(--leading-body);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    accent-color: var(--color-accent);
+  }
+
+  body {
+    min-block-size: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-size: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+
+  :where(p, li) {
+    text-wrap: pretty;
+  }
+
+  :where(a:any-link) {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  :where(a:any-link, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
+  }
+}
+
+@layer utilities {
+  .visually-hidden:not(:focus, :active) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .skip-link {
+    position: absolute;
+    inset-block-start: var(--space-2);
+    inset-inline-start: var(--space-2);
+    z-index: var(--z-overlay);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: var(--weight-medium);
+    translate: 0 -200%;
+  }
+
+  .skip-link:focus-visible {
+    translate: 0 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .skip-link {
+      transition: translate var(--duration-fast) var(--ease-out);
+    }
+  }
+}
+
+@layer base {
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  [data-surface] {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  button,
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .container {
+    inline-size: 100%;
+    max-inline-size: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-gutter);
+  }
+}

@@ -1,0 +1,366 @@
+/*
+ * Atlas Satelital com câmera fly-to. Só `transform` e `opacity` animam (GPU), em
+ * 1000 ms com --ease-flyto, e só com movimento permitido. Sem pílulas: alternadores
+ * retos com fio de latão.
+ */
+
+.atlas {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.toolbar {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.toggle,
+.toggleSmall,
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-cta);
+  background-color: transparent;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.toggleIndex {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.toggleSmall,
+.back {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+}
+
+.back {
+  border-color: var(--color-hairline-strong);
+  color: var(--color-champagne);
+}
+
+.toggle[aria-pressed="true"],
+.toggleSmall[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background-color: color-mix(in oklch, var(--color-accent) 14%, var(--color-bg));
+  color: var(--color-champagne);
+}
+
+.toggleSmall:disabled,
+.back:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  aspect-ratio: 1920 / 1400;
+  overflow: clip;
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-surface);
+}
+
+.regional,
+.detail {
+  position: absolute;
+  inset: 0;
+}
+
+.regional {
+  z-index: 1;
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--origin, 50% 50%);
+}
+
+.stage[data-camera="site"] .regional {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.detail {
+  z-index: 0;
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+.detail[data-active="true"] {
+  z-index: 2;
+  opacity: 1;
+  transform: none;
+}
+
+.image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/*
+ * Marcador: área de toque de 44 px, transparente, sobre o marcador já desenhado na
+ * carta (sem anel duplicado encostando nos rótulos). Foco visível com fio de latão.
+ */
+.marker {
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  inline-size: var(--target-min);
+  block-size: var(--target-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  translate: -50% -50%;
+}
+
+.marker:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.markerLabel {
+  clip-path: inset(50%);
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: calc(100% + var(--space-2));
+  translate: 0 -50%;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  white-space: nowrap;
+}
+
+/* Faixa inferior opaca: cobre a caixa de legenda embutida na carta (ilegível em tela). */
+.stageCaption {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-block-size: 12%;
+  padding: var(--space-2) var(--space-3);
+  border-block-start: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-bg);
+  pointer-events: none;
+}
+
+.stageCaption span {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+}
+
+.stageColumn {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.credit {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.legend {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: var(--border-width) solid var(--color-hairline);
+}
+
+.legendItem {
+  display: grid;
+  grid-template-columns: var(--space-10) minmax(0, 1fr);
+  gap: var(--space-1) var(--space-2);
+  padding-block: var(--space-3);
+  border-block-end: var(--border-width) solid var(--color-hairline);
+}
+
+.legendItem[data-active="true"] .legendName {
+  color: var(--color-champagne);
+}
+
+.legendName {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.legendFacts {
+  grid-column: 2;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.dossier {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-inline-size: 0;
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-hairline);
+  background-color: var(--color-surface);
+}
+
+.priority {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.name {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-snug);
+}
+
+.place {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.kpi {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-4);
+  border-block: var(--border-width) solid var(--color-hairline);
+}
+
+.kpiAcres {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-snug);
+}
+
+.kpiPrice {
+  color: var(--color-champagne);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.note {
+  padding: var(--space-4);
+  border-inline-start: var(--border-width-strong) solid var(--color-signal);
+  background-color: var(--color-surface-raised);
+  font-size: var(--text-sm);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Voltando à carta: a carta reaparece já no começo e recua o zoom. */
+  .regional {
+    transition:
+      transform var(--duration-flyto) var(--ease-flyto),
+      opacity var(--duration-base) var(--ease-out);
+    will-change: transform;
+  }
+
+  /* Indo ao terreno: zoom contínuo e, perto do pouso, a carta se dissolve no detalhe. */
+  .stage[data-camera="site"] .regional {
+    transition:
+      transform var(--duration-flyto) var(--ease-flyto),
+      opacity var(--duration-base) var(--ease-out) calc(var(--duration-flyto) * 0.6);
+  }
+
+  .detail {
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-flyto) var(--ease-flyto);
+  }
+
+  .stage[data-camera="site"] .detail[data-active="true"] {
+    transition:
+      opacity var(--duration-slow) var(--ease-out) calc(var(--duration-flyto) * 0.5),
+      transform var(--duration-flyto) var(--ease-flyto) calc(var(--duration-flyto) * 0.5);
+  }
+
+  .toggle,
+  .toggleSmall,
+  .back {
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+}
+
+@media (min-width: 768px) {
+  .legendItem {
+    grid-template-columns: var(--space-10) minmax(0, 1fr) auto;
+    align-items: baseline;
+  }
+
+  .legendFacts {
+    grid-column: auto;
+  }
+
+  .toolbar {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1200px) {
+  .body {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  }
+}

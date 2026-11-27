@@ -1,0 +1,430 @@
+/*
+ * Ato cinematográfico em tela cheia (FORJA 1.1 · scrollytelling).
+ *
+ * Padrão (servidor, sem JS, movimento reduzido): palco de 100svh com o pôster nítido e
+ * as legendas abaixo, em trilha compacta. Com movimento permitido a trilha ganha a
+ * altura do ato (360–560svh) e o palco fica sticky — direto no CSS, sem esperar a
+ * hidratação, para não deslocar nada (CLS).
+ *
+ * `--act-progress` (0..1) é escrito pelo scrub no palco; a fase da legenda vem em
+ * `data-phase` (intro | mid | arrival).
+ */
+
+.act {
+  position: relative;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.track {
+  position: relative;
+}
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-block-size: 100svh;
+  overflow: clip;
+  background-color: var(--color-bg);
+}
+
+.poster,
+.canvas,
+.shade,
+.frameLines {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.poster img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.canvas {
+  opacity: 0;
+}
+
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+/* Ato I: o pôster é a fotografia do hero; o filme entra em fusão nos primeiros passos da rolagem. */
+.act[data-act="approach"] .canvas[data-ready="true"] {
+  opacity: clamp(0, calc((var(--act-progress, 0) - 0.01) * 14), 1);
+}
+
+/* phone: a abertura ocupa a metade de baixo; o degradê cobre todo o bloco de texto. */
+.shade {
+  background-image:
+    linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 88%, transparent) 40%, color-mix(in oklch, var(--color-bg) 40%, transparent) 62%, transparent 76%),
+    linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
+  pointer-events: none;
+}
+
+/* tablet (retrato): o bloco de texto ocupa metade da tela; o degradê sobe junto. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 90%, transparent) 42%, color-mix(in oklch, var(--color-bg) 45%, transparent) 64%, transparent 80%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
+  }
+}
+
+@media (min-width: 1200px) {
+  .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 78%, transparent) 26%, transparent 62%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
+  }
+}
+
+/* Marcas de enquadramento: dois cantos em fio de latão, como num visor de câmera. */
+.frameLines {
+  inset: calc(var(--header-height) + var(--space-4)) var(--container-gutter) var(--space-16);
+  inline-size: auto;
+  block-size: auto;
+  pointer-events: none;
+}
+
+.frameLines::before,
+.frameLines::after {
+  position: absolute;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  border-color: var(--color-hairline-strong);
+  border-style: solid;
+  border-width: 0;
+  content: "";
+}
+
+.frameLines::before {
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  border-block-start-width: var(--border-width);
+  border-inline-start-width: var(--border-width);
+}
+
+.frameLines::after {
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  border-block-start-width: var(--border-width);
+  border-inline-end-width: var(--border-width);
+}
+
+.opening,
+.captions {
+  position: relative;
+  z-index: var(--z-raised);
+  grid-row: 1;
+  grid-column: 1;
+  align-self: end;
+  inline-size: 100%;
+  max-inline-size: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: calc(var(--header-height) + var(--space-10)) var(--space-8);
+}
+
+.captions {
+  display: none;
+}
+
+/* Legendas do filme -------------------------------------------------------- */
+
+.kicker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.body {
+  max-inline-size: var(--measure-narrow);
+  margin-block-start: var(--space-3);
+  color: var(--color-text);
+  font-size: var(--text-base);
+}
+
+.mid {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-style: italic;
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-display);
+  text-align: center;
+  translate: 0 -50%;
+}
+
+.arrival {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.arrivalTitle {
+  max-inline-size: 16ch;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+/* HUD inferior: ato, barra de progresso e contador de quadro ------------- */
+
+.readout {
+  position: relative;
+  z-index: var(--z-raised);
+  grid-row: 2;
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  inline-size: 100%;
+  max-inline-size: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: var(--space-3) var(--space-5);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-hud);
+}
+
+.readoutLabel {
+  color: var(--color-accent);
+}
+
+.meter {
+  position: relative;
+  display: block;
+  block-size: var(--border-width);
+  overflow: clip;
+  background-color: var(--color-hairline);
+}
+
+.counterLegend {
+  color: var(--color-text-muted);
+}
+
+.meterFill {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-champagne);
+  transform: scaleX(var(--act-progress, 0));
+  transform-origin: left center;
+}
+
+.telemetry {
+  display: none;
+}
+
+/* Ato I: o jato ocupa o canto superior; sem cantoneiras ali. */
+.act[data-act="approach"] .frameLines {
+  display: none;
+}
+
+/* Ato III: o hangar é claro; um véu de obsidiana mantém a atmosfera noturna. */
+.act[data-act="hangar"] .shade {
+  background-color: color-mix(in oklch, var(--color-bg) 24%, transparent);
+}
+
+@media (max-width: 767px) {
+  .act[data-act="hangar"] .shade {
+    background-color: color-mix(in oklch, var(--color-bg) 42%, transparent);
+  }
+}
+
+/* phone: o rótulo do ato e o contador ficam no topo do palco, visíveis desde o primeiro quadro. */
+@media (max-width: 767px) {
+  /* grid-area auto: o bloco de contenção é o palco inteiro, não a linha 2 do grid. */
+  .readout {
+    position: absolute;
+    grid-area: auto;
+    inset-block-start: calc(var(--header-height) + var(--space-3));
+    inset-inline: 0;
+    padding-block: var(--space-2);
+    background-image: linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 80%, transparent), transparent);
+  }
+
+  .readout {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .counterLegend {
+    display: none;
+  }
+
+  .act[data-act="hangar"] .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 88%, transparent) 40%, color-mix(in oklch, var(--color-bg) 40%, transparent) 62%, transparent 76%),
+      linear-gradient(to bottom, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 70%, transparent) 24%, transparent 48%);
+  }
+}
+
+/* Movimento reduzido / sem JS: legendas abaixo do palco, sempre visíveis ---------- */
+
+.reducedCaptions {
+  display: grid;
+  gap: var(--space-6);
+  max-inline-size: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: var(--space-8) var(--space-12);
+  border-block-start: var(--border-width) solid var(--color-hairline);
+}
+
+.reducedMid {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-style: italic;
+  font-weight: var(--weight-light);
+}
+
+.reducedTitle {
+  max-inline-size: 22ch;
+  margin-block-start: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-snug);
+}
+
+/* Movimento permitido: trilha alta, palco sticky e legendas por fase --------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .act[data-act="approach"] .track {
+    block-size: 400svh;
+  }
+
+  .act[data-act="villa"] .track {
+    block-size: 480svh;
+  }
+
+  .act[data-act="hangar"] .track {
+    block-size: 440svh;
+  }
+
+  .stage {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100svh;
+  }
+
+  .captions {
+    display: grid;
+    align-self: stretch;
+    align-content: end;
+    pointer-events: none;
+  }
+
+  .reducedCaptions {
+    display: none;
+  }
+
+  .mid,
+  .arrival,
+  .opening {
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      visibility var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+
+  .mid,
+  .arrival {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(var(--space-4));
+  }
+
+  .stage[data-phase="mid"] .mid,
+  .stage[data-phase="arrival"] .arrival {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  /* Atos II e III: a abertura (com o h2) some quando o filme avança. */
+  .stage[data-phase="mid"] .opening,
+  .stage[data-phase="arrival"] .opening {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(var(--space-4) * -1));
+  }
+
+  /* Ato I: o hero (e a telemetria) se dissolve com a rolagem, deixando o filme respirar. */
+  .act[data-act="approach"] .telemetry,
+  .act[data-act="approach"] .opening {
+    opacity: calc(1 - clamp(0, calc((var(--act-progress, 0) - 0.06) * 6), 1));
+    transition: visibility var(--duration-slow) var(--ease-out);
+  }
+
+  .act[data-act="approach"] .shade {
+    opacity: calc(1 - clamp(0, calc((var(--act-progress, 0) - 0.1) * 3), 0.45));
+  }
+
+  .meterFill {
+    transition: transform var(--duration-fast) linear;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .act[data-act="approach"] .track {
+    block-size: 420svh;
+  }
+
+  .act[data-act="villa"] .track {
+    block-size: 520svh;
+  }
+
+  .act[data-act="hangar"] .track {
+    block-size: 460svh;
+  }
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .reducedCaptions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
+  .body {
+    font-size: var(--text-lg);
+  }
+}
+
+/* desktop: sombra lateral para a leitura e telemetria à direita */
+@media (min-width: 1200px) {
+  .shade {
+    background-image:
+      linear-gradient(to right, color-mix(in oklch, var(--color-bg) 82%, transparent) 0%, color-mix(in oklch, var(--color-bg) 36%, transparent) 36%, transparent 58%),
+      linear-gradient(to left, color-mix(in oklch, var(--color-bg) 70%, transparent) 0%, transparent 26%),
+      linear-gradient(to top, var(--color-bg) 0%, transparent 30%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 64%, transparent) 0%, transparent 20%);
+  }
+
+  .frameLines {
+    inset-block-end: var(--space-20);
+  }
+
+  .telemetry {
+    position: absolute;
+    inset-block-end: var(--space-16);
+    inset-inline-end: var(--container-gutter);
+    z-index: var(--z-raised);
+    display: block;
+  }
+}

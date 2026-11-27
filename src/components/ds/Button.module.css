@@ -1,0 +1,102 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sm {
+  min-block-size: var(--space-8);
+  padding-inline: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.md {
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.lg {
+  min-block-size: var(--space-12);
+  padding-inline: var(--space-6);
+  font-size: var(--text-base);
+}
+
+.primary {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: color-mix(in oklch, var(--color-accent) 88%, var(--color-text));
+}
+
+.secondary {
+  border-color: var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--color-surface-raised);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--color-text);
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: var(--color-surface-raised);
+}
+
+.danger {
+  background-color: var(--color-danger);
+  color: var(--color-on-accent);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: color-mix(in oklch, var(--color-danger) 86%, var(--color-text));
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.spinner {
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+  border: var(--border-width) solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: var(--radius-pill);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .button {
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .spinner {
+    animation: spin var(--duration-slow) linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}

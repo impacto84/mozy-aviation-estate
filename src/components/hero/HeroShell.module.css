@@ -1,0 +1,172 @@
+/*
+ * Casca do hero. O texto e o CTA são HTML do servidor; a mídia (pôster e canvas)
+ * fica atrás, em camadas absolutas que nunca mexem no layout (CLS zero na troca).
+ *
+ * Ordem no DOM: pôster, conteúdo, palco (canvas) e botão de pausa. Pôster e palco
+ * usam a mesma camada (--z-base), então o palco, que vem depois, pinta por cima
+ * do pôster; o conteúdo fica acima dos dois (--z-raised).
+ */
+
+@property --hero-color-base {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --hero-color-soft {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --hero-color-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --hero-color-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+.hero {
+  --hero-color-base: var(--color-bg);
+  --hero-color-soft: color-mix(in oklch, var(--color-accent) 32%, var(--color-bg));
+  --hero-color-accent: var(--color-accent);
+  --hero-color-ink: var(--color-text);
+  --hero-copy-max: calc(var(--container-max) * 0.52);
+  /* Faixa de baixo reservada para a mídia no layout empilhado (phone e tablet). */
+  --hero-media-zone: calc(var(--space-24) * 3);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: start;
+  min-block-size: calc(100svh - var(--space-16));
+  overflow: clip;
+  background-color: var(--hero-color-base);
+  color: var(--hero-color-ink);
+}
+
+.content {
+  position: relative;
+  z-index: var(--z-raised);
+  inline-size: 100%;
+  max-inline-size: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+  padding-block: var(--space-12) var(--hero-media-zone);
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+  max-inline-size: var(--hero-copy-max);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+}
+
+.title {
+  max-inline-size: var(--measure-title);
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.lead {
+  max-inline-size: var(--measure);
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-block-start: var(--space-2);
+}
+
+.cta,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-pill);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.cta {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.cta:hover {
+  background-color: color-mix(in oklch, var(--color-accent) 88%, var(--color-text));
+  box-shadow: var(--shadow-lg);
+}
+
+.ctaSecondary {
+  border: var(--border-width) solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.ctaSecondary:hover {
+  background-color: var(--color-surface-raised);
+  border-color: color-mix(in oklch, var(--color-text) 25%, var(--color-border));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta,
+  .ctaSecondary {
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out),
+      translate var(--duration-fast) var(--ease-out);
+  }
+
+  .cta:hover,
+  .ctaSecondary:hover {
+    translate: 0 -1px;
+  }
+}
+
+/* desktop: >= 1200px. Texto à esquerda, luz à direita. */
+@media (min-width: 1200px) {
+  .hero {
+    align-items: center;
+  }
+
+  .content {
+    padding-block: var(--space-16);
+  }
+}
