@@ -80,6 +80,8 @@ Fatos, números e copys reais auditados (fonte única: `src/lib/site-data.ts` e 
 
 - **Distâncias ortodrômicas a partir de Orlando (MCO)**: calculadas (haversine, R = 6.371 km) sobre coordenadas públicas dos aeroportos JFK, LAX, GRU, LHR, GVA, DXB e HND. "Sem escala" = até 90% do alcance nominal; 90–100% = "no limite nominal"; acima = "fora do alcance nominal".
 
+- **Campos qualitativos de terrenos e corredores** (força, risco e teste crítico de cada terreno; tese e risco de cada corredor; riscos, reguladores, estrutura, receitas e cronograma): texto da apresentação V05, mantido literalmente em `src/lib/site-data.ts` (`lands`, `corridors`, `risks`, `regulators`, `entities`, `revenues`, `timeline`). São avaliações de diligência do sponsor, não aprovações.
+
 ## Provas ausentes
 - Nenhum depoimento, comprador, logotipo de parceiro ou selo: não existem e não entram.
 - Nenhuma aprovação concedida (FAA, FDOT, zoning, ambiental): tudo é "premissa inicial", "screening" ou "sujeito à aprovação".

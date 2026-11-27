@@ -76,4 +76,9 @@ com as legendas abaixo, trilha compacta, nenhum quadro baixado, e o fly-to vira 
 
 - Literais de cor/medida existem **apenas** em `tokens.css`; `src/styles/design-tokens.test.ts` falha se algum `var(--…)` não estiver declarado.
 - Propriedades escritas em tempo de execução (`--x`, `--y`, `--act-progress`, `--reveal-index`, `--marquee-duration`, `--glass-refraction-filter`) ficam numa lista explícita do teste, que confere a origem.
+- Display: a Cormorant Garamond é servida de `src/app/fonts/` (WOFF2 gerado por
+  `scripts/patch-display-accents.mjs`): os acentos dos minúsculos foram encurtados e assentados porque
+  no subconjunto original flutuavam longe da letra nos títulos de ~100 px. Faces 300/400/400 itálico.
+- Heróis no phone: o da home amplia a fotografia ancorada embaixo (o jato sobe para o céu, fora do
+  texto); os das páginas internas ocupam a metade de cima e o texto fica abaixo, sobre obsidiana.
 - Texto dentro dos SVG do console usa `font-size` em unidades do viewBox derivadas de `--text-base` e sobe no phone para continuar legível depois da redução.

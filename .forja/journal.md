@@ -75,3 +75,34 @@ Correções aplicadas (P1 e P2 do júri):
 - Capturas full-page do Chromium acima de ~8.192 px de altura repetem o topo da página (limite de
   textura da captura, não do layout). A home tem ~15k px; a repetição nas capturas não existe no navegador.
 - Sem verificação em Safari/Firefox reais nem disparo ao vivo de GTM/pixels (sem IDs de produção).
+
+## 2026-11-27 — V3 Cinematográfica (FORJA 1.1 · `--profile flagship`)
+Rejeição da V2 (atos em abas, frames decimados via `/_next/image q=60`, hero estático com shader
+quase invisível, Atlas sem fly-to, diagrama de aviação fora de escala, estética B2B bege/pílulas,
+aviso de cookies na dobra) atacada ponto a ponto:
+- **Atos**: `CinematicAct` + `useFrameScrub` + `frame-loader` com WebP original direto; approach 121
+  (passo 1/2) na própria dobra, villa 722 (passo 2/3 = 361 quadros), hangar 361 (passo 1/2); trilhas
+  420/520/460 svh (phone 400/480/440); janela deslizante de `ImageBitmap`, canvas nunca limpo,
+  DPR ≤ 2, decodificação na largura que o `cover` exige (no phone a altura manda).
+- **Filmes**: `night.mp4` e `closer.mp4` em bandas próprias com pôster, pausa fora da tela e controle.
+- **Aviação**: especificações públicas das 6 aeronaves (brief), silhueta métrica sobre 45 m, pista
+  inteira (decolagem × 3.000 m) e mapa azimutal equidistante a partir de MCO com 7 polos.
+- **Atlas**: fly-to GPU `scale(4.4)` em `ox/oy`, 1000 ms `cubic-bezier(0.22, 1, 0.36, 1)`, na home e em /terrenos.
+- **Direção**: tokens obsidiana/carvão/grafite, fios de latão, CTA de canto reto; sem superfícies claras.
+- **Consentimento**: `hideBannerWithoutTracking`; sem GTM o `generate_lead` vai para a `dataLayer`
+  local na hora (destino `first-party`), com GTM volta a esperar o consentimento.
+- **SecOps (lesson #24)**: `readBody` por stream com teto, origem canônica, `x-real-ip`/último salto,
+  webhook `redirect: "error"`, evicção do limitador.
+- **Fontes**: os acentos da Cormorant (subconjunto `@fontsource`) flutuavam nos títulos; 
+  `scripts/patch-display-accents.mjs` gera WOFF2 com os acentos assentados (OFL 1.1, 3 faces, 88 kB).
+
+### Gate e júri
+- Gate flagship: rodadas 1–14. Falhas encontradas e corrigidas: CODE-NO-WINDOW-RENDER (anotação de
+  retorno em seta), PERF-CLS 0,087 (troca tardia da Cormorant → `optional`), TRACK-FORM-EVENT (fila do
+  tracker sem banner), LEGAL-ANCHORS (índice da obra), PERF-LCP /terrenos (WOFF1 pesado; fonte do hero).
+- Júri cego (novo a cada rodada, sem veredito anterior): 7,4 → 7,6 → 7,9 → 8,1 → 7,9 → 8,1 → 8,1 →
+  8,1 → 8,4 (cabeçalho "FIX" contraditório com o json "SHIP"; rodada repetida) → **SHIP 8,4 (rodada 10)**,
+  zero P0/P1. Vereditos em `.forja/verdicts/jury-v3-*.json`.
+- P2 restantes da rodada 10 (não bloqueiam): HUD do Ato III acompanhando a seção seguinte no desktop,
+  véu na entrada do Ato III no phone, jato sob o título da tese no tablet, ritmo de /tese-capital,
+  etiquetas do master plan no tablet.
