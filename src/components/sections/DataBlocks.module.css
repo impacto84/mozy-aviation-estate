@@ -54,6 +54,8 @@
 
 .weight {
   min-inline-size: 0;
+  color: var(--color-champagne);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   white-space: nowrap;
   font-weight: var(--weight-light);
@@ -251,7 +253,8 @@
 .railNumber {
   grid-row: span 2;
   font-variant-numeric: lining-nums tabular-nums;
-  color: var(--color-accent);
+  color: var(--color-champagne);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-light);
   line-height: var(--leading-tight);

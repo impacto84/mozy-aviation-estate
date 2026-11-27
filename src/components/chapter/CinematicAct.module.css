@@ -67,7 +67,16 @@
   pointer-events: none;
 }
 
-@media (min-width: 768px) {
+/* tablet (retrato): o bloco de texto ocupa metade da tela; o degradê sobe junto. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 90%, transparent) 42%, color-mix(in oklch, var(--color-bg) 45%, transparent) 64%, transparent 80%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 72%, transparent) 0%, transparent 22%);
+  }
+}
+
+@media (min-width: 1200px) {
   .shade {
     background-image:
       linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 78%, transparent) 26%, transparent 62%),
@@ -217,9 +226,20 @@
   display: none;
 }
 
+/* Ato I: o jato ocupa o canto superior; sem cantoneiras ali. */
+.act[data-act="approach"] .frameLines {
+  display: none;
+}
+
 /* Ato III: o hangar é claro; um véu de obsidiana mantém a atmosfera noturna. */
 .act[data-act="hangar"] .shade {
   background-color: color-mix(in oklch, var(--color-bg) 24%, transparent);
+}
+
+@media (max-width: 767px) {
+  .act[data-act="hangar"] .shade {
+    background-color: color-mix(in oklch, var(--color-bg) 42%, transparent);
+  }
 }
 
 /* phone: o rótulo do ato e o contador ficam no topo do palco, visíveis desde o primeiro quadro. */

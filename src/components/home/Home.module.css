@@ -117,11 +117,11 @@
   }
 }
 
-/* desktop: +60% ancorado embaixo; o jato sobe para a faixa livre acima do sobretítulo. */
+/* desktop: +55% ancorado embaixo; o jato sobe para a faixa livre entre o cabeçalho e o sobretítulo. */
 @media (min-width: 1200px) {
   .heroPoster {
     object-position: 34% 50%;
-    transform: scale(1.6);
+    transform: scale(1.55);
     transform-origin: 34% 100%;
   }
 }

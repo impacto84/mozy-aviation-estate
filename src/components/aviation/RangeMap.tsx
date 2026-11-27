@@ -104,7 +104,7 @@ export function RangeMap({ spec }: RangeMapProps) {
       })}
 
       <circle className={styles.origin} cx="0" cy="0" r="9" />
-      <text className={styles.hubLabel} x="16" y="30">
+      <text className={styles.hubLabel} x="-16" y="34" textAnchor="end">
         Orlando · MCO
       </text>
     </svg>

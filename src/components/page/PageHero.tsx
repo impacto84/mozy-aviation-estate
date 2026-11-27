@@ -9,6 +9,8 @@ interface PageHeroImage {
   readonly height: number;
   /** Ponto focal no recorte (`object-position`). */
   readonly position?: "center" | "right" | "left";
+  /** Ponto focal no phone (retrato), quando difere do desktop. */
+  readonly phonePosition?: "center" | "right" | "left";
 }
 
 interface PageHeroProps {
@@ -31,11 +33,12 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
       <Image
         className={styles.image}
         data-position={image.position ?? "center"}
+        data-phone-position={image.phonePosition ?? image.position ?? "center"}
         src={image.src}
         alt=""
         width={image.width}
         height={image.height}
-        sizes="(max-width: 767px) 200vw, 100vw"
+        sizes="(max-width: 767px) 270vw, 100vw"
         quality={88}
         priority
       />
@@ -51,7 +54,7 @@ export function PageHero({ title, lead, kicker, image, primaryCta, secondaryCta,
             {primaryCta.label}
           </LinkButton>
           {secondaryCta === undefined ? null : (
-            <LinkButton href={secondaryCta.href} variant="ghost" ctaRole="secondary">
+            <LinkButton href={secondaryCta.href} variant="text" ctaRole="secondary" hasArrow>
               {secondaryCta.label}
             </LinkButton>
           )}

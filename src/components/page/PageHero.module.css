@@ -142,3 +142,18 @@
       linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 60%, transparent) 0%, transparent 22%);
   }
 }
+
+/* phone (retrato): o recorte segue o ponto focal próprio do phone. */
+@media (max-width: 767px) {
+  .image[data-phone-position="left"] {
+    object-position: 22% 50%;
+  }
+
+  .image[data-phone-position="center"] {
+    object-position: 50% 50%;
+  }
+
+  .image[data-phone-position="right"] {
+    object-position: 75% 50%;
+  }
+}

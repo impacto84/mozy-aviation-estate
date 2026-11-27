@@ -41,7 +41,7 @@ export default function AviationPage() {
         kicker="Aviação · pista, taxiway e hangares"
         title="A pista como extensão da casa."
         lead={AVIATION.title}
-        image={{ src: "/media/taxiway.jpg", width: 1792, height: 1008, position: "right" }}
+        image={{ src: "/media/taxiway.jpg", width: 1792, height: 1008, position: "right", phonePosition: "left" }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
         secondaryCta={{ href: "#simulador", label: "Abrir o console de escala" }}
         caption={CONCEPT_CAPTION}
