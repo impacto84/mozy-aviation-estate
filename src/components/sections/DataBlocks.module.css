@@ -249,6 +249,7 @@
 
 .railNumber {
   grid-row: span 2;
+  font-variant-numeric: lining-nums tabular-nums;
   color: var(--color-accent);
   font-size: var(--text-2xl);
   font-weight: var(--weight-light);
@@ -262,6 +263,13 @@
 .railBody {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-8);
+  }
 }
 
 @media (min-width: 768px) {

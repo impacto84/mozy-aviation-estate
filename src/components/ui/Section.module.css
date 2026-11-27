@@ -27,10 +27,16 @@
 }
 
 .index {
+  margin-block-end: var(--space-4);
   color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-hud);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.title + .lede {
+  margin-block-start: var(--space-5);
 }
 
 .title {

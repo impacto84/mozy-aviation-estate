@@ -16,7 +16,7 @@ import { days90, lands } from "@/lib/site-data";
 import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Terrenos: Atlas Satelital da Central Florida e scorecard",
+  title: "Terrenos: Atlas por satélite da Central Florida e scorecard",
   description:
     "Honey Bee Ranch, Peace River Legacy East e Osceola Ranch em satélite real, corredores regionais, seis frentes de aprovação e scorecard ponderado.",
   path: "/terrenos",
@@ -46,7 +46,7 @@ export default function LandsPage() {
         lead={LANDS_HERO}
         image={{ src: "/media/estate-aerial.jpg", width: 1800, height: 1350 }}
         primaryCta={{ href: ACCESS_PATH, label: CTA.primary }}
-        secondaryCta={{ href: "#atlas", label: "Abrir o Atlas Satelital" }}
+        secondaryCta={{ href: "#atlas", label: "Abrir o Atlas por satélite" }}
         facts={[
           { label: "faixa-alvo de área", value: "1.200–1.800 acres" },
           { label: "terrenos candidatos", value: String(lands.length) },
@@ -59,7 +59,7 @@ export default function LandsPage() {
         <div className={`${section.inner} ${section.wide}`}>
           <SectionHeader
             id="atlas-titulo"
-            index="Atlas Satelital"
+            index="Atlas por satélite"
             title={LANDS.title}
             lede="Alterne entre o satélite regional, o satélite aproximado e a foto do anúncio de cada terreno. Status de anúncios verificado em agosto de 2026."
             isSplit

@@ -16,7 +16,7 @@ interface SatelliteAtlasProps {
 }
 
 /**
- * Atlas Satelital com câmera contínua (fly-to). A carta regional real recebe
+ * Atlas por satélite com câmera contínua (fly-to). A carta regional real recebe
  * `transform-origin` no marcador do terreno e mergulha em `scale(4.4)` em 1000 ms
  * (só `transform` e `opacity`, na GPU); no pouso, a imagem de detalhe (satélite
  * amplo, próximo ou foto do anúncio) entra em fusão. "Voltar à carta regional"

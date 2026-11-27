@@ -137,10 +137,16 @@ textarea.control {
   font-size: var(--text-sm);
 }
 
+/* Seta do select desenhada no sistema: chevron de fio de latão, sem a seta nativa. */
 select.control {
-  appearance: auto;
-}
-
-.submit:hover {
-  background-color: var(--color-accent-strong);
+  appearance: none;
+  padding-inline-end: var(--space-10);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-accent) 50%),
+    linear-gradient(135deg, var(--color-accent) 50%, transparent 50%);
+  background-position:
+    calc(100% - var(--space-5)) 50%,
+    calc(100% - var(--space-4)) 50%;
+  background-repeat: no-repeat;
+  background-size: var(--space-1) var(--space-1);
 }

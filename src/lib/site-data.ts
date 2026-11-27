@@ -265,9 +265,9 @@ export const stack = [
 export const risks = [
   { level: "Alto", title: "FAA / espaço aéreo", body: "Favorável antes do fechamento" },
   { level: "Alto", title: "Wetlands / wildlife", body: "Evitar; mitigar apenas o residual" },
-  { level: "Alto", title: "Zoning / oposição", body: "Pre-app + carta + estratégia pública" },
+  { level: "Alto", title: "Zoning / oposição", body: "Pré-aprovação + carta + estratégia pública" },
   { level: "Médio", title: "Custos / inflação", body: "Design-to-budget + contingência" },
-  { level: "Médio", title: "Absorção de luxo", body: "Pre-sales + fases + produto raro" },
+  { level: "Médio", title: "Absorção de luxo", body: "Pré-vendas + fases + produto raro" },
   { level: "Médio", title: "Operação / seguros", body: "OpCo especializado + reservas" },
 ] as const;
 

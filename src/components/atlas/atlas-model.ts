@@ -1,5 +1,5 @@
 /**
- * Modelo do Atlas Satelital. Só dados de `site-data.ts` (lands): imagens reais
+ * Modelo do Atlas por satélite. Só dados de `site-data.ts` (lands): imagens reais
  * (`public/media/sat/*`, `listing-*.jpg`) e as coordenadas dos marcadores (ox/oy)
  * na carta regional, que também são a origem do fly-to (`transform-origin`).
  */
