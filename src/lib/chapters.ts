@@ -104,9 +104,14 @@ export function loadOrder(length: number, stride: number = KEYFRAME_STRIDE): rea
   return [...keys, ...rest];
 }
 
-/** Largura do bitmap decodificado: o buffer do canvas, nunca acima do arquivo original. */
-export function decodeWidthFor(canvasBufferWidth: number, sourceWidth: number): number {
-  return Math.max(1, Math.min(Math.round(canvasBufferWidth), sourceWidth));
+/**
+ * Largura do bitmap decodificado para desenhar em `cover`: a largura que o quadro ocupa
+ * no canvas (no phone, retrato, é a altura que manda: 844 px de altura pedem ~1.500 px
+ * de largura de um quadro 16:9). Nunca acima do arquivo original.
+ */
+export function decodeWidthFor(canvasWidth: number, canvasHeight: number, sourceWidth: number, sourceHeight: number): number {
+  const coverWidth = Math.max(canvasWidth, (canvasHeight * sourceWidth) / Math.max(sourceHeight, 1));
+  return Math.max(1, Math.min(Math.ceil(coverWidth), sourceWidth));
 }
 
 /** Índice (0-based) do quadro para um progresso de 0 a 1. */

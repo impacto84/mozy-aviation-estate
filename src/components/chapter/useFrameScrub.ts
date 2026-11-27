@@ -183,7 +183,7 @@ export function useFrameScrub(options: FrameScrubOptions): ScrubMode {
         createFrameLoader({
           urls,
           concurrency: LOAD_CONCURRENCY,
-          targetWidth: () => decodeWidthFor(elements.canvas.width, chapter.width),
+          targetWidth: () => decodeWidthFor(elements.canvas.width, elements.canvas.height, chapter.width, chapter.height),
           window: DECODE_WINDOW,
           onFrame: () => painter.draw(),
         }),

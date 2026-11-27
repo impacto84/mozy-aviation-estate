@@ -97,10 +97,14 @@ describe("scrub", () => {
     expect(captionPhase(0.68)).toBe("arrival");
   });
 
-  it("decodeWidthFor nunca amplia além do arquivo original", () => {
-    expect(decodeWidthFor(2880, 1920)).toBe(1920);
-    expect(decodeWidthFor(780.4, 1600)).toBe(780);
-    expect(decodeWidthFor(0, 1600)).toBe(1);
+  it("decodeWidthFor cobre o canvas em cover e nunca amplia além do arquivo original", () => {
+    expect(decodeWidthFor(2880, 1800, 1920, 1082)).toBe(1920);
+    // desktop 1440x900: a largura manda
+    expect(decodeWidthFor(1440, 900, 1600, 900)).toBe(1600);
+    expect(decodeWidthFor(1280, 600, 1600, 900)).toBe(1280);
+    // phone 390x844 em retrato: a altura manda (844 * 16/9 = 1.501)
+    expect(decodeWidthFor(390, 844, 1600, 900)).toBe(1501);
+    expect(decodeWidthFor(0, 0, 1600, 900)).toBe(1);
   });
 
   it("coverRect cobre o canvas mantendo a proporção", () => {
