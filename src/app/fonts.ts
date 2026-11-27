@@ -24,10 +24,9 @@ import localFont from "next/font/local";
 
 export const displayFont = localFont({
   src: [
-    { path: "./fonts/cormorant-garamond-mozy-300.woff", weight: "300", style: "normal" },
-    { path: "./fonts/cormorant-garamond-mozy-400.woff", weight: "400", style: "normal" },
-    { path: "./fonts/cormorant-garamond-mozy-400-italic.woff", weight: "400", style: "italic" },
-    { path: "./fonts/cormorant-garamond-mozy-500.woff", weight: "500", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-300.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/cormorant-garamond-mozy-400-italic.woff2", weight: "400", style: "italic" },
   ],
   variable: "--nf-display",
   display: "optional",

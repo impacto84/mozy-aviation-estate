@@ -6,7 +6,8 @@
  * são longos e chegam à altura da caixa alta (yMax 731 sobre x-height ~395): em display
  * (~100 px) o acento "flutua" longe da letra. Este script mexe SÓ nos contornos acima
  * da x-height dos minúsculos acentuados: encurta o acento (escala vertical a partir da
- * base) e o assenta a um vão fixo da letra; grava WOFF em `src/app/fonts/`. Nada mais
+ * base) e o assenta a um vão fixo da letra; grava WOFF2 (brotli, transformação nula) em
+ * `src/app/fonts/`. Nada mais
  * muda (larguras, métricas verticais, kerning, GSUB/GPOS).
  *
  * Licença: SIL Open Font License 1.1, sem Reserved Font Name declarado; a versão
@@ -15,15 +16,15 @@
  * Uso: node scripts/patch-display-accents.mjs
  */
 import { readFileSync, writeFileSync, copyFileSync } from "node:fs";
-import { deflateSync, inflateSync } from "node:zlib";
+import { brotliCompressSync, constants as zlibConstants, inflateSync } from "node:zlib";
 
 const SOURCE = "node_modules/@fontsource/cormorant-garamond";
 const OUT = "src/app/fonts";
+/** Faces usadas pelo site (a 500 não é: os títulos são 300/400). */
 const FACES = [
-  ["latin-300-normal", "cormorant-garamond-mozy-300.woff"],
-  ["latin-400-normal", "cormorant-garamond-mozy-400.woff"],
-  ["latin-400-italic", "cormorant-garamond-mozy-400-italic.woff"],
-  ["latin-500-normal", "cormorant-garamond-mozy-500.woff"],
+  ["latin-300-normal", "cormorant-garamond-mozy-300.woff2"],
+  ["latin-400-normal", "cormorant-garamond-mozy-400.woff2"],
+  ["latin-400-italic", "cormorant-garamond-mozy-400-italic.woff2"],
 ];
 /** Minúsculos acentuados de Latin-1 (à … ÿ), menos æ ð ÷ ø þ. */
 const ACCENTED = [..."àáâãäåçèéêëìíîïñòóôõöùúûüýÿ"].map((char) => char.codePointAt(0));
@@ -49,43 +50,50 @@ function readWoff(buffer) {
   return { flavor: buffer.readUInt32BE(4), tables };
 }
 
-function checksum(data) {
-  const padded = Buffer.concat([data, Buffer.alloc((4 - (data.length % 4)) % 4)]);
-  let sum = 0;
-  for (let at = 0; at < padded.length; at += 4) sum = (sum + padded.readUInt32BE(at)) >>> 0;
-  return sum;
+/** Índices dos tags conhecidos da WOFF2 (tabela 2 da especificação W3C). */
+const KNOWN_TAGS = [
+  "cmap", "head", "hhea", "hmtx", "maxp", "name", "OS/2", "post", "cvt ", "fpgm", "glyf", "loca", "prep", "CFF ", "VORG", "EBDT",
+  "EBLC", "gasp", "hdmx", "kern", "LTSH", "PCLT", "VDMX", "vhea", "vmtx", "BASE", "GDEF", "GPOS", "GSUB", "EBSC", "JSTF", "MATH",
+  "CBDT", "CBLC", "COLR", "CPAL", "SVG ", "sbix", "acnt", "avar", "bdat", "bloc", "bsln", "cvar", "fdsc", "feat", "fmtx", "fvar",
+  "gvar", "hsty", "just", "lcar", "mort", "morx", "opbd", "prop", "trak", "Zapf", "Silf", "Glat", "Gloc", "Feat", "Sill",
+];
+const ARBITRARY_TAG = 63;
+/** glyf/loca: versão 3 = transformação nula; nas demais tabelas a nula é a 0. */
+const NULL_TRANSFORM_GLYF = 3 << 6;
+
+function uintBase128(value) {
+  const bytes = [value & 0x7f];
+  for (let rest = value >>> 7; rest > 0; rest >>>= 7) bytes.unshift((rest & 0x7f) | 0x80);
+  return Buffer.from(bytes);
 }
 
-function writeWoff(flavor, tables) {
-  const tags = [...tables.keys()].sort();
-  const entries = tags.map((tag) => {
-    const data = tables.get(tag);
-    const packed = deflateSync(data, { level: 9 });
-    return { tag, data, stored: packed.length < data.length ? packed : data, sum: checksum(data) };
+function writeWoff2(flavor, tables) {
+  const sorted = [...tables.keys()].sort().filter((tag) => tag !== "loca");
+  const order = sorted.flatMap((tag) => (tag === "glyf" ? ["glyf", "loca"] : [tag]));
+  const directory = order.map((tag) => {
+    const known = KNOWN_TAGS.indexOf(tag);
+    const transform = tag === "glyf" || tag === "loca" ? NULL_TRANSFORM_GLYF : 0;
+    const flags = Buffer.from([(known === -1 ? ARBITRARY_TAG : known) | transform]);
+    const parts = [flags];
+    if (known === -1) parts.push(Buffer.from(tag, "ascii"));
+    parts.push(uintBase128(tables.get(tag).length));
+    return Buffer.concat(parts);
   });
-  let offset = 44 + entries.length * 20;
-  const sfntSize = 12 + entries.length * 16 + entries.reduce((total, entry) => total + Math.ceil(entry.data.length / 4) * 4, 0);
-  const directory = Buffer.alloc(entries.length * 20);
-  const bodies = [];
-  entries.forEach((entry, index) => {
-    const at = index * 20;
-    directory.write(entry.tag, at, "ascii");
-    directory.writeUInt32BE(offset, at + 4);
-    directory.writeUInt32BE(entry.stored.length, at + 8);
-    directory.writeUInt32BE(entry.data.length, at + 12);
-    directory.writeUInt32BE(entry.sum, at + 16);
-    const pad = (4 - (entry.stored.length % 4)) % 4;
-    bodies.push(entry.stored, Buffer.alloc(pad));
-    offset += entry.stored.length + pad;
-  });
-  const header = Buffer.alloc(44);
-  header.write("wOFF", 0, "ascii");
+  const stream = Buffer.concat(order.map((tag) => tables.get(tag)));
+  const compressed = brotliCompressSync(stream, { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 11, [zlibConstants.BROTLI_PARAM_MODE]: zlibConstants.BROTLI_MODE_FONT } });
+  const sfntSize = 12 + order.length * 16 + order.reduce((total, tag) => total + Math.ceil(tables.get(tag).length / 4) * 4, 0);
+  const directoryBytes = Buffer.concat(directory);
+  const unpadded = 48 + directoryBytes.length + compressed.length;
+  const padding = Buffer.alloc((4 - (unpadded % 4)) % 4);
+  const header = Buffer.alloc(48);
+  header.write("wOF2", 0, "ascii");
   header.writeUInt32BE(flavor, 4);
-  header.writeUInt32BE(offset, 8);
-  header.writeUInt16BE(entries.length, 12);
+  header.writeUInt32BE(unpadded + padding.length, 8);
+  header.writeUInt16BE(order.length, 12);
   header.writeUInt32BE(sfntSize, 16);
-  header.writeUInt16BE(1, 20);
-  return Buffer.concat([header, directory, ...bodies]);
+  header.writeUInt32BE(compressed.length, 20);
+  header.writeUInt16BE(1, 24);
+  return Buffer.concat([header, directoryBytes, compressed, padding]);
 }
 
 function glyphIndexMap(cmap) {
@@ -237,7 +245,7 @@ function patch(file) {
   tables.set("glyf", Buffer.concat(pieces));
   tables.set("loca", newLoca);
   tables.set("head", newHead);
-  return { woff: writeWoff(flavor, tables), shifts };
+  return { woff: writeWoff2(flavor, tables), shifts };
 }
 
 for (const [face, output] of FACES) {
