@@ -24,7 +24,7 @@ export function AviationSection() {
         </div>
         <FleetSimulator variant="teaser" />
         <div className={styles.rowActions}>
-          <LinkButton href="/aviacao" variant="ghost">
+          <LinkButton href="/aviacao" variant="text" hasArrow>
             Abrir o console completo de pista & frota
           </LinkButton>
         </div>

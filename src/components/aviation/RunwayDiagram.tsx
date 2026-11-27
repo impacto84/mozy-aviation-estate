@@ -87,12 +87,13 @@ export function RunwayEnvelope({ spec }: ScaleProps) {
       <text x="24" y={top - 16} className={styles.dimLabel}>
         PISTA · {RUNWAY_PREMISE.widthM} M DE LARGURA · PREMISSA INICIAL
       </text>
-      <g className={styles.scaleBar} transform={`translate(${VIEW_W - 24 - SCALE_BAR_M * PX_PER_M} ${VIEW_H - 24})`}>
+      {/* Régua de escala abaixo da borda da pista, com o rótulo à esquerda (nunca cruza a linha). */}
+      <g className={styles.scaleBar} transform={`translate(${VIEW_W - 24 - SCALE_BAR_M * PX_PER_M} ${VIEW_H - 20})`}>
         <line x1="0" y1="0" x2={SCALE_BAR_M * PX_PER_M} y2="0" />
-        <line x1="0" y1="-8" x2="0" y2="8" />
-        <line x1={SCALE_BAR_M * PX_PER_M} y1="-8" x2={SCALE_BAR_M * PX_PER_M} y2="8" />
-        <text x="0" y="-16" className={styles.dimLabel}>
-          {SCALE_BAR_M} M
+        <line x1="0" y1="-6" x2="0" y2="6" />
+        <line x1={SCALE_BAR_M * PX_PER_M} y1="-6" x2={SCALE_BAR_M * PX_PER_M} y2="6" />
+        <text x="-14" y="8" className={styles.dimLabelEnd}>
+          ESCALA · {SCALE_BAR_M} M
         </text>
       </g>
     </svg>

@@ -9,23 +9,30 @@
   object-fit: cover;
 }
 
+/* Controle discreto preso ao canto superior da mídia que ele controla. */
 .toggle {
   position: absolute;
-  /* Alinhado à grade de conteúdo (mesma margem direita das colunas), não à borda da tela. */
-  inset-block-end: var(--space-6);
+  inset-block-start: calc(var(--header-height) + var(--space-4));
   inset-inline-end: max(var(--container-gutter), calc((100% - var(--container-wide)) / 2 + var(--container-gutter)));
   z-index: var(--z-raised);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   min-block-size: var(--target-min);
-  padding-inline: var(--space-4);
-  border: var(--border-width) solid var(--color-hairline-strong);
-  border-radius: var(--radius-cta);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  padding-inline: var(--space-2);
+  border: 0;
+  background-color: color-mix(in oklch, var(--color-bg) 55%, transparent);
+  color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
-  font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-hud);
   text-transform: uppercase;
+}
+
+.toggleIcon {
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
 }
 
 .toggle:hover {

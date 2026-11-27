@@ -83,6 +83,9 @@ export function AmbientVideo({ src, poster, label }: AmbientVideoProps) {
     <div className={styles.frame} data-forja-autoplay="">
       <video ref={videoRef} className={styles.video} src={src} poster={poster} muted loop playsInline preload="none" aria-label={label} />
       <button type="button" className={styles.toggle} data-forja-pause="" aria-pressed={!isPlaying} onClick={toggle}>
+        <span className={styles.toggleIcon} aria-hidden="true">
+          {isPlaying ? "❚❚" : "▶"}
+        </span>
         {isPlaying ? "Pausar vídeo" : "Reproduzir vídeo"}
       </button>
     </div>

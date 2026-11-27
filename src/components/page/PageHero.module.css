@@ -157,3 +157,24 @@
     object-position: 75% 50%;
   }
 }
+
+/*
+ * phone: a fotografia ocupa a metade de cima, com o assunto inteiro visível, e se
+ * dissolve no fundo; o texto fica abaixo, sobre obsidiana (sobretítulo sempre legível).
+ */
+@media (max-width: 767px) {
+  .image {
+    inset: 0 0 auto;
+    block-size: 46svh;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent);
+    mask-image: linear-gradient(to bottom, black 55%, transparent);
+  }
+
+  .content {
+    padding-block-start: 40svh;
+  }
+
+  .scrim {
+    background-image: linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 50%, transparent) 0%, transparent 16%);
+  }
+}

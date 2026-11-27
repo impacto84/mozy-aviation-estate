@@ -79,6 +79,7 @@ export function CinematicAct({ chapterId, numeral, label, headingId, poster, ope
             <span className={styles.meter}>
               <span className={styles.meterFill} />
             </span>
+            <span className={styles.counterLegend}>Quadro do filme</span>
             <span className={`${styles.counter} tnum`} data-scrub-counter="">
               {frameCounter(chapter.stillFrame, chapter.count)}
             </span>

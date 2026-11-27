@@ -104,9 +104,9 @@
  * sobretítulo, em vez de ficar atrás do título.
  */
 .heroPoster {
-  object-position: 22% 50%;
+  object-position: 15% 50%;
   transform: scale(1.25);
-  transform-origin: 15% 100%;
+  transform-origin: 0% 100%;
 }
 
 /* tablet (retrato): o jato fica fora do quadro, à esquerda, longe do sobretítulo. */
@@ -121,8 +121,8 @@
 @media (min-width: 1200px) {
   .heroPoster {
     object-position: 34% 50%;
-    transform: scale(1.55);
-    transform-origin: 34% 100%;
+    transform: scale(1.6);
+    transform-origin: 20% 100%;
   }
 }
 

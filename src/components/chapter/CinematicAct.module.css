@@ -188,7 +188,7 @@
   grid-row: 2;
   grid-column: 1;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-4);
   inline-size: 100%;
@@ -212,6 +212,10 @@
   block-size: var(--border-width);
   overflow: clip;
   background-color: var(--color-hairline);
+}
+
+.counterLegend {
+  color: var(--color-text-muted);
 }
 
 .meterFill {
@@ -244,11 +248,28 @@
 
 /* phone: o rótulo do ato e o contador ficam no topo do palco, visíveis desde o primeiro quadro. */
 @media (max-width: 767px) {
+  /* grid-area auto: o bloco de contenção é o palco inteiro, não a linha 2 do grid. */
   .readout {
     position: absolute;
+    grid-area: auto;
     inset-block-start: calc(var(--header-height) + var(--space-3));
     inset-inline: 0;
-    padding-block: 0;
+    padding-block: var(--space-2);
+    background-image: linear-gradient(to bottom, color-mix(in oklch, var(--color-bg) 80%, transparent), transparent);
+  }
+
+  .readout {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .counterLegend {
+    display: none;
+  }
+
+  .act[data-act="hangar"] .shade {
+    background-image:
+      linear-gradient(to top, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 88%, transparent) 40%, color-mix(in oklch, var(--color-bg) 40%, transparent) 62%, transparent 76%),
+      linear-gradient(to bottom, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 70%, transparent) 24%, transparent 48%);
   }
 }
 
