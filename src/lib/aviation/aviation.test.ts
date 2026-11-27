@@ -82,6 +82,11 @@ describe("alcance sem escala", () => {
     expect(reachStatus(1.01)).toBe("out");
   });
 
+  it("lista os polos do mais perto ao mais longe", () => {
+    const distances = hubReach(findAircraft("Falcon 8X")).map((entry) => entry.distanceKm);
+    expect(distances).toEqual([...distances].sort((a, b) => a - b));
+  });
+
   it("Global 7500 alcança Tóquio sem escala; Falcon 2000 não alcança Dubai", () => {
     const tokyo = hubReach(findAircraft("Global 7000 / 7500")).find((entry) => entry.hub.id === "tokyo");
     const dubai = hubReach(findAircraft("Falcon 2000")).find((entry) => entry.hub.id === "dubai");

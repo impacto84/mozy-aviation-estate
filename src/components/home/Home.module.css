@@ -98,21 +98,31 @@
 
 /* Ato I: hero ------------------------------------------------------------------ */
 
-/* phone: recorte no jato e na pista (o arquivo é paisagem e cobre a tela em altura). */
+/*
+ * phone: recorte no jato e na pista (o arquivo é paisagem e cobre a tela em altura). A
+ * imagem cresce 25% ancorada embaixo, à esquerda: o jato sobe para o céu, acima do
+ * sobretítulo, em vez de ficar atrás do título.
+ */
 .heroPoster {
   object-position: 22% 50%;
+  transform: scale(1.25);
+  transform-origin: 15% 100%;
 }
 
 /* tablet (retrato): o jato fica fora do quadro, à esquerda, longe do sobretítulo. */
 @media (min-width: 768px) {
   .heroPoster {
     object-position: 62% 50%;
+    transform: none;
   }
 }
 
+/* desktop: +60% ancorado embaixo; o jato sobe para a faixa livre acima do sobretítulo. */
 @media (min-width: 1200px) {
   .heroPoster {
     object-position: 34% 50%;
+    transform: scale(1.6);
+    transform-origin: 34% 100%;
   }
 }
 

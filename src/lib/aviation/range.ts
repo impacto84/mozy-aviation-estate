@@ -31,12 +31,14 @@ export function reachStatus(share: number): ReachStatus {
 }
 
 export function hubReach(spec: AircraftSpec, hubs: readonly Hub[] = HUBS): readonly HubReach[] {
-  return hubs.map((hub) => {
-    const distanceKm = greatCircleKm(ORIGIN, hub);
-    const distanceNm = distanceKm / NM_TO_KM;
-    const share = distanceNm / spec.rangeNm;
-    return { hub, distanceKm, distanceNm, share, status: reachStatus(share) };
-  });
+  return hubs
+    .map((hub) => {
+      const distanceKm = greatCircleKm(ORIGIN, hub);
+      const distanceNm = distanceKm / NM_TO_KM;
+      const share = distanceNm / spec.rangeNm;
+      return { hub, distanceKm, distanceNm, share, status: reachStatus(share) };
+    })
+    .sort((a, b) => a.distanceKm - b.distanceKm);
 }
 
 export const REACH_LABEL: Readonly<Record<ReachStatus, string>> = {

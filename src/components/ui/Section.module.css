@@ -2,7 +2,7 @@
 
 .section {
   position: relative;
-  padding-block: var(--space-section);
+  padding-block: var(--space-section-tight);
 }
 
 .tight {

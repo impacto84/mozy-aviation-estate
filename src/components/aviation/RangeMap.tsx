@@ -17,10 +17,10 @@ const RING_LABEL_COS = Math.SQRT1_2;
 
 /** Deslocamento dos rótulos (unidades do SVG) para os polos vizinhos não colidirem. */
 const LABEL_OFFSET: Readonly<Record<string, { readonly dx: number; readonly dy: number; readonly anchor: "start" | "end" }>> = {
-  "new-york": { dx: 14, dy: -10, anchor: "start" },
+  "new-york": { dx: 16, dy: 34, anchor: "start" },
   "los-angeles": { dx: -14, dy: -10, anchor: "end" },
   "sao-paulo": { dx: 14, dy: 22, anchor: "start" },
-  london: { dx: -14, dy: -12, anchor: "end" },
+  london: { dx: -14, dy: -30, anchor: "end" },
   geneva: { dx: 14, dy: 24, anchor: "start" },
   dubai: { dx: -14, dy: 26, anchor: "end" },
   tokyo: { dx: 14, dy: -12, anchor: "start" },

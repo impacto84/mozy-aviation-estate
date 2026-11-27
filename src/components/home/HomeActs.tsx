@@ -39,7 +39,7 @@ export function ActApproach() {
           alt="Jato executivo na pista privada ao pôr do sol, com as residências e hangares ao lado"
           width={1920}
           height={1088}
-          sizes="(max-width: 767px) 300vw, (max-width: 1199px) 180vw, 100vw"
+          sizes="(max-width: 767px) 300vw, (max-width: 1199px) 180vw, 160vw"
           quality={88}
           priority
         />
@@ -55,7 +55,7 @@ export function ActApproach() {
             <LinkButton href={ACCESS_PATH} ctaRole="primary">
               {CTA.primary}
             </LinkButton>
-            <LinkButton href="/aviacao" variant="ghost" ctaRole="secondary">
+            <LinkButton href="/aviacao" variant="text" ctaRole="secondary" hasArrow>
               {CTA.aviation}
             </LinkButton>
           </div>

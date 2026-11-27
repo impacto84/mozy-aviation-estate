@@ -87,7 +87,7 @@ export default function AviationPage() {
 
       <section className={section.section} aria-labelledby="masterplan-titulo" data-surface="void">
         <div className={`${section.inner} ${section.wide}`}>
-          <SectionHeader id="masterplan-titulo" title={AVIATION.masterplanTitle} isSplit lede="Pista, taxiway, residências, Aviation Club, terminal e preservação organizados numa só implantação conceitual." />
+          <SectionHeader id="masterplan-titulo" title={AVIATION.masterplanTitle} lede="Pista, taxiway, residências, Aviation Club, terminal e preservação organizados numa só implantação conceitual." />
           <div className={`${sections.split}`}>
             <figure className={`${sections.figure} ${sections.masterplan}`}>
               <Image
@@ -123,7 +123,7 @@ export default function AviationPage() {
 
       <section className={section.section} aria-labelledby="club-aviacao-titulo" data-surface="void">
         <div className={`${section.inner} ${section.wide}`}>
-          <SectionHeader id="club-aviacao-titulo" index="Aviation Club" title={CLUB.title} lede={CLUB.amenities} isSplit />
+          <SectionHeader id="club-aviacao-titulo" index="Aviation Club" title="Um clube na borda da pista, do pouso ao jantar." lede={CLUB.amenities} isSplit />
           <div className={sections.photoGrid}>
             <div className={sections.photo}>
               <Image className={sections.cover} src="/media/club.jpg" alt="Aviation Club ao entardecer" fill sizes="(min-width: 768px) 66vw, 100vw" quality={88} />

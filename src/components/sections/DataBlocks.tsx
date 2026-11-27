@@ -33,7 +33,9 @@ export function ScorecardBars() {
           </li>
         ))}
       </ol>
-      <p className={styles.footnote}>{DISCIPLINE.scorecardNote}</p>
+      <p className={styles.footnote}>
+        Barras individuais em escala relativa ao maior peso (25%). {DISCIPLINE.scorecardNote}
+      </p>
     </div>
   );
 }

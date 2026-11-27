@@ -259,7 +259,7 @@ export const stack = [
   { share: "5–10%", title: "Sponsor / seed", body: "Opção, diligência, projeto e aprovações" },
   { share: "20–35%", title: "Equity de desenvolvimento", body: "Aquisição e infraestrutura inicial" },
   { share: "35–50%", title: "Dívida sênior / de construção", body: "Pista, horizontal e vertical" },
-  { share: "10–25%", title: "Pré-vendas / depósitos", body: "Redução de exposição no buildout" },
+  { share: "10–25%", title: "Pré-vendas / depósitos", body: "Redução de exposição na implantação" },
 ] as const;
 
 export const risks = [
@@ -274,7 +274,7 @@ export const risks = [
 export const regulators = [
   { title: "County / City", body: "Zoneamento · FLU · PD · audiências públicas" },
   { title: "FAA", body: "Part 157 · Form 7480-1 · airspace" },
-  { title: "FDOT Aviation", body: "Site Approval · registration" },
+  { title: "FDOT Aviation", body: "Aprovação do local · registro" },
   { title: "FDEP / WMD", body: "ERP · stormwater · wetlands" },
   { title: "USACE / USFWS", body: "Section 404 · IPaC · espécies" },
   { title: "FDOT Roads / Fire", body: "Licença de acesso viário · tráfego · combustível" },
@@ -285,7 +285,7 @@ export const entities = [
   { title: "HoldCo", body: "Governança do investimento" },
   { title: "Land / DevCo", body: "Aquisição · entitlements · construção" },
   { title: "Airport OpCo", body: "Pista · fuel · terminal · operação" },
-  { title: "Clube / amenidades", body: "Hospitalidade · memberships · eventos" },
+  { title: "Clube / amenidades", body: "Hospitalidade · títulos de sócio · eventos" },
 ] as const;
 
 export const revenues = [
@@ -293,6 +293,6 @@ export const revenues = [
   { n: "02", title: "Build-to-suit", body: "Development fee e margem de construção" },
   { n: "03", title: "Hangares centrais", body: "Venda, lease e serviços especializados" },
   { n: "04", title: "Airport operations", body: "Fuel margin, fees e guest handling" },
-  { n: "05", title: "Club memberships", body: "Hospitalidade, wellness e eventos" },
+  { n: "05", title: "Títulos do clube", body: "Hospitalidade, wellness e eventos" },
   { n: "06", title: "Property services", body: "Concierge, maintenance e management" },
 ] as const;

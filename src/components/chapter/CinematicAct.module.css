@@ -217,6 +217,21 @@
   display: none;
 }
 
+/* Ato III: o hangar é claro; um véu de obsidiana mantém a atmosfera noturna. */
+.act[data-act="hangar"] .shade {
+  background-color: color-mix(in oklch, var(--color-bg) 24%, transparent);
+}
+
+/* phone: o rótulo do ato e o contador ficam no topo do palco, visíveis desde o primeiro quadro. */
+@media (max-width: 767px) {
+  .readout {
+    position: absolute;
+    inset-block-start: calc(var(--header-height) + var(--space-3));
+    inset-inline: 0;
+    padding-block: 0;
+  }
+}
+
 /* Movimento reduzido / sem JS: legendas abaixo do palco, sempre visíveis ---------- */
 
 .reducedCaptions {
